@@ -2,6 +2,9 @@ require("resmgr")
 require("map")
 require("anim")
 
+require("state")
+require("ingameState")
+
 require("entity")
 require("duck")
 
@@ -9,17 +12,14 @@ function love.load()
 	love.graphics.setMode(582, 442)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
-	map = Map.create("test")
-	duck = Duck.create(216, 168, 3)
+	stateStack = StateStack.create()
+	stateStack:push(IngameState.create())
 end
 
 function love.update(dt)
-	duck:update(dt, map)
+	stateStack:peek():update(dt)
 end
 
 function love.draw()
-	love.graphics.translate(3, 8)
-
-	love.graphics.draw(map:getDrawable(), 0, 0)
-	duck:draw()
+	stateStack:peek():draw()
 end

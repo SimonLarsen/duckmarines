@@ -22,6 +22,10 @@ function Map:updateSpriteBatch()
 		for ix = 0, 11 do
 			local tile = self:getTile(ix, iy)
 			if tile > 0 then
+				if tile >= 5 and tile <= 7 then
+					tile = 3
+				end
+
 				local cx = (tile % 10) * 48
 				local cy = 0
 				if tile > 0 then
@@ -39,14 +43,21 @@ function Map:updateSpriteBatch()
 	local fenceVertQuad = love.graphics.newQuad(96, 432, 4, 48, 512, 512)
 	for iy = 0, 9 do
 		for ix = 0, 12 do
-			if self:getWall(ix, iy) == 1 then
+			local wall = self:getWall(ix, iy)
+			if wall > 0 then
 				-- Right fence
-				if ix < 12 and self:getWall(ix+1, iy) == 1 then
+				if ix < 12 and wall % 2 == 1 then
 					self.batch:addq(fenceHorzQuad, ix*48, iy*48-5)
+					if self:getWall(ix+1, iy) == 0 then
+						self.batch:addq(postQuad, ix*48+45, iy*48-8)
+					end
 				end
 				-- Downwards fence
-				if iy < 9 and self:getWall(ix, iy+1) == 1 then
+				if iy < 9 and wall > 1 then
 					self.batch:addq(fenceVertQuad, ix*48-2, iy*48-3)
+					if self:getWall(ix, iy+1) == 0 then
+						self.batch:addq(postQuad, ix*48-3, iy*48+40)
+					end
 				end
 				-- Post
 				self.batch:addq(postQuad, ix*48-3, iy*48-8)
@@ -64,19 +75,19 @@ function Map:getWall(x, y)
 end
 
 function Map:northWall(x, y)
-	return self:getWall(x, y) == 1 and self:getWall(x+1, y) == 1
+	return self:getWall(x, y) % 2 > 0
 end
 
 function Map:southWall(x, y)
-	return self:getWall(x, y+1) == 1 and self:getWall(x+1, y+1) == 1
+	return self:getWall(x, y+1) % 2 > 0
 end
 
 function Map:westWall(x, y)
-	return self:getWall(x, y) == 1 and self:getWall(x, y+1) == 1
+	return self:getWall(x, y) > 1
 end
 
 function Map:eastWall(x, y)
-	return self:getWall(x+1, y) == 1 and self:getWall(x+1, y+1) == 1
+	return self:getWall(x+1, y) > 1
 end
 
 function Map:getDrawable()

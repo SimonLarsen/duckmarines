@@ -14,8 +14,10 @@ function Duck.create(x, y, dir)
 end
 
 function Duck:update(dt, map)
+	-- Update animation
 	self.anim:update(dt)
 
+	-- Move
 	local toMove = self.MOVE_SPEED*dt
 	if self.dir == 0 then -- up
 		self.y = self.y - toMove
@@ -34,43 +36,37 @@ function Duck:update(dt, map)
 		local cy = math.floor(self.y / 48)
 		self.x = cx*48 + 24
 		self.y = cy*48 + 24
-		self.moved = 0
 
-		if self.dir == 0 then
-			if map:northWall(cx, cy) then
-				if not map:eastWall(cx, cy) then
-					self.dir = 1
-				else
-					self.dir = 3
-				end
+		if self.dir == 0 and map:northWall(cx, cy) then
+			if not map:eastWall(cx, cy) then
+				self.dir = 1
+				self.moved = 0
+			else
+				self.dir = 3
 			end
-		end
-		if self.dir == 1 then
-			if map:eastWall(cx, cy) then
-				if not map:southWall(cx, cy) then
-					self.dir = 2
-				else
-					self.dir = 0
-				end
+		elseif self.dir == 1 and map:eastWall(cx, cy) then
+			if not map:southWall(cx, cy) then
+				self.dir = 2
+				self.moved = 0
+			else
+				self.dir = 0
 			end
-		end
-		if self.dir == 2 then
-			if map:southWall(cx, cy) then
-				if not map:westWall(cx, cy) then
-					self.dir = 3
-				else
-					self.dir = 1
-				end
+		elseif self.dir == 2 and map:southWall(cx, cy) then
+			if not map:westWall(cx, cy) then
+				self.dir = 3
+				self.moved = 0
+			else
+				self.dir = 1
 			end
-		end
-		if self.dir == 3 then
-			if map:westWall(cx, cy) then
-				if not map:northWall(cx, cy) then
-					self.dir = 0
-				else
-					self.dir = 2
-				end
+		elseif self.dir == 3 and map:westWall(cx, cy) then
+			if not map:northWall(cx, cy) then
+				self.dir = 0
+				self.moved = 0
+			else
+				self.dir = 2
 			end
+		else
+			self.moved = 0
 		end
 	end
 end
