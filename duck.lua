@@ -1,76 +1,24 @@
-Duck = { MOVE_SPEED = 100 }
+Duck = {}
 Duck.__index = Duck
 setmetatable(Duck, Entity)
 
 function Duck.create(x, y, dir)
-	local self = setmetatable({}, Duck)
+	local self = Entity.create(x, y, dir)
+	setmetatable(self, Duck)
 
-	self.x, self.y = x, y
-	self.dir = dir
-	self.moved = 0
-	self.anim = Animation.create(ResMgr.getImage("duck.png"), 48, 48, 24, 24, 0.2, 1)
+	self.anim = {}
+	self.anim[0] = Animation.create(ResMgr.getImage("duck_back.png"),  32, 37, 16, 26, 0.09, 6)
+	self.anim[1] = Animation.create(ResMgr.getImage("duck_right.png"), 32, 39, 16, 28, 0.09, 6)
+	self.anim[2] = Animation.create(ResMgr.getImage("duck_front.png"), 34, 37, 17, 26, 0.09, 6)
+	self.anim[3] = Animation.create(ResMgr.getImage("duck_left.png"),  32, 39, 16, 28, 0.09, 6)
 
 	return self
 end
 
-function Duck:update(dt, map)
-	-- Update animation
-	self.anim:update(dt)
+function Duck:onCell(cell)
 
-	-- Move
-	local toMove = self.MOVE_SPEED*dt
-	if self.dir == 0 then -- up
-		self.y = self.y - toMove
-	elseif self.dir == 1 then -- right
-		self.x = self.x + toMove
-	elseif self.dir == 2 then -- down
-		self.y = self.y + toMove
-	elseif self.dir == 3 then -- left
-		self.x = self.x - toMove
-	end
-
-	-- Check if whole step has been moved
-	self.moved = self.moved + toMove
-	if self.moved > 48 then
-		local cx = math.floor(self.x / 48)
-		local cy = math.floor(self.y / 48)
-		self.x = cx*48 + 24
-		self.y = cy*48 + 24
-
-		if self.dir == 0 and map:northWall(cx, cy) then
-			if not map:eastWall(cx, cy) then
-				self.dir = 1
-				self.moved = 0
-			else
-				self.dir = 3
-			end
-		elseif self.dir == 1 and map:eastWall(cx, cy) then
-			if not map:southWall(cx, cy) then
-				self.dir = 2
-				self.moved = 0
-			else
-				self.dir = 0
-			end
-		elseif self.dir == 2 and map:southWall(cx, cy) then
-			if not map:westWall(cx, cy) then
-				self.dir = 3
-				self.moved = 0
-			else
-				self.dir = 1
-			end
-		elseif self.dir == 3 and map:westWall(cx, cy) then
-			if not map:northWall(cx, cy) then
-				self.dir = 0
-				self.moved = 0
-			else
-				self.dir = 2
-			end
-		else
-			self.moved = 0
-		end
-	end
 end
 
 function Duck:getAnim()
-	return self.anim
+	return self.anim[self.dir]
 end

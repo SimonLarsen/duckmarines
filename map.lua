@@ -14,12 +14,18 @@ end
 
 function Map:updateSpriteBatch()
 	-- Ground tiles
-	local groundQuad = love.graphics.newQuad(144, 432, 48, 48, 512, 512)
-	self.batch:addq(groundQuad, 0, 0, 0, 12, 9)
+	local groundQuad1 = love.graphics.newQuad(144, 432, 48, 48, 512, 512)
+	local groundQuad2 = love.graphics.newQuad(192, 432, 48, 48, 512, 512)
 	-- Tiles
 	local quad = love.graphics.newQuad(0, 0, 0, 0, 512, 512)
 	for iy = 0, 8 do
 		for ix = 0, 11 do
+			if (ix+iy) % 2 == 1 then
+				self.batch:addq(groundQuad1, ix*48, iy*48)
+			else
+				self.batch:addq(groundQuad2, ix*48, iy*48)
+			end
+
 			local tile = self:getTile(ix, iy)
 			if tile > 0 then
 				if tile >= 5 and tile <= 7 then

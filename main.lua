@@ -7,6 +7,7 @@ require("ingameState")
 
 require("entity")
 require("duck")
+require("enemy")
 
 function love.load()
 	love.graphics.setMode(582, 442)
