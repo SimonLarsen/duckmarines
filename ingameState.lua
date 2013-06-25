@@ -18,9 +18,11 @@ function IngameState:update(dt)
 end
 
 function IngameState:draw()
+	-- Draw map
 	love.graphics.translate(3, 8)
 	love.graphics.draw(self.map:getDrawable(), 0, 0)
 
+	-- Draw entities
 	self.enemy:draw()
 	self.duck:draw()
 end
