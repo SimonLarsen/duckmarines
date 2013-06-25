@@ -16,7 +16,7 @@ local cursors = {}
 local inputs = {}
 
 function love.load()
-	love.graphics.setMode(582, 442)
+	love.graphics.setMode(582, 442, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
 	love.mouse.setGrab(true)
@@ -25,9 +25,13 @@ function love.load()
 	-- Initialize cursors and inputs
 	cursors[1] = Cursor.create(100, 100, 1)
 	cursors[2] = Cursor.create(200, 200, 2)
+	cursors[3] = Cursor.create(200, 100, 3)
+	cursors[4] = Cursor.create(100, 200, 4)
 
 	inputs[1] = KeyboardInput.create()
 	inputs[2] = MouseInput.create()
+	inputs[3] = JoystickInput.create(1)
+	inputs[4] = JoystickInput.create(2)
 
 	stateStack = StateStack.create()
 	stateStack:push(IngameState.create())

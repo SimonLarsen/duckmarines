@@ -53,3 +53,34 @@ function MouseInput:getMovement(dt)
 
 	return love.mouse.getX(), love.mouse.getY(), true
 end
+
+--- Joystick Input
+JoystickInput = { SPEED = 300 }
+JoystickInput.__index = JoystickInput
+setmetatable(JoystickInput, Input)
+
+function JoystickInput.create(id)
+	local self = setmetatable({}, JoystickInput)
+
+	self.type = Input.IT_JOYSTICK
+	self.id = id
+
+	return self
+end
+
+function JoystickInput:getMovement(dt)
+	local dx = 0
+	local dy = 0
+
+	local axis1 = love.joystick.getAxis(self.id, 1)
+	local axis2 = love.joystick.getAxis(self.id, 2)
+
+	if axis1 then
+		dx = axis1 * self.SPEED * dt
+	end
+	if axis2 then
+		dy = axis2 * self.SPEED * dt
+	end
+
+	return dx, dy, false
+end
