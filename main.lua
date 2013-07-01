@@ -1,19 +1,21 @@
+require("util")
 require("resmgr")
 require("map")
-require("anim")
 require("input")
 
 require("state")
 require("ingameState")
 
+require("sprite")
+require("anim")
+
 require("cursor")
+require("arrow")
 require("entity")
 require("duck")
 require("enemy")
 
 local stateStack = nil
-local cursors = {}
-local inputs = {}
 
 function love.load()
 	love.graphics.setMode(582, 442, false, true)
@@ -22,39 +24,42 @@ function love.load()
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 
-	-- Initialize cursors and inputs
-	cursors[1] = Cursor.create(100, 100, 1)
-	cursors[2] = Cursor.create(200, 200, 2)
-	cursors[3] = Cursor.create(200, 100, 3)
-	cursors[4] = Cursor.create(100, 200, 4)
-
-	inputs[1] = KeyboardInput.create()
-	inputs[2] = MouseInput.create()
-	inputs[3] = JoystickInput.create(1)
-	inputs[4] = JoystickInput.create(2)
-
 	stateStack = StateStack.create()
 	stateStack:push(IngameState.create())
 end
 
 function love.update(dt)
-	for i=1,#cursors do
-		cursors[i]:move(inputs[i]:getMovement(dt))
-	end
-
 	stateStack:peek():update(dt)
 end
 
 function love.draw()
 	stateStack:peek():draw()
-
-	for i,v in ipairs(cursors) do
-		love.graphics.draw(v:getDrawable(), v.x, v.y, 0, 1, 1, 2, 2)
-	end
 end
 
 function love.keypressed(k, uni)
 	if k == "escape" then
 		love.event.quit()
+	else
+		for i,v in ipairs(stateStack:peek():getInputs()) do
+			v:keypressed(k, uni)
+		end
+	end
+end
+
+function love.mousepressed(x, y, button)
+	for i,v in ipairs(stateStack:peek():getInputs()) do
+		v:mousepressed(x, y, button)
+	end
+end
+
+function love.mousereleased(x, y, button)
+	for i,v in ipairs(stateStack:peek():getInputs()) do
+		v:mousereleased(x, y, button)
+	end
+end
+
+function love.joystickpressed(joystick, button)
+	for i,v in ipairs(stateStack:peek():getInputs()) do
+	   v:joystickpressed(joystick, button)
 	end
 end

@@ -6,7 +6,9 @@ function Cursor.create(x,y,player)
 
 	self.x, self.y = x,y
 	self.player = player
-	self.img = ResMgr.getImage("cursor"..player..".png")
+	local img = ResMgr.getImage("cursor"..player..".png")
+	self.sprite = Sprite.create(img)
+	self.sprite:setOffset(2, 2)
 
 	return self
 end
@@ -26,5 +28,5 @@ function Cursor:move(dx, dy, absolute)
 end
 
 function Cursor:getDrawable()
-	return self.img
+	return self.sprite
 end
