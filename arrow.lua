@@ -6,6 +6,7 @@ function Arrow.create(x,y,dir,player)
 
 	self.x, self.y = x, y
 	self.dir = dir
+	self.time = 0
 
 	local img = ResMgr.getImage("arrows"..player..".png")
 	local quad = love.graphics.newQuad(dir*48, 0, 48, 48, 192, 48)

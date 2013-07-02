@@ -20,7 +20,7 @@ require("enemy")
 local stateStack = nil
 
 function love.load()
-	love.graphics.setMode(700, 542, false, true)
+	love.graphics.setMode(700, 442, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
 	love.mouse.setGrab(true)

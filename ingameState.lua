@@ -39,6 +39,9 @@ function IngameState.create(rules)
 end
 
 function IngameState:update(dt)
+	-- Cap mouse
+	love.mouse.setPosition(math.cap(love.mouse.getX(), 0, 582), math.cap(love.mouse.getY(), 0, 422))
+
 	-- Update counters and events
 	self.nextEntity = self.nextEntity - dt
 	if self.nextEntity <= 0 then
@@ -61,14 +64,27 @@ function IngameState:update(dt)
 		self.cursors[i]:move(self.inputs[i]:getMovement(dt))
 	end
 
+	-- Remove expired arrows
+	for i=1,4 do
+		for j=#self.arrows[i], 1, -1 do
+			local v = self.arrows[i][j]
+			v.time = v.time + dt
+			if v.time >= self.rules.arrowtime then
+				table.remove(self.arrows[i], j)
+			end
+		end
+	end
+
 	-- Check player actions
 	for i=1,4 do
 		local ac = self.inputs[i]:getAction()
 		if ac then
 			local cx, cy = 0, 0
 			if self.inputs[i]:getType() == Input.TYPE_MOUSE then
+				print(self.inputs[i].clicky)
 				cx = math.floor(self.inputs[i].clickx / 48)
 				cy = math.floor(self.inputs[i].clicky / 48)
+				print(cx .. ", " .. cy)
 			else
 				cx = math.floor(self.cursors[i].x / 48)
 				cy = math.floor(self.cursors[i].y / 48)
@@ -127,22 +143,22 @@ end
 
 function IngameState:drawHUD()
 	love.graphics.setColor(234, 73, 89)
-	love.graphics.rectangle("fill", 0, 442, 120, 100)
+	love.graphics.rectangle("fill", 0, 90, 118, 88)
 
 	love.graphics.setColor(76, 74, 145)
-	love.graphics.rectangle("fill", 120, 442, 120, 100)
+	love.graphics.rectangle("fill", 0, 178, 118, 88)
 
 	love.graphics.setColor(232, 101, 49)
-	love.graphics.rectangle("fill", 240, 442, 120, 100)
+	love.graphics.rectangle("fill", 0, 266, 118, 88)
 
 	love.graphics.setColor(150, 75, 164)
-	love.graphics.rectangle("fill", 360, 442, 120, 100)
+	love.graphics.rectangle("fill", 0, 354, 118, 88)
 
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.print(self.score[1], 40, 487)
-	love.graphics.print(self.score[2], 160, 487)
-	love.graphics.print(self.score[3], 280, 487)
-	love.graphics.print(self.score[4], 400, 487)
+	love.graphics.print(self.score[1], 40, 130)
+	love.graphics.print(self.score[2], 40, 218)
+	love.graphics.print(self.score[3], 40, 306)
+	love.graphics.print(self.score[4], 40, 394)
 end
 
 function IngameState:getInputs()
