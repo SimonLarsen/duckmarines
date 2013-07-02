@@ -15,6 +15,8 @@ require("cursor")
 require("arrow")
 require("entity")
 require("duck")
+require("goldduck")
+require("pinkduck")
 require("enemy")
 
 local stateStack = nil

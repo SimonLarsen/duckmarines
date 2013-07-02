@@ -76,9 +76,18 @@ function IngameState:update(dt)
 		elseif self.event == IngameState.EVENT_ENEMYFRENZY then
 			table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
 		else
+			-- Spawn random entity according to rules' percentages
 			local choice = math.random(0, 99)
+			-- enemy
 			if choice < self.rules.enemyperc then
 				table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
+			-- golden duck
+			elseif choice < self.rules.enemyperc + self.rules.goldperc then
+				table.insert(self.entities, GoldDuck.create(e.x*48+24, e.y*48+24, e.dir))
+			-- pink duck
+			elseif choice < self.rules.enemyperc + self.rules.goldperc + self.rules.pinkperc then
+				table.insert(self.entities, PinkDuck.create(e.x*48+24, e.y*48+24, e.dir))
+			-- normal duck
 			else
 				table.insert(self.entities, Duck.create(e.x*48+24, e.y*48+24, e.dir))
 			end
@@ -125,11 +134,15 @@ function IngameState:update(dt)
 		-- Check if entities hit submarine
 		if tile >= 10 and tile <= 14 then
 			local eType = self.entities[i]:getType()
+			local player = tile-9
 			if eType == Entity.TYPE_DUCK then
-				self.score[tile-9] = self.score[tile-9] + 1
+				self.score[player] = self.score[player] + 1
+
+			elseif eType == Entity.TYPE_GOLDDUCK then
+				self.score[player] = self.score[player] + 50
 
 			elseif eType == Entity.TYPE_ENEMY then
-				self.score[tile-9] = math.floor(self.score[tile-9]*0.6667)
+				self.score[player] = math.floor(self.score[player]*0.6667)
 			end
 
 			table.remove(self.entities, i)

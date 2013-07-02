@@ -1,4 +1,4 @@
-Entity = { MOVE_SPEED = 100 }
+Entity = { MOVE_SPEED = 150 }
 Entity.__index = Entity
 
 Entity.TYPE_NONE = 0

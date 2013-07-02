@@ -1,4 +1,4 @@
-Enemy = {}
+Enemy = { MOVE_SPEED = 100}
 Enemy.__index = Enemy
 setmetatable(Enemy, Entity)
 
