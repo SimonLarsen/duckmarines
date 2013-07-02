@@ -6,6 +6,7 @@ function Map.create(name)
 
 	self.batch = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 256)
 	self.data = love.filesystem.load("res/maps/"..name..".lua")()
+	self.spawns = self:findSpawnPoints()
 
 	self:updateSpriteBatch()
 
@@ -78,6 +79,27 @@ end
 
 function Map:getWall(x, y)
 	return self.data.walls[x + y*13 + 1]
+end
+
+function Map:getSpawnPoints()
+	return self.spawns
+end
+
+function Map:findSpawnPoints()
+	local spawns = {}
+	for iy=0,8 do
+		for ix=0,11 do
+			local tile = self:getTile(ix, iy)
+			if tile >= 4 and tile <= 7 then
+				local e = {}
+				e.x = ix
+				e.y = iy
+				e.dir = tile - 4
+				table.insert(spawns, e)
+			end
+		end
+	end
+	return spawns
 end
 
 function Map:northWall(x, y)

@@ -5,6 +5,7 @@ require("input")
 
 require("stack")
 require("state")
+require("rules")
 require("ingameState")
 
 require("sprite")
@@ -26,7 +27,7 @@ function love.load()
 	love.mouse.setVisible(false)
 
 	stateStack = Stack.create()
-	stateStack:push(IngameState.create())
+	stateStack:push(IngameState.create(Rules.create()))
 end
 
 function love.update(dt)

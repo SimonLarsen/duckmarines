@@ -7,6 +7,7 @@ function Entity.create(x, y, dir)
 	self.x, self.y = x, y
 	self.dir = dir
 	self.moved = 0
+	self.tile = 0
 
 	return self
 end
@@ -36,18 +37,21 @@ function Entity:update(dt, map, arrows)
 		self.x = cx*48 + 24
 		self.y = cy*48 + 24
 
-		-- Check collision with walls
-		self:collideWalls(map)
-
 		-- Change direction if standing on an arrow
 		for i=1, 4 do
 			for j,v in ipairs(arrows[i]) do
 				if v.x == cx and v.y == cy then
 					self.dir = v.dir
+					self.moved = 0
 					break
 				end
 			end
 		end
+
+		-- Check collision with walls
+		self:collideWalls(map)
+
+		self.tile = map:getTile(cx, cy)
 	end
 end
 
@@ -90,4 +94,8 @@ end
 function Entity:draw()
 	love.graphics.draw(ResMgr.getImage("entity_shadow.png"), self.x, self.y, 0, 1, 1, 15, -5)
 	self:getAnim():draw(self.x, self.y)
+end
+
+function Entity:getTile()
+	return self.tile
 end

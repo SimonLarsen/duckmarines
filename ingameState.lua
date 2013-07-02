@@ -2,17 +2,20 @@ IngameState = {}
 IngameState.__index = IngameState
 setmetatable(IngameState, State)
 
-function IngameState.create()
+function IngameState.create(rules)
 	local self = setmetatable({}, IngameState)
+	self.rules = rules
 
+	-- Load map
 	self.map = Map.create("test")
-	self.duck = Duck.create(6*48+24, 3*48+24, 2)
-	self.enemy = Enemy.create(4*48+24, 3*48+24, 0)
-	self.arrows = {}
 
+	self.arrows = {}
 	for i=1,4 do
 		self.arrows[i] = {}
 	end
+
+	self.ducks = {}
+	self.enemies = {}
 
 	-- Initialize cursors and inputs
 	self.inputs = {}
@@ -26,10 +29,30 @@ function IngameState.create()
 	self.cursors[3] = Cursor.create( 72, 360, 3)
 	self.cursors[4] = Cursor.create(504, 360, 4)
 
+	-- Set counters
+	self.nextEntity = 2
+
 	return self
 end
 
 function IngameState:update(dt)
+	-- Update counters and events
+	self.nextEntity = self.nextEntity - dt
+	if self.nextEntity <= 0 then
+		local freq = self.rules.frequency
+		self.nextEntity = 1/(freq + math.randnorm()*freq)*60
+
+		local spawns = self.map:getSpawnPoints()
+		local e = table.random(spawns)
+
+		local choice = math.random(0, 99)
+		if choice < self.rules.enemyperc then
+			table.insert(self.enemies, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
+		else
+			table.insert(self.ducks, Duck.create(e.x*48+24, e.y*48+24, e.dir))
+		end
+	end
+
 	-- Move cursors
 	for i=1,4 do
 		self.cursors[i]:move(self.inputs[i]:getMovement(dt))
@@ -52,8 +75,20 @@ function IngameState:update(dt)
 	end
 
 	-- Update entities
-	self.enemy:update(dt, self.map, self.arrows)
-	self.duck:update(dt, self.map, self.arrows)
+	for i=#self.ducks, 1, -1 do
+		self.ducks[i]:update(dt, self.map, self.arrows)
+		local tile = self.ducks[i]:getTile()
+		if tile >= 10 and tile <= 14 then
+			table.remove(self.ducks, i)
+		end
+	end
+	for i=#self.enemies, 1, -1 do
+		self.enemies[i]:update(dt, self.map, self.arrows)
+		local tile = self.enemies[i]:getTile()
+		if tile >= 10 and tile <= 14 then
+			table.remove(self.enemies, i)
+		end
+	end
 end
 
 function IngameState:draw()
@@ -69,8 +104,12 @@ function IngameState:draw()
 	end
 
 	-- Draw entities
-	self.enemy:draw()
-	self.duck:draw()
+	for i,v in ipairs(self.ducks) do
+	   v:draw()
+	end
+	for i,v in ipairs(self.enemies) do
+	   v:draw()
+	end
 
 	-- Draw cursors
 	for i,v in ipairs(self.cursors) do
