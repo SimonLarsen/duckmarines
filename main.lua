@@ -3,6 +3,7 @@ require("resmgr")
 require("map")
 require("input")
 
+require("stack")
 require("state")
 require("ingameState")
 
@@ -24,7 +25,7 @@ function love.load()
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 
-	stateStack = StateStack.create()
+	stateStack = Stack.create()
 	stateStack:push(IngameState.create())
 end
 
