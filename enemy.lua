@@ -15,10 +15,6 @@ function Enemy.create(x, y, dir)
 	return self
 end
 
-function Enemy:onCell(cell)
-	
-end
-
 function Enemy:getAnim()
 	return self.anim[self.dir]
 end

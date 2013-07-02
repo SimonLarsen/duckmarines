@@ -41,26 +41,18 @@ function love.keypressed(k, uni)
 	if k == "escape" then
 		love.event.quit()
 	else
-		for i,v in ipairs(stateStack:peek():getInputs()) do
-			v:keypressed(k, uni)
-		end
+		stateStack:peek():keypressed(k, uni)
 	end
 end
 
 function love.mousepressed(x, y, button)
-	for i,v in ipairs(stateStack:peek():getInputs()) do
-		v:mousepressed(x, y, button)
-	end
+	stateStack:peek():mousepressed(x, y, button)
 end
 
 function love.mousereleased(x, y, button)
-	for i,v in ipairs(stateStack:peek():getInputs()) do
-		v:mousereleased(x, y, button)
-	end
+	stateStack:peek():mousereleased(x, y, button)
 end
 
 function love.joystickpressed(joystick, button)
-	for i,v in ipairs(stateStack:peek():getInputs()) do
-	   v:joystickpressed(joystick, button)
-	end
+	stateStack:peek():joystickpressed(joystick, button)
 end

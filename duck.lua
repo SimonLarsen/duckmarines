@@ -15,10 +15,6 @@ function Duck.create(x, y, dir)
 	return self
 end
 
-function Duck:onCell(cell)
-
-end
-
 function Duck:getAnim()
 	return self.anim[self.dir]
 end

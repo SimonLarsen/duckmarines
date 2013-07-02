@@ -11,7 +11,7 @@ function Entity.create(x, y, dir)
 	return self
 end
 
-function Entity:update(dt, map)
+function Entity:update(dt, map, arrows)
 	-- Update animation
 	self:getAnim():update(dt)
 
@@ -39,8 +39,15 @@ function Entity:update(dt, map)
 		-- Check collision with walls
 		self:collideWalls(map)
 
-		-- Check current tile
-		self:onCell(map:getTile(cx, cy))
+		-- Change direction if standing on an arrow
+		for i=1, 4 do
+			for j,v in ipairs(arrows[i]) do
+				if v.x == cx and v.y == cy then
+					self.dir = v.dir
+					break
+				end
+			end
+		end
 	end
 end
 

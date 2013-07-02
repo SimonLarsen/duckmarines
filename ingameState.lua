@@ -52,8 +52,8 @@ function IngameState:update(dt)
 	end
 
 	-- Update entities
-	self.enemy:update(dt, self.map)
-	self.duck:update(dt, self.map)
+	self.enemy:update(dt, self.map, self.arrows)
+	self.duck:update(dt, self.map, self.arrows)
 end
 
 function IngameState:draw()
@@ -82,9 +82,37 @@ function IngameState:getInputs()
 	return self.inputs
 end
 
+--- Places an arrow in tile if possible.
+--  @param x x-coordinate (in cell coordinates)
+--  @param y y-coordinate (in cell coordinates)
+--  @param dir Integer direction of arrow (0,1,2 or 3)
+--  @param player Id of player that placed arrow (1-4)
 function IngameState:placeArrow(x, y, dir, player)
+	if self:canPlaceArrow(x, y) == false then
+		return
+	end
+
 	if #self.arrows[player] >= 4 then
 		table.remove(self.arrows[player], 1)
 	end
 	table.insert(self.arrows[player], Arrow.create(x, y, dir, player))
+end
+
+--- Checks if an arrow can be placed at (x,y)
+--  @return True if placement is possible, false otherwise
+function IngameState:canPlaceArrow(x, y)
+	-- Check if tile is empty
+	if self.map:getTile(x, y) ~= 0 then
+		return false
+	end
+	-- Check if another arrow is already placed there
+	for i=1,4 do
+		for j,v in ipairs(self.arrows[i]) do
+			if v.x == x and v.y == y then
+				return false
+			end
+		end
+	end
+
+	return true
 end
