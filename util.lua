@@ -12,3 +12,13 @@ function vecToDir(dx, dy)
 		return 2
 	end
 end
+
+--- Returns a random element from a table
+function table.random(t)
+	return t[math.random(1,#t)]
+end
+
+--- Returns random number from a Gauss. dist. around 0
+function math.randnorm()
+	return math.random() - math.random()
+end
