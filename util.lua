@@ -22,3 +22,8 @@ end
 function math.randnorm()
 	return math.random() - math.random()
 end
+
+--- Caps x in the interval [a,b]
+function math.cap(x, a, b)
+	return math.min(math.max(x, a), b)
+end

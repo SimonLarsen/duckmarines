@@ -14,8 +14,7 @@ function IngameState.create(rules)
 		self.arrows[i] = {}
 	end
 
-	self.ducks = {}
-	self.enemies = {}
+	self.entities = {}
 
 	-- Initialize cursors and inputs
 	self.inputs = {}
@@ -29,7 +28,11 @@ function IngameState.create(rules)
 	self.cursors[3] = Cursor.create( 72, 360, 3)
 	self.cursors[4] = Cursor.create(504, 360, 4)
 
-	-- Set counters
+	-- Set variables and counters
+	self.score = {}
+	for i=1,4 do
+		self.score[i] = 0
+	end
 	self.nextEntity = 2
 
 	return self
@@ -47,9 +50,9 @@ function IngameState:update(dt)
 
 		local choice = math.random(0, 99)
 		if choice < self.rules.enemyperc then
-			table.insert(self.enemies, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
+			table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
 		else
-			table.insert(self.ducks, Duck.create(e.x*48+24, e.y*48+24, e.dir))
+			table.insert(self.entities, Duck.create(e.x*48+24, e.y*48+24, e.dir))
 		end
 	end
 
@@ -75,25 +78,29 @@ function IngameState:update(dt)
 	end
 
 	-- Update entities
-	for i=#self.ducks, 1, -1 do
-		self.ducks[i]:update(dt, self.map, self.arrows)
-		local tile = self.ducks[i]:getTile()
+	for i=#self.entities, 1, -1 do
+		self.entities[i]:update(dt, self.map, self.arrows)
+		local tile = self.entities[i]:getTile()
+
+		-- Check if entities hit submarine
 		if tile >= 10 and tile <= 14 then
-			table.remove(self.ducks, i)
-		end
-	end
-	for i=#self.enemies, 1, -1 do
-		self.enemies[i]:update(dt, self.map, self.arrows)
-		local tile = self.enemies[i]:getTile()
-		if tile >= 10 and tile <= 14 then
-			table.remove(self.enemies, i)
+			local eType = self.entities[i]:getType()
+			if eType == Entity.TYPE_DUCK then
+				self.score[tile-9] = self.score[tile-9] + 1
+
+			elseif eType == Entity.TYPE_ENEMY then
+				self.score[tile-9] = math.floor(self.score[tile-9]*0.6667)
+			end
+
+			table.remove(self.entities, i)
 		end
 	end
 end
 
 function IngameState:draw()
 	-- Draw map
-	love.graphics.translate(3, 8)
+	love.graphics.push()
+	love.graphics.translate(118+3, 8)
 	love.graphics.draw(self.map:getDrawable(), 0, 0)
 
 	-- Draw arrows
@@ -104,10 +111,7 @@ function IngameState:draw()
 	end
 
 	-- Draw entities
-	for i,v in ipairs(self.ducks) do
-	   v:draw()
-	end
-	for i,v in ipairs(self.enemies) do
+	for i,v in ipairs(self.entities) do
 	   v:draw()
 	end
 
@@ -115,6 +119,30 @@ function IngameState:draw()
 	for i,v in ipairs(self.cursors) do
 		v:getDrawable():draw(v.x, v.y)
 	end
+
+	-- Draw hud
+	love.graphics.pop()
+	self:drawHUD()
+end
+
+function IngameState:drawHUD()
+	love.graphics.setColor(234, 73, 89)
+	love.graphics.rectangle("fill", 0, 442, 120, 100)
+
+	love.graphics.setColor(76, 74, 145)
+	love.graphics.rectangle("fill", 120, 442, 120, 100)
+
+	love.graphics.setColor(232, 101, 49)
+	love.graphics.rectangle("fill", 240, 442, 120, 100)
+
+	love.graphics.setColor(150, 75, 164)
+	love.graphics.rectangle("fill", 360, 442, 120, 100)
+
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print(self.score[1], 40, 487)
+	love.graphics.print(self.score[2], 160, 487)
+	love.graphics.print(self.score[3], 280, 487)
+	love.graphics.print(self.score[4], 400, 487)
 end
 
 function IngameState:getInputs()

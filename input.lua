@@ -96,7 +96,9 @@ function MouseInput:mousereleased(x, y, button)
 	if button == "l" then
 		local dx = x - self.clickx
 		local dy = y - self.clicky
-		self.action = vecToDir(dx, dy)
+		if dx ~= 0 or dy ~= 0 then
+			self.action = vecToDir(dx, dy)
+		end
 	end
 end
 

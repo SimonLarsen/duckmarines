@@ -18,3 +18,7 @@ end
 function Duck:getAnim()
 	return self.anim[self.dir]
 end
+
+function Duck:getType()
+	return Entity.TYPE_DUCK
+end

@@ -18,3 +18,7 @@ end
 function Enemy:getAnim()
 	return self.anim[self.dir]
 end
+
+function Enemy:getType()
+	return Entity.TYPE_ENEMY
+end

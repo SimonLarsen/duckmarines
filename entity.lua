@@ -1,6 +1,10 @@
 Entity = { MOVE_SPEED = 100 }
 Entity.__index = Entity
 
+Entity.TYPE_NONE = 0
+Entity.TYPE_DUCK = 1
+Entity.TYPE_ENEMY = 2
+
 function Entity.create(x, y, dir)
 	local self = setmetatable({}, Entity)
 
@@ -98,4 +102,8 @@ end
 
 function Entity:getTile()
 	return self.tile
+end
+
+function Entity:getType()
+	return Entity.TYPE_NONE
 end
