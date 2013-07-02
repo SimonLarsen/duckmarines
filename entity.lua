@@ -4,6 +4,8 @@ Entity.__index = Entity
 Entity.TYPE_NONE = 0
 Entity.TYPE_DUCK = 1
 Entity.TYPE_ENEMY = 2
+Entity.TYPE_GOLDDUCK = 3
+Entity.TYPE_PINKDUCK = 4
 
 function Entity.create(x, y, dir)
 	local self = setmetatable({}, Entity)
