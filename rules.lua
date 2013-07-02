@@ -15,6 +15,8 @@ function Rules.create()
 	self.enemyperc = 5
 	-- Time arrows stay before they disappear
 	self.arrowtime = 10
+	-- Number of arrows per player
+	self.maxarrows = 4
 
 	return self
 end

@@ -41,6 +41,13 @@ function IngameState.create(rules)
 	end
 	self.nextEntity = 2
 
+	-- Get marker images
+	self.marker = {}
+	self.marker[1] = ResMgr.getImage("marker1.png")
+	self.marker[2] = ResMgr.getImage("marker2.png")
+	self.marker[3] = ResMgr.getImage("marker3.png")
+	self.marker[4] = ResMgr.getImage("marker4.png")
+
 	return self
 end
 
@@ -55,16 +62,26 @@ function IngameState:update(dt)
 	self.nextEntity = self.nextEntity - dt
 	if self.nextEntity <= 0 then
 		local freq = self.rules.frequency
-		self.nextEntity = 1/(freq + math.randnorm()*freq)*60
+		if self.event == IngameState.EVENT_FRENZY then
+			self.nextEntity = 0.05+math.random()/10
+		else
+			self.nextEntity = 1/(freq + math.randnorm()*freq)*60
+		end
 
 		local spawns = self.map:getSpawnPoints()
 		local e = table.random(spawns)
 
-		local choice = math.random(0, 99)
-		if choice < self.rules.enemyperc then
+		if self.event == IngameState.EVENT_FRENZY then
+			table.insert(self.entities, Duck.create(e.x*48+24, e.y*48+24, e.dir))
+		elseif self.event == IngameState.EVENT_ENEMYFRENZY then
 			table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
 		else
-			table.insert(self.entities, Duck.create(e.x*48+24, e.y*48+24, e.dir))
+			local choice = math.random(0, 99)
+			if choice < self.rules.enemyperc then
+				table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
+			else
+				table.insert(self.entities, Duck.create(e.x*48+24, e.y*48+24, e.dir))
+			end
 		end
 	end
 
@@ -90,10 +107,8 @@ function IngameState:update(dt)
 		if ac then
 			local cx, cy = 0, 0
 			if self.inputs[i]:getType() == Input.TYPE_MOUSE then
-				print(self.inputs[i].clicky)
 				cx = math.floor(self.inputs[i].clickx / 48)
 				cy = math.floor(self.inputs[i].clicky / 48)
-				print(cx .. ", " .. cy)
 			else
 				cx = math.floor(self.cursors[i].x / 48)
 				cy = math.floor(self.cursors[i].y / 48)
@@ -132,8 +147,18 @@ function IngameState:draw()
 	-- Draw arrows
 	for i=1,4 do
 		for j,v in ipairs(self.arrows[i]) do
-			v:getDrawable():draw(v.x*48, v.y*48)
+			-- Make arrows blink the last seconds
+			if self.rules.arrowtime - v.time > 1 or v.time % 0.2 > 0.1 then
+				v:getDrawable():draw(v.x*48, v.y*48)
+			end
 		end
+	end
+
+	-- Draw cursors
+	for i,v in ipairs(self.cursors) do
+		local mx = math.floor(v.x / 48)*48
+		local my = math.floor(v.y / 48)*48
+		love.graphics.draw(self.marker[i], mx, my)
 	end
 
 	-- Draw map front layer
@@ -189,7 +214,7 @@ function IngameState:placeArrow(x, y, dir, player)
 		return
 	end
 
-	if #self.arrows[player] >= 4 then
+	if #self.arrows[player] >= self.rules.maxarrows then
 		table.remove(self.arrows[player], 1)
 	end
 	table.insert(self.arrows[player], Arrow.create(x, y, dir, player))
