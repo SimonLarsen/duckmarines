@@ -27,3 +27,11 @@ end
 function math.cap(x, a, b)
 	return math.min(math.max(x, a), b)
 end
+
+--- Creates time string from number of seconds.
+--  s = 123.4 produces "2:03"
+function secsToString(s)
+	local mins = math.floor(s / 60)
+	local secs = math.floor(s % 60)
+	return mins .. ":" .. string.format("%02d", secs)
+end

@@ -7,6 +7,8 @@ Rules = {}
 function Rules.create()
 	local self = {}
 
+	-- Round time in minutes
+	self.roundtime = 2
 	-- Number of entities pr. minute
 	self.frequency = 100
 	-- Percentage of entities that are enemies

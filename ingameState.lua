@@ -2,6 +2,10 @@ IngameState = {}
 IngameState.__index = IngameState
 setmetatable(IngameState, State)
 
+IngameState.EVENT_NONE = 0
+IngameState.EVENT_FRENZY = 1
+IngameState.EVENT_ENEMYFRENZY = 2
+
 function IngameState.create(rules)
 	local self = setmetatable({}, IngameState)
 	self.rules = rules
@@ -29,6 +33,8 @@ function IngameState.create(rules)
 	self.cursors[4] = Cursor.create(504, 360, 4)
 
 	-- Set variables and counters
+	self.event = IngameState.EVENT_NONE
+	self.time = self.rules.roundtime*60
 	self.score = {}
 	for i=1,4 do
 		self.score[i] = 0
@@ -39,6 +45,9 @@ function IngameState.create(rules)
 end
 
 function IngameState:update(dt)
+	-- Advance time
+	self.time = self.time - dt
+
 	-- Cap mouse
 	love.mouse.setPosition(math.cap(love.mouse.getX(), 0, 582), math.cap(love.mouse.getY(), 0, 422))
 
@@ -114,10 +123,11 @@ function IngameState:update(dt)
 end
 
 function IngameState:draw()
-	-- Draw map
 	love.graphics.push()
 	love.graphics.translate(118+3, 8)
-	love.graphics.draw(self.map:getDrawable(), 0, 0)
+
+	-- Draw map back layer
+	love.graphics.draw(self.map:getBackBatch(), 0, 0)
 
 	-- Draw arrows
 	for i=1,4 do
@@ -125,6 +135,9 @@ function IngameState:draw()
 			v:getDrawable():draw(v.x*48, v.y*48)
 		end
 	end
+
+	-- Draw map front layer
+	love.graphics.draw(self.map:getFrontBatch(), 0, 0)
 
 	-- Draw entities
 	for i,v in ipairs(self.entities) do
@@ -155,10 +168,11 @@ function IngameState:drawHUD()
 	love.graphics.rectangle("fill", 0, 354, 118, 88)
 
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.print(self.score[1], 40, 130)
-	love.graphics.print(self.score[2], 40, 218)
-	love.graphics.print(self.score[3], 40, 306)
-	love.graphics.print(self.score[4], 40, 394)
+	love.graphics.print(secsToString(self.time), 48, 40)
+	love.graphics.print(self.score[1], 48, 130)
+	love.graphics.print(self.score[2], 48, 218)
+	love.graphics.print(self.score[3], 48, 306)
+	love.graphics.print(self.score[4], 48, 394)
 end
 
 function IngameState:getInputs()
