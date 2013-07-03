@@ -2,9 +2,15 @@ IngameState = {}
 IngameState.__index = IngameState
 setmetatable(IngameState, State)
 
-IngameState.EVENT_NONE = 0
-IngameState.EVENT_FRENZY = 1
-IngameState.EVENT_ENEMYFRENZY = 2
+IngameState.EVENT_NONE 		= 0
+IngameState.EVENT_RUSH 		= 1
+IngameState.EVENT_PREDRUSH	= 2
+IngameState.EVENT_FREEZE	= 3
+IngameState.EVENT_SWITCH	= 4
+IngameState.EVENT_PREDATORS	= 5
+IngameState.EVENT_VACUUM	= 6
+IngameState.EVENT_SPEEDUP	= 7
+IngameState.EVENT_SLOWDOWN	= 8
 
 function IngameState.create(rules)
 	local self = setmetatable({}, IngameState)
@@ -33,8 +39,11 @@ function IngameState.create(rules)
 	self.cursors[4] = Cursor.create(504, 360, 4)
 
 	-- Set variables and counters
-	self.event = IngameState.EVENT_NONE
 	self.time = self.rules.roundtime*60
+
+	self.event = IngameState.EVENT_NONE
+	self.eventTime = 0
+
 	self.score = {}
 	for i=1,4 do
 		self.score[i] = 0
@@ -58,14 +67,25 @@ function IngameState:update(dt)
 	-- Advance time
 	self.time = self.time - dt
 
+	-- Advance event time
+	if self.event ~= 0 then
+		self.eventTime = self.eventTime - dt
+		if self.eventTime < 0 then
+			self.event = 0
+		end
+	end
+
 	-- Cap mouse
 	love.mouse.setPosition(math.cap(love.mouse.getX(), 0, 582), math.cap(love.mouse.getY(), 0, 422))
 
-	-- Update counters and events
-	self.nextEntity = self.nextEntity - dt
+	-- Update spawn counter if not frozen
+	if self.event ~= IngameState.EVENT_FREEZE then
+		self.nextEntity = self.nextEntity - dt
+	end
+	-- Spawn new entity when counter runs out
 	if self.nextEntity <= 0 then
 		local freq = self.rules.frequency
-		if self.event == IngameState.EVENT_FRENZY then
+		if self.event == IngameState.EVENT_RUSH then
 			self.nextEntity = 0.05+math.random()/10
 		else
 			self.nextEntity = 1/(freq + math.randnorm()*freq)*60
@@ -74,9 +94,9 @@ function IngameState:update(dt)
 		local spawns = self.map:getSpawnPoints()
 		local e = table.random(spawns)
 
-		if self.event == IngameState.EVENT_FRENZY then
+		if self.event == IngameState.EVENT_RUSH then
 			table.insert(self.entities, Duck.create(e.x*48+24, e.y*48+24, e.dir))
-		elseif self.event == IngameState.EVENT_ENEMYFRENZY then
+		elseif self.event == IngameState.EVENT_PREDRUSH then
 			table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
 		else
 			-- Spawn random entity according to rules' percentages
@@ -130,25 +150,38 @@ function IngameState:update(dt)
 	end
 
 	-- Update entities
-	for i=#self.entities, 1, -1 do
-		self.entities[i]:update(dt, self.map, self.arrows)
-		local tile = self.entities[i]:getTile()
-
-		-- Check if entities hit submarine
-		if tile >= 10 and tile <= 14 then
-			local eType = self.entities[i]:getType()
-			local player = tile-9
-			if eType == Entity.TYPE_DUCK then
-				self.score[player] = self.score[player] + 1
-
-			elseif eType == Entity.TYPE_GOLDDUCK then
-				self.score[player] = self.score[player] + 50
-
-			elseif eType == Entity.TYPE_ENEMY then
-				self.score[player] = math.floor(self.score[player]*0.6667)
+	if self.event ~= IngameState.EVENT_FREEZE then
+		for i=#self.entities, 1, -1 do
+			-- Adjust delta time according to event
+			local entityDT = dt
+			if self.event == IngameState.EVENT_SPEEDUP then
+				entityDT = dt*1.5
+			elseif self.event == IngameState.EVENT_SLOWDOWN then
+				entityDT = dt*0.5
 			end
+			self.entities[i]:update(entityDT, self.map, self.arrows, self.event)
+			local tile = self.entities[i]:getTile()
 
-			table.remove(self.entities, i)
+			-- Check if entities hit submarine
+			if tile >= 10 and tile <= 14 then
+				local eType = self.entities[i]:getType()
+				local player = tile-9
+				if eType == Entity.TYPE_DUCK then
+					self.score[player] = self.score[player] + 1
+
+				elseif eType == Entity.TYPE_GOLDDUCK then
+					self.score[player] = self.score[player] + 50
+
+				elseif eType == Entity.TYPE_PINKDUCK then
+					self.score[player] = self.score[player] + 10
+					self:triggerEvent(player)
+
+				elseif eType == Entity.TYPE_ENEMY then
+					self.score[player] = math.floor(self.score[player]*0.6667)
+				end
+
+				table.remove(self.entities, i)
+			end
 		end
 	end
 end
@@ -261,4 +294,10 @@ function IngameState:canPlaceArrow(x, y)
 	end
 
 	return true
+end
+
+function IngameState:triggerEvent(player)
+	self.event = math.random(1, 8)
+	self.eventTime = self.rules.eventTime[self.event]
+	pushState(EventTextState.create(self.event))
 end

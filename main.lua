@@ -6,7 +6,9 @@ require("input")
 require("stack")
 require("state")
 require("rules")
+
 require("ingameState")
+require("eventTextState")
 
 require("sprite")
 require("anim")
@@ -25,19 +27,25 @@ function love.load()
 	love.graphics.setMode(700, 442, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
---	love.mouse.setGrab(true)
+	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 
 	stateStack = Stack.create()
-	stateStack:push(IngameState.create(Rules.create()))
+	pushState(IngameState.create(Rules.create()))
 end
 
 function love.update(dt)
+	if dt > 1/30 then
+		dt = 1/30
+	end
 	stateStack:peek():update(dt)
 end
 
 function love.draw()
-	stateStack:peek():draw()
+	if stateStack:peek(1):isTransparent() == true then
+		stateStack:peek(2):draw()
+	end
+	stateStack:peek(1):draw()
 end
 
 function love.keypressed(k, uni)
@@ -58,4 +66,12 @@ end
 
 function love.joystickpressed(joystick, button)
 	stateStack:peek():joystickpressed(joystick, button)
+end
+
+function pushState(state)
+	stateStack:push(state)
+end
+
+function popState()
+	stateStack:pop()
 end

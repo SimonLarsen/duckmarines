@@ -3,12 +3,13 @@ Game state object.
 Contains callbacks for updating and drawing game State
 and exposes Input objects to main program.
 ]]
-State = {}
+State = { inputs = {} }
 State.__index = State
 
 function State:update(dt) end
 function State:draw() end
-function State:getInputs() return {} end
+function State:getInputs() return self.inputs end
+function State:isTransparent() return false end
 
 function State:keypressed(...)
 	for i,v in ipairs(self:getInputs()) do

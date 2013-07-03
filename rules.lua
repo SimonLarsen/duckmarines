@@ -16,11 +16,21 @@ function Rules.create()
 	-- Percentage of entities that are golden ducks
 	self.goldperc = 6
 	-- Percentage of entities that are pink ducks
-	self.pinkperc = 3
+	self.pinkperc = 30
 	-- Time arrows stay before they disappear
 	self.arrowtime = 10
 	-- Number of arrows per player
 	self.maxarrows = 4
+
+	self.eventTime = {}
+	self.eventTime[IngameState.EVENT_RUSH] 		= 15
+	self.eventTime[IngameState.EVENT_PREDRUSH]	= 15
+	self.eventTime[IngameState.EVENT_FREEZE] 	= 7
+	self.eventTime[IngameState.EVENT_SWITCH] 	= 0
+	self.eventTime[IngameState.EVENT_PREDATORS]	= 0
+	self.eventTime[IngameState.EVENT_VACUUM] 	= 0
+	self.eventTime[IngameState.EVENT_SPEEDUP] 	= 10
+	self.eventTime[IngameState.EVENT_SLOWDOWN] 	= 10
 
 	return self
 end

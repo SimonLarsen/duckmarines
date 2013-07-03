@@ -26,6 +26,6 @@ end
 
 --- Peek at top of stack.
 --  @return Top element without popping
-function Stack:peek()
-	return self.stack[1]
+function Stack:peek(no)
+	return self.stack[no or 1]
 end
