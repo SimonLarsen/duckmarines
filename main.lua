@@ -25,7 +25,7 @@ function love.load()
 	love.graphics.setMode(700, 442, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
-	love.mouse.setGrab(true)
+--	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 
 	stateStack = Stack.create()

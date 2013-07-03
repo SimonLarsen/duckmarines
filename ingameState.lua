@@ -41,6 +41,9 @@ function IngameState.create(rules)
 	end
 	self.nextEntity = 2
 
+	-- Get sidebar image
+	self.imgSidebar = ResMgr.getImage("sidebar.png")
+
 	-- Get marker images
 	self.marker = {}
 	self.marker[1] = ResMgr.getImage("marker1.png")
@@ -193,24 +196,32 @@ function IngameState:draw()
 end
 
 function IngameState:drawHUD()
-	love.graphics.setColor(234, 73, 89)
-	love.graphics.rectangle("fill", 0, 90, 118, 88)
+	love.graphics.draw(self.imgSidebar, 0, 0)
 
-	love.graphics.setColor(76, 74, 145)
-	love.graphics.rectangle("fill", 0, 178, 118, 88)
+	love.graphics.setColor(0,0,0)
+	love.graphics.setFont(ResMgr.getFont("bold"))
 
-	love.graphics.setColor(232, 101, 49)
-	love.graphics.rectangle("fill", 0, 266, 118, 88)
+	love.graphics.push()
+	love.graphics.scale(3, 3)
 
-	love.graphics.setColor(150, 75, 164)
-	love.graphics.rectangle("fill", 0, 354, 118, 88)
+	local timeString = secsToString(self.time)
+	love.graphics.print(timeString, 7, 21)
 
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.print(secsToString(self.time), 48, 40)
-	love.graphics.print(self.score[1], 48, 130)
-	love.graphics.print(self.score[2], 48, 218)
-	love.graphics.print(self.score[3], 48, 306)
-	love.graphics.print(self.score[4], 48, 394)
+	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.print(timeString, 7, 22)
+	love.graphics.print(string.format("%03d", self.score[1]), 8, 47)
+	love.graphics.print(string.format("%03d", self.score[2]), 8, 76)
+	love.graphics.print(string.format("%03d", self.score[3]), 8, 105)
+	love.graphics.print(string.format("%03d", self.score[4]), 8, 134)
+	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.print(string.format("%03d", self.score[1]), 8, 46)
+	love.graphics.print(string.format("%03d", self.score[2]), 8, 75)
+	love.graphics.print(string.format("%03d", self.score[3]), 8, 104)
+	love.graphics.print(string.format("%03d", self.score[4]), 8, 133)
+
+	love.graphics.pop()
+
+	love.graphics.setColor(255,255,255)
 end
 
 function IngameState:getInputs()
