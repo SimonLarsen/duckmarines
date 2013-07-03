@@ -4,7 +4,7 @@ ResMgr.__index = ResMgr
 local images = {}
 local fonts = {}
 
-local fontString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:-?!()"
+local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:-?!()"
 
 function ResMgr.getImage(_path)
 	local path = "res/" .. _path
