@@ -184,6 +184,11 @@ function IngameState:update(dt)
 			end
 		end
 	end
+
+	-- Cap scores between 0 and 999
+	for i=1,3 do
+		self.score[i] = math.cap(self.score[i], 0, 999)
+	end
 end
 
 function IngameState:draw()
@@ -300,4 +305,17 @@ function IngameState:triggerEvent(player)
 	self.event = math.random(1, 8)
 	self.eventTime = self.rules.eventTime[self.event]
 	pushState(EventTextState.create(self.event))
+
+	if self.event == IngameState.EVENT_SWITCH then
+		self.map:shuffleSubmarines()
+	elseif self.event == IngameState.EVENT_PREDATORS then
+		local subs = self.map:getSubmarines()
+		for i,v in ipairs(subs) do
+			if v.player ~= player then
+				local e = Enemy.create(v.x*48+24, v.y*48, 2)
+				e.moved = 24
+				table.insert(self.entities, e)
+			end
+		end
+	end
 end

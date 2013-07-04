@@ -8,6 +8,7 @@ function Map.create(name)
 	self.frontBatch = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 128)
 	self.data = love.filesystem.load("res/maps/"..name..".lua")()
 	self.spawns = self:findSpawnPoints()
+	self.submarines = self:findSubmarines()
 
 	self:updateSpriteBatch()
 
@@ -15,6 +16,8 @@ function Map.create(name)
 end
 
 function Map:updateSpriteBatch()
+	self.frontBatch:clear()
+	self.backBatch:clear()
 	-- Ground tiles
 	local groundQuad1 = love.graphics.newQuad(144, 432, 48, 48, 512, 512)
 	local groundQuad2 = love.graphics.newQuad(192, 432, 48, 48, 512, 512)
@@ -78,6 +81,10 @@ function Map:getTile(x, y)
 	return self.data.tiles[x + y*12 +1]
 end
 
+function Map:setTile(x, y, id)
+	self.data.tiles[x + y*12 + 1] = id
+end
+
 function Map:getWall(x, y)
 	return self.data.walls[x + y*13 + 1]
 end
@@ -101,6 +108,42 @@ function Map:findSpawnPoints()
 		end
 	end
 	return spawns
+end
+
+function Map:getSubmarines()
+	return self.submarines
+end
+
+function Map:findSubmarines()
+	local submarines = {}
+	for iy=0,8 do
+		for ix=0,11 do
+			local tile = self:getTile(ix, iy)
+			if tile >= 10 and tile <= 14 then
+				local e = {}
+				e.x = ix
+				e.y = iy
+				e.player = tile - 9
+				table.insert(submarines, e)
+			end
+		end
+	end
+	return submarines
+end
+
+function Map:shuffleSubmarines()
+	local subs = self.submarines
+	for i=#subs, 2, -1 do
+		local j = math.random(1, i)
+		-- Swap tiles
+		local tilei = self:getTile(subs[i].x, subs[i].y)
+		local tilej = self:getTile(subs[j].x, subs[j].y)
+		self:setTile(subs[i].x, subs[i].y, tilej)
+		self:setTile(subs[j].x, subs[j].y, tilei)
+		-- Swap in array
+		subs[i], subs[j] = subs[j], subs[i]
+	end
+	self:updateSpriteBatch()
 end
 
 function Map:northWall(x, y)

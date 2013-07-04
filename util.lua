@@ -35,3 +35,12 @@ function secsToString(s)
 	local secs = math.floor(s % 60)
 	return mins .. ":" .. string.format("%02d", secs)
 end
+
+--- Shuffles a table using modern Fisher-Yates algorithm.
+--  @param Table to shuffle
+function shuffle(a)
+	for i=#a, 2, -1 do
+		local j = math.random(1, i)
+		a[i], a[j] = a[j], a[i]
+	end
+end
