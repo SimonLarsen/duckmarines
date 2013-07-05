@@ -17,7 +17,7 @@ function IngameState.create(rules)
 	self.rules = rules
 
 	-- Load map
-	self.map = Map.create("test")
+	self.map = Map.create("test2")
 
 	self.arrows = {}
 	for i=1,4 do
@@ -88,7 +88,7 @@ function IngameState:update(dt)
 		if self.event == IngameState.EVENT_RUSH then
 			self.nextEntity = 0.05+math.random()/10
 		else
-			self.nextEntity = 1/(freq + math.randnorm()*freq)*60
+			self.nextEntity = 1/(freq + math.randnorm()*0.8*freq)*60
 		end
 
 		local spawns = self.map:getSpawnPoints()
@@ -180,6 +180,9 @@ function IngameState:update(dt)
 					self.score[player] = math.floor(self.score[player]*0.6667)
 				end
 
+				table.remove(self.entities, i)
+			-- Check if entity hit hole
+			elseif tile == 2 then
 				table.remove(self.entities, i)
 			end
 		end
