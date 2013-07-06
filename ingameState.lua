@@ -12,12 +12,12 @@ IngameState.EVENT_VACUUM	= 6
 IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
-function IngameState.create(rules)
+function IngameState.create(mapname, rules)
 	local self = setmetatable({}, IngameState)
 	self.rules = rules
 
 	-- Load map
-	self.map = Map.create("test2")
+	self.map = Map.create(mapname)
 
 	self.arrows = {}
 	for i=1,4 do
@@ -170,7 +170,7 @@ function IngameState:update(dt)
 					self.score[player] = self.score[player] + 1
 
 				elseif eType == Entity.TYPE_GOLDDUCK then
-					self.score[player] = self.score[player] + 50
+					self.score[player] = self.score[player] + 25
 
 				elseif eType == Entity.TYPE_PINKDUCK then
 					self.score[player] = self.score[player] + 10
@@ -305,7 +305,8 @@ function IngameState:canPlaceArrow(x, y)
 end
 
 function IngameState:triggerEvent(player)
-	self.event = math.random(1, 8)
+	--self.event = math.random(1, 8)
+	self.event = IngameState.EVENT_VACUUM
 	self.eventTime = self.rules.eventTime[self.event]
 	pushState(EventTextState.create(self.event))
 
@@ -318,6 +319,21 @@ function IngameState:triggerEvent(player)
 				local e = Enemy.create(v.x*48+24, v.y*48, 2)
 				e.moved = 24
 				table.insert(self.entities, e)
+			end
+		end
+	elseif self.event == IngameState.EVENT_VACUUM then
+		local subs = self.map:getSubmarines()
+		local sub = nil
+		for i,v in ipairs(subs) do
+			if v.player == player then
+				sub = v
+				break
+			end
+		end
+		for i,v in ipairs(self.entities) do
+			local t = v:getType()
+			if t == Entity.TYPE_DUCK or t == Entity.TYPE_GOLDDUCK then
+				v:setFlying(sub.x*48+24, sub.y*48+24)
 			end
 		end
 	end

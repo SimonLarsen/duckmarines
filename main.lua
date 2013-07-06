@@ -31,7 +31,7 @@ function love.load()
 	love.mouse.setVisible(false)
 
 	stateStack = Stack.create()
-	pushState(IngameState.create(Rules.create()))
+	pushState(IngameState.create("test2", Rules.create()))
 end
 
 function love.update(dt)
