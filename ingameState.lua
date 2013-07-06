@@ -305,8 +305,7 @@ function IngameState:canPlaceArrow(x, y)
 end
 
 function IngameState:triggerEvent(player)
-	--self.event = math.random(1, 8)
-	self.event = IngameState.EVENT_VACUUM
+	self.event = math.random(1, 8)
 	self.eventTime = self.rules.eventTime[self.event]
 	pushState(EventTextState.create(self.event))
 
