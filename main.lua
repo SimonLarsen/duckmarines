@@ -23,9 +23,11 @@ require("pinkduck")
 require("enemy")
 
 local stateStack = nil
+WIDTH = 700
+HEIGHT = 442
 
 function love.load()
-	love.graphics.setMode(700, 442, false, true)
+	love.graphics.setMode(WIDTH, HEIGHT, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
 	love.mouse.setGrab(true)
