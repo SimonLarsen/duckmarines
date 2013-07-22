@@ -196,7 +196,7 @@ end
 
 function IngameState:draw()
 	love.graphics.push()
-	love.graphics.translate(118+3, 8)
+	love.graphics.translate(121, 8)
 
 	-- Draw map back layer
 	love.graphics.draw(self.map:getBackBatch(), 0, 0)
@@ -307,10 +307,11 @@ end
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, 8)
 	self.eventTime = self.rules.eventTime[self.event]
-	pushState(EventTextState.create(self.event))
-
 	if self.event == IngameState.EVENT_SWITCH then
+		local oldsubs = self.map:getSubmarines()
 		self.map:shuffleSubmarines()
+		local newsubs = self.map:getSubmarines()
+		pushState(SwitchAnimState.create(oldsubs, newsubs))
 	elseif self.event == IngameState.EVENT_PREDATORS then
 		local subs = self.map:getSubmarines()
 		for i,v in ipairs(subs) do
@@ -336,4 +337,6 @@ function IngameState:triggerEvent(player)
 			end
 		end
 	end
+
+	pushState(EventTextState.create(self.event))
 end

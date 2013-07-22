@@ -47,8 +47,6 @@ function EventTextState:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.print(eventName[self.event], 10, math.floor((self.boxy+40)/4))
 	love.graphics.pop()
-
-	return true
 end
 
 function EventTextState:isTransparent()

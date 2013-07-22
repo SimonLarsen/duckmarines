@@ -144,6 +144,7 @@ function Map:shuffleSubmarines()
 		subs[i], subs[j] = subs[j], subs[i]
 	end
 	self:updateSpriteBatch()
+	self.submarines = self:findSubmarines()
 end
 
 function Map:northWall(x, y)

@@ -9,6 +9,7 @@ require("rules")
 
 require("ingameState")
 require("eventTextState")
+require("switchAnimState")
 
 require("sprite")
 require("anim")
@@ -42,10 +43,13 @@ function love.update(dt)
 end
 
 function love.draw()
-	if stateStack:peek(1):isTransparent() == true then
-		stateStack:peek(2):draw()
+	local bottom = 1
+	while stateStack:peek(bottom):isTransparent() == true do
+		bottom = bottom + 1
 	end
-	stateStack:peek(1):draw()
+	for i=bottom, 1, -1 do
+		stateStack:peek(i):draw()
+	end
 end
 
 function love.keypressed(k, uni)
