@@ -6,7 +6,14 @@ function Map.create(name)
 
 	self.backBatch  = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 128)
 	self.frontBatch = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 128)
-	self.data = love.filesystem.load("res/maps/"..name..".lua")()
+	if name ~= nil then
+		self.data = love.filesystem.load("res/maps/"..name..".lua")()
+	else
+		self.data = {}
+		self.data.tiles = {}
+		self.data.walls = {}
+		self:clearMap()
+	end
 	self.spawns = self:findSpawnPoints()
 	self.submarines = self:findSubmarines()
 
@@ -89,6 +96,10 @@ function Map:getWall(x, y)
 	return self.data.walls[x + y*13 + 1]
 end
 
+function Map:setWall(x, y, val)
+	self.data.walls[x + y*13 + 1] = val
+end
+
 function Map:getSpawnPoints()
 	return self.spawns
 end
@@ -145,6 +156,29 @@ function Map:shuffleSubmarines()
 	end
 	self:updateSpriteBatch()
 	self.submarines = self:findSubmarines()
+end
+
+function Map:clearMap()
+	for iy=0,8 do
+		for ix=0,11 do
+			self:setTile(ix, iy, 0)
+		end
+	end
+	for iy=0,9 do
+		for ix=0,12 do
+			if ix == 0 or ix == 12 then
+				self:setWall(ix, iy, 2)
+			elseif iy == 0 or iy == 9 then
+				self:setWall(ix, iy, 1)
+			else
+				self:setWall(ix, iy, 0)
+			end
+		end
+	end
+	self:setWall( 0,0, 3)
+	self:setWall( 0,9, 1)
+	self:setWall(12,0, 2)
+	self:setWall(12,9, 0)
 end
 
 function Map:northWall(x, y)

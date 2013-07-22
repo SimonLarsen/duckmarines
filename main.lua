@@ -7,9 +7,11 @@ require("stack")
 require("state")
 require("rules")
 
+require("mainMenuState")
 require("ingameState")
 require("eventTextState")
 require("switchAnimState")
+require("levelEditorState")
 
 require("sprite")
 require("anim")
@@ -34,7 +36,7 @@ function love.load()
 	love.mouse.setVisible(false)
 
 	stateStack = Stack.create()
-	pushState(IngameState.create("test2", Rules.create()))
+	pushState(MainMenuState.create())
 end
 
 function love.update(dt)
