@@ -12,6 +12,12 @@ function Input:getAction()
 	return ac
 end
 
+function Input:wasClicked()
+	local cl = self.clicked
+	self.clicked = false
+	return cl
+end
+
 function Input:isDown()
 	return false
 end
@@ -34,6 +40,7 @@ function KeyboardInput.create()
 	local self = setmetatable({}, KeyboardInput)
 
 	self.action = nil
+	self.clicked = false
 	self.type = Input.TYPE_KEYBOARD
 
 	return self
@@ -58,7 +65,9 @@ function KeyboardInput:getMovement(dt)
 end
 
 function KeyboardInput:keypressed(k, uni)
-	if love.keyboard.isDown(" ") then
+	if k == " " then
+		self.clicked = true
+	elseif love.keyboard.isDown(" ") then
 		if k == "up" then
 			self.action = 0
 		elseif k == "right" then
@@ -83,6 +92,7 @@ setmetatable(MouseInput, Input)
 function MouseInput.create()
 	local self = setmetatable({}, MouseInput)
 	self.type = Input.TYPE_MOUSE
+	self.clicked = false
 	return self
 end
 
@@ -95,6 +105,7 @@ end
 
 function MouseInput:mousepressed(x, y, button)
 	if button == "l" then
+		self.clicked = true
 		self.clickx = x
 		self.clicky = y
 	end
@@ -124,6 +135,8 @@ function JoystickInput.create(id)
 
 	self.id = id
 	self.type = Input.TYPE_JOYSTICK
+	self.clicked = false
+	self.down = false
 
 	return self
 end
@@ -143,9 +156,9 @@ function JoystickInput:getMovement(dt)
 			if axis2 then
 				dy = axis2 * self.SPEED * dt
 			end
-		elseif self.clicked == true then
+		elseif self.down == true then
 			if axis1 ~= 0 or axis2 ~= 0 then
-				self.clicked = false
+				self.down = false
 				self.action = vecToDir(axis1, axis2)
 			end
 		end
@@ -156,6 +169,7 @@ end
 
 function JoystickInput:joystickpressed(joystick, button)
 	if joystick == self.id and button == 1 then
+		self.down = true
 		self.clicked = true
 	end
 end

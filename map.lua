@@ -22,7 +22,9 @@ function Map.create(name)
 	return self
 end
 
-function Map:updateSpriteBatch()
+function Map:updateSpriteBatch(debug)
+	debug = debug or false
+
 	self.frontBatch:clear()
 	self.backBatch:clear()
 	-- Ground tiles
@@ -40,7 +42,7 @@ function Map:updateSpriteBatch()
 
 			local tile = self:getTile(ix, iy)
 			if tile > 0 then
-				if tile >= 5 and tile <= 7 then
+				if tile >= 4 and tile <= 7 and not debug then
 					tile = 3
 				end
 

@@ -26,8 +26,8 @@ function Cursor:move(dx, dy, absolute)
 		self.y = self.y + dy
 	end
 
-	self.x = math.cap(self.x, 0, 562)
-	self.y = math.cap(self.y, 0, 422)
+	self.x = math.cap(self.x, 0, WIDTH)
+	self.y = math.cap(self.y, 0, HEIGHT)
 end
 
 function Cursor:getDrawable()
