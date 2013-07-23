@@ -12,7 +12,8 @@ function LevelEditorState.create()
 	self.map = Map.create()
 
 	self.state = LevelEditorState.STATE_TILE
-	self.tile = 2
+	self.selection = 0
+	self.tile = 0
 
 	self.inputs = {}
 	self.inputs[1] = KeyboardInput.create()
@@ -58,8 +59,8 @@ function LevelEditorState:update(dt)
 			-- Check if in menu area
 			if self.cursor.x >= 10 and self.cursor.x <= 107 then
 				-- In tile selection area
-				self.state = LevelEditorState.STATE_TILE
 				if self.cursor.y >= 122 and self.cursor.y <= 369 then
+					self.state = LevelEditorState.STATE_TILE
 					local id = math.floor((self.cursor.x-10) / 50)
 						+ math.floor((self.cursor.y-122) / 50)*2
 					if id == 0 then
@@ -71,6 +72,13 @@ function LevelEditorState:update(dt)
 					else
 						self.tile = id+4
 					end
+					self.selection = id
+				elseif self.cursor.y >= 384 and self.cursor.y <= 431 then
+					if self.cursor.x <= 58 then
+						self.state = LevelEditorState.STATE_ADD_FENCE
+					else
+						self.state = LevelEditorState.STATE_REM_FENCE
+					end
 				end
 			end
 			break
@@ -79,23 +87,20 @@ function LevelEditorState:update(dt)
 end
 
 function LevelEditorState:draw()
-	love.graphics.push()
-	love.graphics.translate(121, 8)
-
 	-- Draw map back layer
-	love.graphics.draw(self.map:getBackBatch(), 0, 0)
+	love.graphics.draw(self.map:getBackBatch(), 121, 8)
 
 	-- Draw tile marker
 	if self.state == LevelEditorState.STATE_TILE and self:cursorInMap() then
-		local mx = math.floor((self.cursor.x-121) / 48)*48
-		local my = math.floor((self.cursor.y-8) / 48)*48
-		love.graphics.draw(self.marker, mx, my)
+		if self:cursorInMap() then
+			local mx = math.floor((self.cursor.x-121) / 48)*48+121
+			local my = math.floor((self.cursor.y-8) / 48)*48+8
+			love.graphics.draw(self.marker, mx, my)
+		end
 	end
 
 	-- Draw map front layer
-	love.graphics.draw(self.map:getFrontBatch(), 0, 0)
-
-	love.graphics.pop()
+	love.graphics.draw(self.map:getFrontBatch(), 121, 8)
 
 	-- Draw buttons
 	-- Menu buttons
@@ -112,6 +117,19 @@ function LevelEditorState:draw()
 	end
 	love.graphics.drawq(self.buttons, self.buttonQuad[14], 10, 384)
 	love.graphics.drawq(self.buttons, self.buttonQuad[15], 60, 384)
+
+	-- Draw menu selection marker
+	if self.state == LevelEditorState.STATE_TILE then
+		if self.selection <= 1 then
+			love.graphics.draw(self.marker, 10+self.selection*50, 122)
+		else
+			love.graphics.draw(self.marker, 10+(self.selection % 2)*50, 122+math.floor(self.selection/2)*50)
+		end
+	elseif self.state == LevelEditorState.STATE_ADD_FENCE then
+		love.graphics.draw(self.marker, 10, 384)
+	elseif self.state == LevelEditorState.STATE_REM_FENCE then
+		love.graphics.draw(self.marker, 60, 384)
+	end
 
 	-- Draw cursor
 	self.cursor:getDrawable():draw(self.cursor.x, self.cursor.y)
