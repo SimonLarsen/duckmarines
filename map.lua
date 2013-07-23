@@ -4,7 +4,7 @@ Map.__index = Map
 function Map.create(name)
 	local self = setmetatable({}, Map)
 
-	self.backBatch  = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 128)
+	self.backBatch  = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 256)
 	self.frontBatch = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 128)
 	if name ~= nil then
 		self.data = love.filesystem.load("res/maps/"..name..".lua")()

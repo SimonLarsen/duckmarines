@@ -12,6 +12,10 @@ function Input:getAction()
 	return ac
 end
 
+function Input:isDown()
+	return false
+end
+
 function Input:getType()
 	return self.type
 end
@@ -67,6 +71,10 @@ function KeyboardInput:keypressed(k, uni)
 	end
 end
 
+function KeyboardInput:isDown()
+	return love.keyboard.isDown(" ")
+end
+
 --- Mouse input
 MouseInput = {}
 MouseInput.__index = MouseInput
@@ -100,6 +108,10 @@ function MouseInput:mousereleased(x, y, button)
 			self.action = vecToDir(dx, dy)
 		end
 	end
+end
+
+function MouseInput:isDown()
+	return love.mouse.isDown("l")
 end
 
 --- Joystick Input
@@ -146,4 +158,8 @@ function JoystickInput:joystickpressed(joystick, button)
 	if joystick == self.id and button == 1 then
 		self.clicked = true
 	end
+end
+
+function JoystickInput:isDown()
+	return love.joystick.isDown(self.id, 1)
 end

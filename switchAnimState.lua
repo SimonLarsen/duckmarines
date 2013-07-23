@@ -16,9 +16,11 @@ function SwitchAnimState.create(oldsubs, newsubs)
 	self.newanims = {}
 	for i=1,4 do
 		self.oldanims[i] = Animation.create(ResMgr.getImage("sub_sink".. oldsubs[i].player ..".png"),
-			48, 48, 0, 0, self.SINK_TIME/8, 8)
+			48, 48, 0, 0, self.SINK_TIME/12, 12)
 		self.newanims[i] = Animation.create(ResMgr.getImage("sub_raise".. newsubs[i].player ..".png"),
 			48, 48, 0, 0, self.RAISE_TIME/7, 7)
+		self.oldanims[i].mode = 2
+		self.newanims[i].mode = 2
 	end
 
 	self.time = 0
