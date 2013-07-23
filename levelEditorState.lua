@@ -13,6 +13,7 @@ function LevelEditorState.create()
 
 	self.state = LevelEditorState.STATE_TILE
 	self.selection = 0
+	self.lastx, self.lasty = 0,0
 	self.tile = 0
 
 	self.inputs = {}
@@ -22,6 +23,7 @@ function LevelEditorState.create()
 
 	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	self.marker = ResMgr.getImage("marker1.png")
+	self.fence_marker = ResMgr.getImage("fence_marker.png")
 
 	self.buttons = ResMgr.getImage("editor_buttons.png")
 	self.buttonQuad = {}
@@ -41,12 +43,26 @@ function LevelEditorState:update(dt)
 
 	-- Draw tiles and fences if an input is held down
 	for i,v in ipairs(self.inputs) do
-		if v:isDown() then
-			if self.state == LevelEditorState.STATE_TILE and self:cursorInMap() then
+		if v:isDown() and self:cursorInMap() then
+			if self.state == LevelEditorState.STATE_TILE then
 				local cx = math.floor((self.cursor.x-121) / 48)
 				local cy = math.floor((self.cursor.y-8) / 48)
 				if self.map:getTile(cx,cy) ~= self.tile then
 					self.map:setTile(cx,cy, self.tile)
+					self.map:updateSpriteBatch(true)
+				end
+			elseif self.state == LevelEditorState.STATE_ADD_FENCE then
+				cx = math.floor((self.cursor.x - 97)/48)
+				cy = math.floor((self.cursor.y + 16)/48)
+				if cx ~= self.lastx or cy ~= self.lasty then
+					self:addFence(self.lastx, self.lasty, cx, cy)
+					self.map:updateSpriteBatch(true)
+				end
+			elseif self.state == LevelEditorState.STATE_REM_FENCE then
+				cx = math.floor((self.cursor.x - 97)/48)
+				cy = math.floor((self.cursor.y + 16)/48)
+				if cx ~= self.lastx or cy ~= self.lasty then
+					self:removeFence(self.lastx, self.lasty, cx, cy)
 					self.map:updateSpriteBatch(true)
 				end
 			end
@@ -84,6 +100,13 @@ function LevelEditorState:update(dt)
 			break
 		end
 	end
+	if self.state == LevelEditorState.STATE_ADD_FENCE
+	or self.state == LevelEditorState.STATE_REM_FENCE then
+		if self:cursorInMap() then
+			self.lastx = math.floor((self.cursor.x - 97)/48)
+			self.lasty = math.floor((self.cursor.y + 16)/48)
+		end
+	end
 end
 
 function LevelEditorState:draw()
@@ -91,11 +114,14 @@ function LevelEditorState:draw()
 	love.graphics.draw(self.map:getBackBatch(), 121, 8)
 
 	-- Draw tile marker
-	if self.state == LevelEditorState.STATE_TILE and self:cursorInMap() then
-		if self:cursorInMap() then
+	if self:cursorInMap() then
+		if self.state == LevelEditorState.STATE_TILE then
 			local mx = math.floor((self.cursor.x-121) / 48)*48+121
 			local my = math.floor((self.cursor.y-8) / 48)*48+8
 			love.graphics.draw(self.marker, mx, my)
+		elseif self.state == LevelEditorState.STATE_ADD_FENCE or
+		self.state == LevelEditorState.STATE_REM_FENCE then
+			love.graphics.draw(self.fence_marker, 117+self.lastx*48, self.lasty*48-3)
 		end
 	end
 
@@ -137,4 +163,40 @@ end
 
 function LevelEditorState:cursorInMap()
 	return self.cursor.x >= 121 and self.cursor.x <= WIDTH-4 and self.cursor.y >= 8 and self.cursor.y <= HEIGHT-4
+end
+
+function LevelEditorState:addFence(x1, y1, x2, y2)
+	-- Horizontal
+	if y1 == y2 then
+		local x = math.min(x1, x2)
+		local val = self.map:getWall(x, y1)
+		if val % 2 == 0 then
+			self.map:setWall(x, y1, val+1)
+		end
+	-- Vertical
+	elseif x1 == x2 then
+		local y = math.min(y1, y2)
+		local val = self.map:getWall(x1, y)
+		if val < 2 then
+			self.map:setWall(x1, y, val+2)
+		end
+	end
+end
+
+function LevelEditorState:removeFence(x1, y1, x2, y2)
+	-- Horizontal
+	if y1 == y2 then
+		if y1 == 0 or y1 == 9 then return end
+
+		local x = math.min(x1, x2)
+		local val = self.map:getWall(x, y1)
+		self.map:setWall(x, y1, val - (val%2))
+	-- Vertical
+	elseif x1 == x2 then
+		if x1 == 0 or x1 == 12 then return end
+
+		local y = math.min(y1, y2)
+		local val = self.map:getWall(x1, y)
+		self.map:setWall(x1, y, val%2)
+	end
 end
