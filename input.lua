@@ -93,6 +93,7 @@ function MouseInput.create()
 	local self = setmetatable({}, MouseInput)
 	self.type = Input.TYPE_MOUSE
 	self.clicked = false
+	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 	return self
 end
 
@@ -100,7 +101,8 @@ function MouseInput:getMovement(dt)
 	local mx = love.mouse.getX()
 	local my = love.mouse.getY()
 
-	return love.mouse.getX(), love.mouse.getY(), true
+	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
+	return mx-WIDTH/2, my-HEIGHT/2, false
 end
 
 function MouseInput:mousepressed(x, y, button)
