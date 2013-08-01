@@ -4,6 +4,7 @@ require("resmgr")
 require("map")
 require("input")
 
+require("menu")
 require("stack")
 require("state")
 require("rules")

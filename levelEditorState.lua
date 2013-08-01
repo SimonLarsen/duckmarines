@@ -113,7 +113,7 @@ function LevelEditorState:update(dt)
 						end
 					else
 						-- Open file
-						if self.cusor.x <= 58 then
+						if self.cursor.x <= 58 then
 						-- Quit editor
 						else
 						end
