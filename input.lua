@@ -98,11 +98,15 @@ function MouseInput.create()
 end
 
 function MouseInput:getMovement(dt)
-	local mx = love.mouse.getX()
-	local my = love.mouse.getY()
+	if self.clicked == false then
+		local mx = love.mouse.getX()
+		local my = love.mouse.getY()
 
-	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
-	return mx-WIDTH/2, my-HEIGHT/2, false
+		love.mouse.setPosition(WIDTH/2, HEIGHT/2)
+		return mx-WIDTH/2, my-HEIGHT/2, false
+	else
+		return 0, 0, false
+	end
 end
 
 function MouseInput:mousepressed(x, y, button)
@@ -120,6 +124,8 @@ function MouseInput:mousereleased(x, y, button)
 		if dx ~= 0 or dy ~= 0 then
 			self.action = vecToDir(dx, dy)
 		end
+		self.clicked = false
+		love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 	end
 end
 

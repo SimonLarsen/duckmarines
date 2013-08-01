@@ -137,14 +137,8 @@ function IngameState:update(dt)
 	for i=1,4 do
 		local ac = self.inputs[i]:getAction()
 		if ac then
-			local cx, cy = 0, 0
-			if self.inputs[i]:getType() == Input.TYPE_MOUSE then
-				cx = math.floor(self.inputs[i].clickx / 48)
-				cy = math.floor(self.inputs[i].clicky / 48)
-			else
-				cx = math.floor(self.cursors[i].x / 48)
-				cy = math.floor(self.cursors[i].y / 48)
-			end
+			local cx = math.floor(self.cursors[i].x / 48)
+			local cy = math.floor(self.cursors[i].y / 48)
 			self:placeArrow(cx, cy, ac, i)
 		end
 	end
