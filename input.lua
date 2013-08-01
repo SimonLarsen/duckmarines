@@ -118,7 +118,7 @@ function MouseInput:mousepressed(x, y, button)
 end
 
 function MouseInput:mousereleased(x, y, button)
-	if button == "l" then
+	if self.clicked == true and button == "l" then
 		local dx = x - self.clickx
 		local dy = y - self.clicky
 		if dx ~= 0 or dy ~= 0 then

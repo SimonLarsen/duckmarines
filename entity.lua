@@ -15,7 +15,7 @@ function Entity.create(x, y, dir)
 
 	self.x, self.y = x, y
 	self.dir = dir
-	self.moved = 0
+	self.moved = 48
 	self.tile = 0
 	self.state = Entity.STATE_WALKING
 
@@ -41,7 +41,7 @@ function Entity:update(dt, map, arrows)
 
 		-- Check if whole step has been moved
 		self.moved = self.moved + toMove
-		if self.moved > 48 then
+		if self.moved >= 48 then
 			-- Collide with walls
 			local cx = math.floor(self.x / 48)
 			local cy = math.floor(self.y / 48)
