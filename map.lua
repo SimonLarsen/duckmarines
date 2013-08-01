@@ -7,7 +7,8 @@ function Map.create(name)
 	self.backBatch  = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 256)
 	self.frontBatch = love.graphics.newSpriteBatch(ResMgr.getImage("tiles.png"), 512)
 	if name ~= nil then
-		self.data = love.filesystem.load("res/maps/"..name..".lua")()
+		local strdata = love.filesystem.read(name)
+		self.data = TSerial.unpack(strdata, true)
 	else
 		self.data = {}
 		self.data.tiles = {}
@@ -181,6 +182,42 @@ function Map:clearMap()
 	self:setWall( 0,9, 1)
 	self:setWall(12,0, 2)
 	self:setWall(12,9, 0)
+end
+
+function Map:verify()
+	local subsFound = {0, 0, 0, 0}
+	local spawnerFound = false
+	for iy = 0,8 do
+		for ix=0,11 do
+			local t = self:getTile(ix, iy)
+			-- Check submarines
+			if t >= 4 and t <= 7 then
+				spawnerFound = true
+			elseif t >= 10 and t <= 13 then
+				subsFound[t-9] = subsFound[t-9]+1
+			end
+		end
+	end
+
+	-- Check if map contains at least one spawner
+	if spawnerFound == false then
+		return false, "MAP SHOULD CONTAIN AT LEAST ONE SPAWNER"
+	end
+	-- Check if all four subs are represented once
+	for i=1,4 do
+		if subsFound[i] ~= 1 then
+			return false, "MAP SHOULD CONTAIN ONE OF EACH SUBMARINE"
+		end
+	end
+
+	return true
+end
+
+function Map:pack()
+	local data = {}
+	data.tiles = self.data.tiles
+	data.walls = self.data.walls
+	return TSerial.pack(data)
 end
 
 function Map:northWall(x, y)

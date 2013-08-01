@@ -89,11 +89,34 @@ function LevelEditorState:update(dt)
 						self.tile = id+4
 					end
 					self.selection = id
+				-- Fence tool area
 				elseif self.cursor.y >= 384 and self.cursor.y <= 431 then
 					if self.cursor.x <= 58 then
 						self.state = LevelEditorState.STATE_ADD_FENCE
 					else
 						self.state = LevelEditorState.STATE_REM_FENCE
+					end
+				-- File menu
+				elseif self.cursor.y >= 11 and self.cursor.y <= 108 then
+					if self.cursor.y <= 59 then
+						-- New file
+						if self.cursor.x <= 58 then
+						-- Save file
+						else
+							local valid, msg = self.map:verify()
+							if valid == true then
+								local strdata = self.map:pack()
+								love.filesystem.write("usermaps/custom.lua", strdata)
+							else
+								print("error: " .. msg)
+							end
+						end
+					else
+						-- Open file
+						if self.cusor.x <= 58 then
+						-- Quit editor
+						else
+						end
 					end
 				end
 			end

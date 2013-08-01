@@ -1,3 +1,4 @@
+require("Tserial")
 require("util")
 require("resmgr")
 require("map")
@@ -29,12 +30,20 @@ WIDTH = 700
 HEIGHT = 442
 
 function love.load()
+	-- Setup screen
 	love.graphics.setMode(WIDTH, HEIGHT, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
+	-- Setup user data
+	if love.filesystem.exists("usermaps") == false then
+		love.filesystem.mkdir("usermaps")
+	end
+
+	-- Setup mouse
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 
+	-- Setup gamestate stack
 	stateStack = Stack.create()
 	pushState(MainMenuState.create())
 end

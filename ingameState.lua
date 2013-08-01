@@ -300,7 +300,6 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, 8)
-	self.event = IngameState.EVENT_SWITCH
 	self.eventTime = self.rules.eventTime[self.event]
 	if self.event == IngameState.EVENT_SWITCH then
 		local oldsubs = self.map:getSubmarines()
