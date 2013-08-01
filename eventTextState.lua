@@ -38,11 +38,11 @@ function EventTextState:update(dt)
 end
 
 function EventTextState:draw()
-	love.graphics.draw(self.imgBox, 0, self.boxy)
-
 	love.graphics.setColor(0, 0, 0, 128)
 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
 	love.graphics.setColor(255, 255, 255, 255)
+
+	love.graphics.draw(self.imgBox, 0, self.boxy)
 
 	love.graphics.push()
 	love.graphics.scale(4, 4)
