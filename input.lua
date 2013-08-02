@@ -46,11 +46,11 @@ function KeyboardInput.create()
 	return self
 end
 
-function KeyboardInput:getMovement(dt)
+function KeyboardInput:getMovement(dt, lock)
 	local dx = 0
 	local dy = 0
 
-	if not love.keyboard.isDown(" ") then
+	if not love.keyboard.isDown(" ") or lock == false then
 		if love.keyboard.isDown("left") then
 			dx = dx - self.SPEED * dt end
 		if love.keyboard.isDown("right") then
@@ -149,7 +149,7 @@ function JoystickInput.create(id)
 	return self
 end
 
-function JoystickInput:getMovement(dt)
+function JoystickInput:getMovement(dt, lock)
 	local dx = 0
 	local dy = 0
 
@@ -157,7 +157,7 @@ function JoystickInput:getMovement(dt)
 	local axis2 = love.joystick.getAxis(self.id, 2)
 
 	if axis1 and axis2 then
-		if not love.joystick.isDown(self.id, 1) then
+		if not love.joystick.isDown(self.id, 1) or lock == false then
 			if axis1 then
 				dx = axis1 * self.SPEED * dt
 			end

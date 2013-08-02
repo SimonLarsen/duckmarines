@@ -38,7 +38,7 @@ end
 
 function LevelEditorState:update(dt)
 	for i,v in ipairs(self.inputs) do
-		self.cursor:move(v:getMovement(dt))
+		self.cursor:move(v:getMovement(dt, false))
 	end
 
 	-- Draw tiles and fences if an input is held down
@@ -101,6 +101,8 @@ function LevelEditorState:update(dt)
 					if self.cursor.y <= 59 then
 						-- New file
 						if self.cursor.x <= 58 then
+							self.map:clear()
+							self.map:updateSpriteBatch(true)
 						-- Save file
 						else
 							local valid, msg = self.map:verify()
@@ -114,8 +116,11 @@ function LevelEditorState:update(dt)
 					else
 						-- Open file
 						if self.cursor.x <= 58 then
+							self.map = Map.create("usermaps/custom.lua")
+							self.map:updateSpriteBatch(true)
 						-- Quit editor
 						else
+							popState()
 						end
 					end
 				end

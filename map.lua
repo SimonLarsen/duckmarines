@@ -13,7 +13,7 @@ function Map.create(name)
 		self.data = {}
 		self.data.tiles = {}
 		self.data.walls = {}
-		self:clearMap()
+		self:clear()
 	end
 	self.spawns = self:findSpawnPoints()
 	self.submarines = self:findSubmarines()
@@ -161,7 +161,7 @@ function Map:shuffleSubmarines()
 	self.submarines = self:findSubmarines()
 end
 
-function Map:clearMap()
+function Map:clear()
 	for iy=0,8 do
 		for ix=0,11 do
 			self:setTile(ix, iy, 0)
