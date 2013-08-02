@@ -12,7 +12,7 @@ function MainMenuState.create()
 	
 	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 
-	self.menu = Menu.create((WIDTH-200)/2, 220, 220, 32, 16, self)
+	self.menu = Menu.create((WIDTH-200)/2, 220, 220, 32, 20, self)
 	self.menu:addButton("START GAME", "start")
 	self.menu:addButton("OPTIONS", "options")
 	self.menu:addButton("LEVEL EDITOR", "editor")

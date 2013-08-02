@@ -60,18 +60,20 @@ function Menu:draw()
 	love.graphics.scale(2,2)
 	love.graphics.setFont(ResMgr.getFont("bold"))
 
-	-- Draw text shadow
-	love.graphics.setColor(131, 80, 0, 255)
+	-- Draw embossed text
 	for i,v in ipairs(self.buttons) do
-		love.graphics.printf(v.text, v.x/2, (v.y+self.height/2-7)/2, self.width/2, "center")
+		local x = v.x/2
+		local y = (v.y+self.height/2-6)/2
+		local w = self.width/2
+		love.graphics.setColor(44, 27, 0, 255)
+		love.graphics.printf(v.text, x, y-1, w, "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf(v.text, x, y+1, w, "center")
+		love.graphics.setColor(131, 80, 0, 255)
+		love.graphics.printf(v.text, x, y, w, "center")
 	end
 
-	-- Draw text
 	love.graphics.setColor(255, 255, 255, 255)
-	for i,v in ipairs(self.buttons) do
-		love.graphics.printf(v.text, v.x/2, (v.y+self.height/2-8)/2, self.width/2, "center")
-	end
-
 	love.graphics.pop()
 end
 
