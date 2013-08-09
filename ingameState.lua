@@ -168,9 +168,15 @@ function IngameState:update(dt)
 				local player = tile-9
 				if eType == Entity.TYPE_DUCK then
 					self.score[player] = self.score[player] + 1
+					local x = math.floor(self.entities[i].x / 48)*48-2
+					local y = math.floor(self.entities[i].y / 48)*48+1
+					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 
 				elseif eType == Entity.TYPE_GOLDDUCK then
 					self.score[player] = self.score[player] + 25
+					local x = math.floor(self.entities[i].x / 48)*48-2
+					local y = math.floor(self.entities[i].y / 48)*48+1
+					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 
 				elseif eType == Entity.TYPE_PINKDUCK then
 					self.score[player] = self.score[player] + 10
@@ -221,6 +227,13 @@ function IngameState:draw()
 		end
 	end
 
+	-- Draw back particles
+	for i,v in ipairs(self.particles) do
+		if v.layer == Particle.LAYER_BACK then
+			v:draw()
+		end
+	end
+
 	-- Draw cursors
 	for i,v in ipairs(self.cursors) do
 		local mx = math.floor(v.x / 48)*48
@@ -236,9 +249,11 @@ function IngameState:draw()
 	   v:draw()
 	end
 
-	-- Draw particles
+	-- Draw front particles
 	for i,v in ipairs(self.particles) do
-		v:draw()
+		if v.layer == Particle.LAYER_FRONT then
+			v:draw()
+		end
 	end
 
 	-- Draw cursors
