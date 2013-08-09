@@ -14,6 +14,7 @@ require("mainMenuState")
 require("ingameState")
 require("eventTextState")
 require("switchAnimState")
+require("gameOverState")
 require("levelEditorState")
 
 require("sprite")

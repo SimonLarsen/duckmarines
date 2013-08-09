@@ -12,8 +12,11 @@ IngameState.EVENT_VACUUM	= 6
 IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
-function IngameState.create(mapname, rules)
+function IngameState.create(inputs, mapname, rules)
 	local self = setmetatable({}, IngameState)
+
+	self.inputs = inputs
+	self.mapname = mapname
 	self.rules = rules
 
 	-- Load map
@@ -26,12 +29,7 @@ function IngameState.create(mapname, rules)
 
 	self.entities = {}
 
-	-- Initialize cursors and inputs
-	self.inputs = {}
-	self.inputs[1] = KeyboardInput.create()
-	self.inputs[2] = MouseInput.create()
-	self.inputs[3] = JoystickInput.create(1)
-	self.inputs[4] = JoystickInput.create(2)
+	-- Initialize cursors
 	self.cursors = {}
 	self.cursors[1] = Cursor.create( 72,  72, 1)
 	self.cursors[2] = Cursor.create(504,  72, 2)
@@ -66,6 +64,10 @@ end
 function IngameState:update(dt)
 	-- Advance time
 	self.time = self.time - dt
+	if self.time < 1 then
+		self.time = 0
+		pushState(GameOverState.create(self.inputs, self.score, self))
+	end
 
 	-- Advance event time
 	if self.event ~= 0 then
