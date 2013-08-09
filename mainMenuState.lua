@@ -2,8 +2,10 @@ MainMenuState = {}
 MainMenuState.__index = MainMenuState
 setmetatable(MainMenuState, State)
 
-function MainMenuState.create()
+function MainMenuState.create(config)
 	local self = setmetatable({}, MainMenuState)
+
+	self.config = config
 
 	self.inputs = {}
 	self.inputs[1] = KeyboardInput.create()
@@ -37,6 +39,10 @@ function MainMenuState:update(dt)
 end
 
 function MainMenuState:draw()
+	love.graphics.setColor(16, 34, 90)
+	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+	love.graphics.setColor(255, 255, 255)
+
 	self.menu:draw()
 	love.graphics.print("1 START TEST", 32, 32)
 	love.graphics.print("2 START TEST2", 32, 48)
@@ -65,6 +71,9 @@ end
 function MainMenuState:buttonPressed(id)
 	if id == "editor" then
 		pushState(LevelEditorState.create())
+	elseif id == "options" then
+		print(self.config)
+		pushState(OptionsState.create(self.inputs, self.config))
 	elseif id == "quit" then
 		love.event.quit()
 	end

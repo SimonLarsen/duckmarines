@@ -42,6 +42,7 @@ function Menu:addButton(text, id, x, y, width, height)
 	table.insert(self.buttons, e)
 
 	self.nexty = self.nexty + e.height + self.spacing
+	return e
 end
 
 function Menu:draw()

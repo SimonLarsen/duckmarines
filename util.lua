@@ -44,3 +44,8 @@ function shuffle(a)
 		a[i], a[j] = a[j], a[i]
 	end
 end
+
+function boolToStr(val)
+	if val then return "TRUE"
+	else return "FALSE" end
+end

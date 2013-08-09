@@ -16,6 +16,7 @@ require("eventTextState")
 require("switchAnimState")
 require("gameOverState")
 require("levelEditorState")
+require("optionsState")
 
 require("sprite")
 require("anim")
@@ -56,7 +57,7 @@ function love.load()
 
 	-- Setup gamestate stack
 	stateStack = Stack.create()
-	pushState(MainMenuState.create())
+	pushState(MainMenuState.create(config))
 end
 
 function love.update(dt)
@@ -102,4 +103,9 @@ end
 
 function popState()
 	stateStack:pop()
+end
+
+function setScreenMode()
+	love.graphics.setMode(WIDTH, HEIGHT, config.fullscreen, config.vsync)
+	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 end
