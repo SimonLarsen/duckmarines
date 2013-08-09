@@ -26,32 +26,39 @@ function Menu.create(x, y, width, height, spacing, listener)
 	return self
 end
 
-function Menu:addButton(text, id)
+function Menu:addButton(text, id, x, y, width, height)
 	local e = {}
 	e.text = text
 	e.id = id
-	e.x = self.x
-	e.y = self.nexty
+	if x and y then
+		e.x = x
+		e.y = y
+	else
+		e.x = self.x
+		e.y = self.nexty
+	end
+	e.width = width or self.width
+	e.height = height or self.height
 	table.insert(self.buttons, e)
 
-	self.nexty = self.nexty + self.height + self.spacing
+	self.nexty = self.nexty + e.height + self.spacing
 end
 
 function Menu:draw()
 	-- Draw button graphics
 	for i,v in ipairs(self.buttons) do
 		love.graphics.drawq(self.imgButton, self.quadTopLeft, v.x, v.y)
-		love.graphics.drawq(self.imgButton, self.quadTopRight, v.x+self.width-3, v.y)
-		love.graphics.drawq(self.imgButton, self.quadBottomLeft, v.x, v.y+self.height-3)
-		love.graphics.drawq(self.imgButton, self.quadBottomRight, v.x+self.width-3, v.y+self.height-3)
+		love.graphics.drawq(self.imgButton, self.quadTopRight, v.x+v.width-3, v.y)
+		love.graphics.drawq(self.imgButton, self.quadBottomLeft, v.x, v.y+v.height-3)
+		love.graphics.drawq(self.imgButton, self.quadBottomRight, v.x+v.width-3, v.y+v.height-3)
 
-		love.graphics.drawq(self.imgButton, self.quadTopEdge, v.x+3, v.y, 0, self.width-6, 1)
-		love.graphics.drawq(self.imgButton, self.quadBottomEdge, v.x+3, v.y+self.height-3, 0, self.width-6, 1)
-		love.graphics.drawq(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, self.height-6)
-		love.graphics.drawq(self.imgButton, self.quadRightEdge, v.x+self.width-3, v.y+3, 0, 1, self.height-6)
+		love.graphics.drawq(self.imgButton, self.quadTopEdge, v.x+3, v.y, 0, v.width-6, 1)
+		love.graphics.drawq(self.imgButton, self.quadBottomEdge, v.x+3, v.y+v.height-3, 0, v.width-6, 1)
+		love.graphics.drawq(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
+		love.graphics.drawq(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
 
 		love.graphics.setColor(255, 194, 49, 255)
-		love.graphics.rectangle("fill", v.x+3, v.y+3, self.width-6, self.height-6)
+		love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
 		love.graphics.setColor(255, 255, 255, 255)
 	end
 
@@ -63,8 +70,8 @@ function Menu:draw()
 	-- Draw embossed text
 	for i,v in ipairs(self.buttons) do
 		local x = v.x/2
-		local y = (v.y+self.height/2-6)/2
-		local w = self.width/2
+		local y = (v.y+v.height/2-6)/2
+		local w = v.width/2
 		love.graphics.setColor(44, 27, 0, 255)
 		love.graphics.printf(v.text, x, y-1, w, "center")
 		love.graphics.setColor(255, 255, 255, 255)
@@ -79,8 +86,8 @@ end
 
 function Menu:click(x, y)
 	for i,v in ipairs(self.buttons) do
-		if x >= v.x and x <= v.x + self.width
-		and y >= v.y and y <= v.y + self.height then
+		if x >= v.x and x <= v.x + v.width
+		and y >= v.y and y <= v.y + v.height then
 			self.listener:buttonPressed(v.id)
 			return
 		end
