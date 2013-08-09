@@ -310,8 +310,8 @@ function IngameState:triggerEvent(player)
 		local subs = self.map:getSubmarines()
 		for i,v in ipairs(subs) do
 			if v.player ~= player then
-				local e = Enemy.create(v.x*48+24, v.y*48, 2)
-				e.moved = 24
+				local e = Enemy.create(6*48, 4*48+24, 2)
+				e:setFlying(v.x*48+24, v.y*48+24)
 				table.insert(self.entities, e)
 			end
 		end
