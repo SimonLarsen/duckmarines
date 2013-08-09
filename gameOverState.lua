@@ -38,7 +38,7 @@ function GameOverState:draw()
 		love.graphics.print("PLAYER "..i..": "..self.scores[i], 16, i*16)
 	end
 
-	self.cursor:getDrawable():draw(self.cursor.x, self.cursor.y)
+	self.cursor:draw()
 end
 
 function GameOverState:buttonPressed(id)

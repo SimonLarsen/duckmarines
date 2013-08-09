@@ -186,7 +186,7 @@ function LevelEditorState:draw()
 	end
 
 	-- Draw cursor
-	self.cursor:getDrawable():draw(self.cursor.x, self.cursor.y)
+	self.cursor:draw()
 end
 
 function LevelEditorState:cursorInMap()

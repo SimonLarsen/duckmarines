@@ -43,7 +43,7 @@ function MainMenuState:draw()
 	love.graphics.print("3 START CUSTOM MAP", 32, 64)
 	love.graphics.print("4 LEVEL EDITOR", 32, 80)
 
-	self.cursor:getDrawable():draw(self.cursor.x, self.cursor.y)
+	self.cursor:draw()
 end
 
 function MainMenuState:keypressed(k, uni)

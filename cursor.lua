@@ -30,6 +30,6 @@ function Cursor:move(dx, dy, absolute)
 	self.y = math.cap(self.y, 0, HEIGHT)
 end
 
-function Cursor:getDrawable()
-	return self.sprite
+function Cursor:draw()
+	self.sprite:draw(self.x, self.y)
 end

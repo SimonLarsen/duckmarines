@@ -28,6 +28,7 @@ function IngameState.create(inputs, mapname, rules)
 	end
 
 	self.entities = {}
+	self.particles = {}
 
 	-- Initialize cursors
 	self.cursors = {}
@@ -149,14 +150,15 @@ function IngameState:update(dt)
 
 	-- Update entities
 	if self.event ~= IngameState.EVENT_FREEZE then
+		-- Adjust delta time according to event
+		local entityDT = dt
+		if self.event == IngameState.EVENT_SPEEDUP then
+			entityDT = dt*1.5
+		elseif self.event == IngameState.EVENT_SLOWDOWN then
+			entityDT = dt*0.5
+		end
+
 		for i=#self.entities, 1, -1 do
-			-- Adjust delta time according to event
-			local entityDT = dt
-			if self.event == IngameState.EVENT_SPEEDUP then
-				entityDT = dt*1.5
-			elseif self.event == IngameState.EVENT_SLOWDOWN then
-				entityDT = dt*0.5
-			end
 			self.entities[i]:update(entityDT, self.map, self.arrows, self.event)
 			local tile = self.entities[i]:getTile()
 
@@ -176,6 +178,7 @@ function IngameState:update(dt)
 
 				elseif eType == Entity.TYPE_ENEMY then
 					self.score[player] = math.floor(self.score[player]*0.6667)
+					table.insert(self.particles, SkullParticle.create(self.entities[i].x, self.entities[i].y-8))
 				end
 
 				table.remove(self.entities, i)
@@ -183,6 +186,15 @@ function IngameState:update(dt)
 			elseif tile == 2 then
 				table.remove(self.entities, i)
 			end
+		end
+	end
+
+	-- Update particles
+	for i=#self.particles, 1, -1 do
+		if self.particles[i].alive == true then
+			self.particles[i]:update(dt)
+		else
+			table.remove(self.particles, i)
 		end
 	end
 
@@ -204,7 +216,7 @@ function IngameState:draw()
 		for j,v in ipairs(self.arrows[i]) do
 			-- Make arrows blink the last seconds
 			if self.rules.arrowtime - v.time > 1 or v.time % 0.2 > 0.1 then
-				v:getDrawable():draw(v.x*48, v.y*48)
+				v:draw()
 			end
 		end
 	end
@@ -224,11 +236,15 @@ function IngameState:draw()
 	   v:draw()
 	end
 
-	-- Draw cursors
-	for i,v in ipairs(self.cursors) do
-		v:getDrawable():draw(v.x, v.y)
+	-- Draw particles
+	for i,v in ipairs(self.particles) do
+		v:draw()
 	end
 
+	-- Draw cursors
+	for i,v in ipairs(self.cursors) do
+		v:draw()
+	end
 	-- Draw hud
 	love.graphics.pop()
 	self:drawHUD()

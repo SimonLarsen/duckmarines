@@ -27,6 +27,7 @@ require("duck")
 require("goldduck")
 require("pinkduck")
 require("enemy")
+require("particles")
 
 WIDTH = 700
 HEIGHT = 442

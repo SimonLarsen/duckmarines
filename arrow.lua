@@ -15,6 +15,6 @@ function Arrow.create(x,y,dir,player)
 	return self
 end
 
-function Arrow:getDrawable()
-	return self.sprite
+function Arrow:draw()
+	self.sprite:draw(self.x*48, self.y*48)
 end
