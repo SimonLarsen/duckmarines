@@ -123,12 +123,14 @@ function IngameState:update(dt)
 	end
 
 	-- Remove expired arrows
-	for i=1,4 do
-		for j=#self.arrows[i], 1, -1 do
-			local v = self.arrows[i][j]
-			v.time = v.time + dt
-			if v.time >= self.rules.arrowtime then
-				table.remove(self.arrows[i], j)
+	if self.event ~= IngameState.EVENT_FREEZE then
+		for i=1,4 do
+			for j=#self.arrows[i], 1, -1 do
+				local v = self.arrows[i][j]
+				v.time = v.time + dt
+				if v.time >= self.rules.arrowtime then
+					table.remove(self.arrows[i], j)
+				end
 			end
 		end
 	end
