@@ -3,6 +3,7 @@ require("util")
 require("resmgr")
 require("map")
 require("input")
+require("configuration")
 
 require("menu")
 require("stack")
@@ -26,9 +27,11 @@ require("goldduck")
 require("pinkduck")
 require("enemy")
 
-local stateStack = nil
 WIDTH = 700
 HEIGHT = 442
+
+local stateStack
+local config
 
 function love.load()
 	-- Setup screen
@@ -38,6 +41,11 @@ function love.load()
 	-- Setup user data
 	if love.filesystem.exists("usermaps") == false then
 		love.filesystem.mkdir("usermaps")
+	end
+	-- Read configuration
+	config = Config.load()
+	if config == nil then
+		config = Config.create()
 	end
 
 	-- Setup mouse
