@@ -30,8 +30,6 @@ function EventTextState:update(dt)
 		self.boxy = self.time*2*274 - 106
 	elseif self.time < 1.5 then
 		self.boxy = 168
-	elseif self.time < 2 then
-		self.boxy = 168+(self.time-1.5)*2*274
 	else
 		popState()
 	end
