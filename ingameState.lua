@@ -194,6 +194,9 @@ function IngameState:update(dt)
 		end
 	end
 
+	-- Sort entities by y-coordinate for drawing order
+	bubblesort(self.entities, function(a,b) return a.y > b.y end)
+
 	-- Update particles
 	for i=#self.particles, 1, -1 do
 		if self.particles[i].alive == true then

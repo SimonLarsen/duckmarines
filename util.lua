@@ -45,7 +45,27 @@ function shuffle(a)
 	end
 end
 
+--- Converts boolean value to upper case string
 function boolToStr(val)
 	if val then return "TRUE"
 	else return "FALSE" end
+end
+
+--- Sorts an array using bubble sort
+-- @param a Array to sort
+-- @param t function taking two arguments (a,b). Returns true if a > b, false otherwise.
+function bubblesort(a, t)
+	while true do
+		swapped = false
+		for i=2,#a do
+			if t(a[i-1], a[i]) == true then
+				local tmp = a[i-1]
+				a[i-1] = a[i]
+				a[i] = tmp
+				swapped = true
+			end
+		end
+
+		if swapped == false then return end
+	end
 end
