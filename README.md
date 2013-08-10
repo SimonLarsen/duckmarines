@@ -9,3 +9,5 @@ Duck Marines try to recreate the magic of the original game's multiplayer on the
 Duck Marines will feature entirely new assets (sprites, music etc.) and gameplay changes that we find appropriate, while still staying true to the original.
 
 [http://tangramgames.dk/games/duckmarines/](http://tangramgames.dk/games/duckmarines/)
+
+![Screenshot](http://tangramgames.dk/games/duckmarines/images/teaser.png "Duck Marines screenshot")
