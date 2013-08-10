@@ -15,11 +15,13 @@ function MainMenuState.create(config)
 	
 	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 
-	self.menu = Menu.create((WIDTH-200)/2, 220, 220, 32, 20, self)
+	self.menu = Menu.create((WIDTH-200)/2, 190, 220, 32, 24, self)
 	self.menu:addButton("START GAME", "start")
 	self.menu:addButton("OPTIONS", "options")
 	self.menu:addButton("LEVEL EDITOR", "editor")
 	self.menu:addButton("QUIT", "quit")
+
+	self.bg = ResMgr.getImage("mainmenu_bg.png")
 
 	return self
 end
@@ -39,9 +41,7 @@ function MainMenuState:update(dt)
 end
 
 function MainMenuState:draw()
-	love.graphics.setColor(16, 34, 90)
-	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
-	love.graphics.setColor(255, 255, 255)
+	love.graphics.draw(self.bg, 0, 0)
 
 	self.menu:draw()
 	love.graphics.print("1 START TEST", 32, 32)

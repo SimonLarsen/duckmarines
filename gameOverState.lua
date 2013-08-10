@@ -34,6 +34,7 @@ function GameOverState:draw()
 
 	self.menu:draw()
 
+	love.graphics.setFont(ResMgr.getFont("bold"))
 	for i = 1,4 do
 		love.graphics.print("PLAYER "..i..": "..self.scores[i], 16, i*16)
 	end

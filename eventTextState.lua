@@ -44,6 +44,7 @@ function EventTextState:draw()
 
 	love.graphics.draw(self.imgBox, 0, self.boxy)
 
+	love.graphics.setFont(ResMgr.getFont("bold"))
 	love.graphics.push()
 	love.graphics.scale(4, 4)
 	love.graphics.setColor(0, 0, 0, 128)

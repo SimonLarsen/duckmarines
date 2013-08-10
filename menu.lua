@@ -64,25 +64,14 @@ function Menu:draw()
 	end
 
 	love.graphics.setColor(0, 0, 0, 255)
-	love.graphics.push()
-	love.graphics.scale(2,2)
-	love.graphics.setFont(ResMgr.getFont("bold"))
 
 	-- Draw embossed text
+	love.graphics.setFont(ResMgr.getFont("menu"))
+	love.graphics.setColor(80, 49, 0)
 	for i,v in ipairs(self.buttons) do
-		local x = v.x/2
-		local y = (v.y+v.height/2-6)/2
-		local w = v.width/2
-		love.graphics.setColor(44, 27, 0, 255)
-		love.graphics.printf(v.text, x, y-1, w, "center")
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.printf(v.text, x, y+1, w, "center")
-		love.graphics.setColor(131, 80, 0, 255)
-		love.graphics.printf(v.text, x, y, w, "center")
+		love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
 	end
-
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.pop()
 end
 
 function Menu:click(x, y)
