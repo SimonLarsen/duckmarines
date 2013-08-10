@@ -12,10 +12,10 @@ IngameState.EVENT_VACUUM	= 6
 IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
-function IngameState.create(inputs, mapname, rules)
+function IngameState.create(parent, mapname, rules)
 	local self = setmetatable({}, IngameState)
 
-	self.inputs = inputs
+	self.inputs = parent.inputs
 	self.mapname = mapname
 	self.rules = rules
 
@@ -78,9 +78,6 @@ function IngameState:update(dt)
 		end
 	end
 
-	-- Cap mouse
-	love.mouse.setPosition(math.cap(love.mouse.getX(), 0, 582), math.cap(love.mouse.getY(), 0, 422))
-
 	-- Update spawn counter if not frozen
 	if self.event ~= IngameState.EVENT_FREEZE then
 		self.nextEntity = self.nextEntity - dt
@@ -123,6 +120,8 @@ function IngameState:update(dt)
 	-- Move cursors
 	for i=1,4 do
 		self.cursors[i]:move(self.inputs[i]:getMovement(dt))
+		self.cursors[i].x = math.cap(self.cursors[i].x, 0, 570)
+		self.cursors[i].y = math.cap(self.cursors[i].y, 0, 428)
 	end
 
 	-- Remove expired arrows

@@ -42,13 +42,7 @@ end
 
 function MainMenuState:draw()
 	love.graphics.draw(self.bg, 0, 0)
-
 	self.menu:draw()
-	love.graphics.print("1 START TEST", 32, 32)
-	love.graphics.print("2 START TEST2", 32, 48)
-	love.graphics.print("3 START CUSTOM MAP", 32, 64)
-	love.graphics.print("4 LEVEL EDITOR", 32, 80)
-
 	self.cursor:draw()
 end
 
@@ -58,22 +52,20 @@ function MainMenuState:keypressed(k, uni)
 	end
 
 	if k == "1" then
-		pushState(IngameState.create(self.inputs, "res/maps/test.lua", Rules.create()))
+		pushState(IngameState.create(self, "res/maps/test.lua", Rules.create()))
 	elseif k == "2" then
-		pushState(IngameState.create(self.inputs, "res/maps/test2.lua", Rules.create()))
+		pushState(IngameState.create(self, "res/maps/test2.lua", Rules.create()))
 	elseif k == "3" then
-		pushState(IngameState.create(self.inputs, "usermaps/custom.lua", Rules.create()))
-	elseif k == "4" then
-		pushState(LevelEditorState.create())
+		pushState(IngameState.create(self, "usermaps/custom.lua", Rules.create()))
 	end
 end
 
 function MainMenuState:buttonPressed(id)
 	if id == "editor" then
-		pushState(LevelEditorState.create())
+		pushState(LevelEditorState.create(self))
 	elseif id == "options" then
 		print(self.config)
-		pushState(OptionsState.create(self.inputs, self.config))
+		pushState(OptionsState.create(self, self.config))
 	elseif id == "quit" then
 		love.event.quit()
 	end

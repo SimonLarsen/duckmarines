@@ -2,12 +2,12 @@ OptionsState = {}
 OptionsState.__index = OptionsState
 setmetatable(OptionsState, State)
 
-function OptionsState.create(inputs, config)
+function OptionsState.create(parent, config)
 	local self = setmetatable({}, OptionsState)
 
 	self.config = config
-	self.inputs = inputs
-	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
+	self.inputs = parent.inputs
+	self.cursor = parent.cursor
 
 	self.menu = Menu.create((WIDTH-300)/2, 100, 300, 32, 20, self)
 	self.fullscreenButton = self.menu:addButton("FULLSCREEN: "..boolToStr(config.fullscreen), "fullscreen")
@@ -27,7 +27,7 @@ function OptionsState:update(dt)
 end
 
 function OptionsState:draw()
-	love.graphics.setColor(16, 34, 90)
+	love.graphics.setColor(70, 97, 138)
 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
 	love.graphics.setColor(255, 255, 255)
 

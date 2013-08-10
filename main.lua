@@ -32,13 +32,14 @@ require("particles")
 
 WIDTH = 700
 HEIGHT = 442
+SCALE = 1
 
 local stateStack
 local config
 
 function love.load()
 	-- Setup screen
-	love.graphics.setMode(WIDTH, HEIGHT, false, true)
+	love.graphics.setMode(WIDTH*SCALE, HEIGHT*SCALE, false, true)
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
 
 	-- Setup user data
@@ -68,6 +69,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.scale(SCALE, SCALE)
 	local bottom = 1
 	while stateStack:peek(bottom):isTransparent() == true do
 		bottom = bottom + 1

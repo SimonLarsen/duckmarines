@@ -6,7 +6,7 @@ LevelEditorState.STATE_TILE      = 0
 LevelEditorState.STATE_ADD_FENCE = 1
 LevelEditorState.STATE_REM_FENCE = 2
 
-function LevelEditorState.create()
+function LevelEditorState.create(parent)
 	local self = setmetatable({}, LevelEditorState)
 
 	self.map = Map.create()
@@ -16,13 +16,9 @@ function LevelEditorState.create()
 	self.lastx, self.lasty = 0,0
 	self.tile = 0
 
-	self.inputs = {}
-	self.inputs[1] = KeyboardInput.create()
-	self.inputs[2] = MouseInput.create()
-	self.inputs[3] = JoystickInput.create(1)
-	self.inputs[4] = JoystickInput.create(2)
+	self.inputs = parent.inputs
+	self.cursor = parent.cursor
 
-	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	self.marker = ResMgr.getImage("marker1.png")
 	self.fence_marker = ResMgr.getImage("fence_marker.png")
 
