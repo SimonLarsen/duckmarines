@@ -2,12 +2,13 @@ GameOverState = {}
 GameOverState.__index = GameOverState
 setmetatable(GameOverState, State)
 
-function GameOverState.create(inputs, scores, game)
+function GameOverState.create(parent, scores)
 	local self = setmetatable({}, GameOverState)
 
-	self.inputs = inputs
+	self.inputs = parent.inputs
+	self.mapname = parent.mapname
+	self.rules = parent.rules
 	self.scores = scores
-	self.game = game
 
 	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 
@@ -46,7 +47,7 @@ function GameOverState:buttonPressed(id)
 	if id == "rematch" then
 		popState()
 		popState()
-		pushState(IngameState.create(self.inputs, self.game.mapname, self.game.rules))
+		pushState(IngameState.create(self, self.mapname, self.rules))
 	elseif id == "mainmenu" then
 		popState()
 		popState()

@@ -55,6 +55,7 @@ function love.load()
 	-- Setup mouse
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
+	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 
 	-- Setup gamestate stack
 	stateStack = Stack.create()
