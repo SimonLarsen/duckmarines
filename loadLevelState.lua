@@ -66,6 +66,7 @@ function LoadLevelState:buttonPressed(id, source)
 	if id == "Load" then
 		self.parent.map = Map.create(self:getFilename())
 		self.parent.map:updateSpriteBatch(true)
+		love.timer.sleep(0.25)
 		popState()
 	elseif id == "delete" then
 		if love.filesystem.exists(self:getFilename()) then
@@ -73,6 +74,7 @@ function LoadLevelState:buttonPressed(id, source)
 			self:updateFileList()
 		end
 	elseif id == "cancel" then
+		love.timer.sleep(0.25)
 		popState()
 	end
 end

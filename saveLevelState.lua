@@ -2,12 +2,12 @@ SaveLevelState = {}
 SaveLevelState.__index = SaveLevelState
 setmetatable(SaveLevelState, State)
 
-function SaveLevelState.create(parent, map)
+function SaveLevelState.create(parent)
 	local self = setmetatable(State.create(), SaveLevelState)
 
 	self.inputs = parent.inputs
 	self.cursor = parent.cursor
-	self.map = map
+	self.parent = parent
 
 	self.list = SelectionList.create(178, 133, 200, 6, 21, self)
 	self.input = TextInput.create(178, 307, 200, 24)
@@ -64,8 +64,9 @@ end
 
 function SaveLevelState:buttonPressed(id, source)
 	if id == "save" then
-		local strdata = self.map:pack()
+		local strdata = self.parent.map:pack()
 		love.filesystem.write(self:getFilename(), strdata)
+		love.timer.sleep(0.25)
 		popState()
 	elseif id == "delete" then
 		if love.filesystem.exists(self:getFilename()) then
@@ -73,6 +74,7 @@ function SaveLevelState:buttonPressed(id, source)
 			self:updateFileList()
 		end
 	elseif id == "cancel" then
+		love.timer.sleep(0.25)
 		popState()
 	end
 end
