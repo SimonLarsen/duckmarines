@@ -131,7 +131,7 @@ function MouseInput:getMovement(dt)
 end
 
 function MouseInput:mousepressed(x, y, button)
-	if button == "l" then
+	if button == "l" or button == "r" then
 		self.clicked = true
 		self.clickx = x
 		self.clicky = y
@@ -139,7 +139,7 @@ function MouseInput:mousepressed(x, y, button)
 end
 
 function MouseInput:mousereleased(x, y, button)
-	if self.clicked == true and button == "l" then
+	if self.clicked == true and (button == "l" or button == "r") then
 		local dx = x - self.clickx
 		local dy = y - self.clicky
 		if dx ~= 0 or dy ~= 0 then
@@ -151,7 +151,7 @@ function MouseInput:mousereleased(x, y, button)
 end
 
 function MouseInput:isDown()
-	return love.mouse.isDown("l")
+	return love.mouse.isDown("l", "r")
 end
 
 function MouseInput:getType() return Input.TYPE_MOUSE end
@@ -178,7 +178,7 @@ function JoystickInput:getMovement(dt, lock)
 	local axis2 = love.joystick.getAxis(self.id, 2)
 
 	if axis1 and axis2 then
-		if not love.joystick.isDown(self.id, 1) or lock == false then
+		if not self:isDown() or lock == false then
 			if axis1 then
 				dx = axis1 * self.SPEED * dt
 			end
@@ -197,14 +197,14 @@ function JoystickInput:getMovement(dt, lock)
 end
 
 function JoystickInput:joystickpressed(joystick, button)
-	if joystick == self.id and button == 1 then
+	if joystick == self.id and button >= 1 and button <= 6 then
 		self.down = true
 		self.clicked = true
 	end
 end
 
 function JoystickInput:isDown()
-	return love.joystick.isDown(self.id, 1)
+	return love.joystick.isDown(self.id, 1, 2, 3, 4, 5, 6)
 end
 
 function JoystickInput:getType() return Input.TYPE_JOYSTICK end
