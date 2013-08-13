@@ -7,7 +7,7 @@ LevelEditorState.STATE_ADD_FENCE = 1
 LevelEditorState.STATE_REM_FENCE = 2
 
 function LevelEditorState.create(parent)
-	local self = setmetatable({}, LevelEditorState)
+	local self = setmetatable(State.create(), LevelEditorState)
 
 	self.map = Map.create()
 
@@ -104,17 +104,15 @@ function LevelEditorState:update(dt)
 						else
 							local valid, msg = self.map:verify()
 							if valid == true then
-								local strdata = self.map:pack()
-								love.filesystem.write("usermaps/custom.lua", strdata)
+								pushState(SaveLevelState.create(self, self.map))
 							else
-								print("error: " .. msg)
+								pushState(MessageBoxState.create(self, msg))
 							end
 						end
 					else
 						-- Open file
 						if self.cursor.x <= 58 then
-							self.map = Map.create("usermaps/custom.lua")
-							self.map:updateSpriteBatch(true)
+							pushState(LoadLevelState.create(self))
 						-- Quit editor
 						else
 							popState()

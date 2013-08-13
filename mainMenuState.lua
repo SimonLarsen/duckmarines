@@ -3,11 +3,10 @@ MainMenuState.__index = MainMenuState
 setmetatable(MainMenuState, State)
 
 function MainMenuState.create(config)
-	local self = setmetatable({}, MainMenuState)
+	local self = setmetatable(State.create(), MainMenuState)
 
 	self.config = config
 
-	self.inputs = {}
 	self.inputs[1] = KeyboardInput.create()
 	self.inputs[2] = MouseInput.create()
 	self.inputs[3] = JoystickInput.create(1)
@@ -33,11 +32,6 @@ function MainMenuState:update(dt)
 		end
 		self.cursor:move(v:getMovement(dt, false))
 	end
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			self.menu:click(self.cursor.x, self.cursor.y)
-		end
-	end
 end
 
 function MainMenuState:draw()
@@ -52,19 +46,18 @@ function MainMenuState:keypressed(k, uni)
 	end
 
 	if k == "1" then
-		pushState(IngameState.create(self, "res/maps/test.lua", Rules.create()))
+		pushState(IngameState.create(self, "res/maps/test", Rules.create()))
 	elseif k == "2" then
-		pushState(IngameState.create(self, "res/maps/test2.lua", Rules.create()))
+		pushState(IngameState.create(self, "res/maps/test2", Rules.create()))
 	elseif k == "3" then
-		pushState(IngameState.create(self, "usermaps/custom.lua", Rules.create()))
+		pushState(IngameState.create(self, "usermaps/custom", Rules.create()))
 	end
 end
 
-function MainMenuState:buttonPressed(id)
+function MainMenuState:buttonPressed(id, source)
 	if id == "editor" then
 		pushState(LevelEditorState.create(self))
 	elseif id == "options" then
-		print(self.config)
 		pushState(OptionsState.create(self, self.config))
 	elseif id == "quit" then
 		love.event.quit()

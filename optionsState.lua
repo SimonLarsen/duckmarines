@@ -3,7 +3,7 @@ OptionsState.__index = OptionsState
 setmetatable(OptionsState, State)
 
 function OptionsState.create(parent, config)
-	local self = setmetatable({}, OptionsState)
+	local self = setmetatable(State.create(), OptionsState)
 
 	self.config = config
 	self.inputs = parent.inputs

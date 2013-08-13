@@ -3,7 +3,7 @@ GameOverState.__index = GameOverState
 setmetatable(GameOverState, State)
 
 function GameOverState.create(parent, scores)
-	local self = setmetatable({}, GameOverState)
+	local self = setmetatable(State.create(), GameOverState)
 
 	self.inputs = parent.inputs
 	self.mapname = parent.mapname
@@ -43,7 +43,7 @@ function GameOverState:draw()
 	self.cursor:draw()
 end
 
-function GameOverState:buttonPressed(id)
+function GameOverState:buttonPressed(id, source)
 	if id == "rematch" then
 		popState()
 		popState()

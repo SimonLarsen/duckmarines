@@ -5,18 +5,26 @@ require("map")
 require("input")
 require("configuration")
 
+require("component")
 require("menu")
+require("selectionList")
+require("textInput")
+
 require("stack")
 require("state")
 require("rules")
 
 require("mainMenuState")
+
 require("ingameState")
 require("eventTextState")
 require("switchAnimState")
 require("gameOverState")
-require("levelEditorState")
 require("optionsState")
+require("levelEditorState")
+require("loadLevelState")
+require("saveLevelState")
+require("messageBoxState")
 
 require("sprite")
 require("anim")

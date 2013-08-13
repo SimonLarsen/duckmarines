@@ -13,7 +13,7 @@ IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
 function IngameState.create(parent, mapname, rules)
-	local self = setmetatable({}, IngameState)
+	local self = setmetatable(State.create(), IngameState)
 
 	self.inputs = parent.inputs
 	self.mapname = mapname

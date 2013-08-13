@@ -1,5 +1,6 @@
 Menu = {}
 Menu.__index = Menu
+setmetatable(Menu, Component)
 
 function Menu.create(x, y, width, height, spacing, listener)
 	local self = setmetatable({}, Menu)
@@ -10,6 +11,7 @@ function Menu.create(x, y, width, height, spacing, listener)
 	self.height = height
 	self.spacing = spacing
 	self.listener = listener
+	self.id = ""
 
 	self.imgButton = ResMgr.getImage("button.png")
 	self.quadTopLeft = love.graphics.newQuad(0, 0, 3, 3, 7, 7)
@@ -78,7 +80,7 @@ function Menu:click(x, y)
 	for i,v in ipairs(self.buttons) do
 		if x >= v.x and x <= v.x + v.width
 		and y >= v.y and y <= v.y + v.height then
-			self.listener:buttonPressed(v.id)
+			self.listener:buttonPressed(v.id, self)
 			return
 		end
 	end
