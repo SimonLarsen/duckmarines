@@ -9,10 +9,14 @@ function OptionsState.create(parent, config)
 	self.inputs = parent.inputs
 	self.cursor = parent.cursor
 
-	self.menu = Menu.create((WIDTH-300)/2, 100, 300, 32, 20, self)
+	self.menu = Menu.create((WIDTH-300)/2, 169, 300, 32, 20, self)
 	self.fullscreenButton = self.menu:addButton("FULLSCREEN: "..boolToStr(config.fullscreen), "fullscreen")
 	self.vsyncButton = self.menu:addButton("VSYNC: "..boolToStr(config.vsync), "vsync")
-	self.menu:addButton("EXIT", "exit")
+	self.menu:addButton("MUSIC VOLUME", "musicvolume")
+	self.menu:addButton("SOUND VOLUME", "soundvolume")
+	self.menu:addButton("BACK", "back")
+	
+	self.bg = ResMgr.getImage("mainmenu_bg.png")
 
 	return self
 end
@@ -27,10 +31,7 @@ function OptionsState:update(dt)
 end
 
 function OptionsState:draw()
-	love.graphics.setColor(70, 97, 138)
-	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
-	love.graphics.setColor(255, 255, 255)
-
+	love.graphics.draw(self.bg, 0, 0)
 	self.menu:draw()
 	self.cursor:draw()
 end
@@ -44,7 +45,7 @@ function OptionsState:buttonPressed(id)
 		self.config.vsync = not self.config.vsync
 		self.vsyncButton.text = "VSYNC: " .. boolToStr(self.config.vsync)
 		setScreenMode()
-	elseif id == "exit" then
+	elseif id == "back" then
 		popState()
 	end
 end

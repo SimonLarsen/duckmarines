@@ -41,9 +41,7 @@ function MainMenuState:draw()
 end
 
 function MainMenuState:keypressed(k, uni)
-	for i,v in ipairs(self:getInputs()) do
-		v:keypressed(k, uni)
-	end
+	State.keypressed(self, k, uni)
 
 	if k == "1" then
 		pushState(IngameState.create(self, "res/maps/test", Rules.create()))
@@ -55,7 +53,9 @@ function MainMenuState:keypressed(k, uni)
 end
 
 function MainMenuState:buttonPressed(id, source)
-	if id == "editor" then
+	if id == "start" then
+		pushState(InputSelectState.create(self))
+	elseif id == "editor" then
 		pushState(LevelEditorState.create(self))
 	elseif id == "options" then
 		pushState(OptionsState.create(self, self.config))

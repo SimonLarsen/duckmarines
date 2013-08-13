@@ -2,9 +2,18 @@
 Input = {}
 Input.__index = Input
 
-Input.TYPE_KEYBOARD = 0
-Input.TYPE_MOUSE = 1
-Input.TYPE_JOYSTICK = 2
+Input.TYPE_KEYBOARD = 1
+Input.TYPE_MOUSE = 2
+Input.TYPE_JOYSTICK = 3
+
+function Input.create()
+	local self = setmetatable({}, Input)
+
+	self.action = nil
+	self.clicked = false
+
+	return self
+end
 
 function Input:getAction()
 	local ac = self.action
@@ -22,14 +31,26 @@ function Input:isDown()
 	return false
 end
 
-function Input:getType()
-	return self.type
-end
-
 function Input:keypressed(k, uni) end
 function Input:mousepressed(x, y, button) end
 function Input:mousereleased(x, y, button) end
 function Input:joystickpressed(joystick, button) end
+
+--- NullInput (does nothing)
+NullInput = {}
+NullInput.__index = NullInput
+setmetatable(NullInput, Input)
+
+function NullInput.create()
+	local self = setmetatable(Input.create(), NullInput)
+	return self
+end
+
+function NullInput:getMovement(dt, lock)
+	return 0, 0, false
+end
+
+function NullInput:getType() return Input.TYPE_NONE end
 
 --- Keyboard input
 KeyboardInput = { SPEED = 300 }
@@ -37,10 +58,8 @@ KeyboardInput.__index = KeyboardInput
 setmetatable(KeyboardInput, Input)
 
 function KeyboardInput.create()
-	local self = setmetatable({}, KeyboardInput)
+	local self = setmetatable(Input.create(), KeyboardInput)
 
-	self.action = nil
-	self.clicked = false
 	self.type = Input.TYPE_KEYBOARD
 
 	return self
@@ -84,16 +103,18 @@ function KeyboardInput:isDown()
 	return love.keyboard.isDown(" ")
 end
 
+function KeyboardInput:getType() return Input.TYPE_KEYBOARD end
+
 --- Mouse input
 MouseInput = {}
 MouseInput.__index = MouseInput
 setmetatable(MouseInput, Input)
 
 function MouseInput.create()
-	local self = setmetatable({}, MouseInput)
-	self.type = Input.TYPE_MOUSE
-	self.clicked = false
+	local self = setmetatable(Input.create(), MouseInput)
+
 	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
+
 	return self
 end
 
@@ -133,17 +154,17 @@ function MouseInput:isDown()
 	return love.mouse.isDown("l")
 end
 
+function MouseInput:getType() return Input.TYPE_MOUSE end
+
 --- Joystick Input
 JoystickInput = { SPEED = 300 }
 JoystickInput.__index = JoystickInput
 setmetatable(JoystickInput, Input)
 
 function JoystickInput.create(id)
-	local self = setmetatable({}, JoystickInput)
+	local self = setmetatable(Input.create(), JoystickInput)
 
 	self.id = id
-	self.type = Input.TYPE_JOYSTICK
-	self.clicked = false
 	self.down = false
 
 	return self
@@ -185,3 +206,5 @@ end
 function JoystickInput:isDown()
 	return love.joystick.isDown(self.id, 1)
 end
+
+function JoystickInput:getType() return Input.TYPE_JOYSTICK end

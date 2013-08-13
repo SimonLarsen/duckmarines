@@ -14,7 +14,7 @@ local eventName = {
 }
 
 function EventTextState.create(event)
-	local self = setmetatable({}, EventTextState)
+	local self = setmetatable(State.create(), EventTextState)
 
 	self.event = event
 	self.imgBox = ResMgr.getImage("event_box.png")

@@ -32,18 +32,17 @@ function Menu:addButton(text, id, x, y, width, height)
 	local e = {}
 	e.text = text
 	e.id = id
+	e.width = width or self.width
+	e.height = height or self.height
 	if x and y then
 		e.x = x
 		e.y = y
 	else
 		e.x = self.x
 		e.y = self.nexty
+		self.nexty = self.nexty + e.height + self.spacing
 	end
-	e.width = width or self.width
-	e.height = height or self.height
 	table.insert(self.buttons, e)
-
-	self.nexty = self.nexty + e.height + self.spacing
 	return e
 end
 

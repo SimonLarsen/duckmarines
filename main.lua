@@ -15,6 +15,7 @@ require("state")
 require("rules")
 
 require("mainMenuState")
+require("inputSelectState")
 
 require("ingameState")
 require("eventTextState")
