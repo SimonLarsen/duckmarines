@@ -30,6 +30,9 @@ function LevelEditorState.create(parent)
 		end
 	end
 
+	self.loadDialog = LoadLevelState.create(self)
+	self.saveDialog = SaveLevelState.create(self)
+
 	return self
 end
 
@@ -104,7 +107,8 @@ function LevelEditorState:update(dt)
 						else
 							local valid, msg = self.map:verify()
 							if valid == true then
-								pushState(SaveLevelState.create(self, self.map))
+								self.saveDialog:updateFileList()
+								pushState(self.saveDialog)
 							else
 								pushState(MessageBoxState.create(self, msg))
 							end
@@ -112,7 +116,8 @@ function LevelEditorState:update(dt)
 					else
 						-- Open file
 						if self.cursor.x <= 58 then
-							pushState(LoadLevelState.create(self))
+							self.loadDialog:updateFileList()
+							pushState(self.loadDialog)
 						-- Quit editor
 						else
 							popState()
