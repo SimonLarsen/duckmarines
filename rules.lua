@@ -21,6 +21,8 @@ function Rules.create()
 	self.arrowtime = 10
 	-- Number of arrows per player
 	self.maxarrows = 4
+	-- Duck rush multiplier
+	self.rushfrequency = 1000
 
 	self.eventTime = {}
 	self.eventTime[IngameState.EVENT_RUSH] 		= 15

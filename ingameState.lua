@@ -84,12 +84,13 @@ function IngameState:update(dt)
 	end
 	-- Spawn new entity when counter runs out
 	if self.nextEntity <= 0 then
-		local freq = self.rules.frequency
+		local freq
 		if self.event == IngameState.EVENT_RUSH then
-			self.nextEntity = 0.05+math.random()/10
+			freq = self.rules.rushfrequency
 		else
-			self.nextEntity = 1/(freq + math.randnorm()*0.8*freq)*60
+			freq = self.rules.frequency
 		end
+		self.nextEntity = 1/(freq + math.randnorm()*0.8*freq)*60
 
 		local spawns = self.map:getSpawnPoints()
 		local e = table.random(spawns)
