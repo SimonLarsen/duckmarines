@@ -19,6 +19,11 @@ function InputSelectState.create(parent)
 	self:addComponent(self.menu)
 
 	self.bg = ResMgr.getImage("bg_stars.png")
+	self.imgColors = ResMgr.getImage("icon_colors.png")
+	self.iconKeyboard = ResMgr.getImage("icon_keyboard.png")
+	self.iconMouse = ResMgr.getImage("icon_mouse.png")
+	self.iconController = ResMgr.getImage("icon_controller.png")
+	self.iconAI = ResMgr.getImage("icon_ai.png")
 
 	return self
 end
@@ -107,7 +112,39 @@ end
 
 function InputSelectState:draw()
 	love.graphics.draw(self.bg, 0, 0)
+	love.graphics.draw(self.imgColors, 62, 108)
 	self.menu:draw()
+
+	-- Draw titles
+	local player = 1
+	local ai = 1
+	for i=1,4 do
+		love.graphics.setColor(23, 23, 23, 255)
+		love.graphics.rectangle("fill", -88+i*150, 58, 126, 32)
+		love.graphics.setColor(241, 148, 0, 255)
+		love.graphics.rectangle("line", -87.5+i*150, 58.5, 126, 32)
+
+		love.graphics.setColor(255, 255, 255, 255)
+
+		if self.inputs[i] then
+			love.graphics.printf("PLAYER "..player, -100+i*150, 65, 150, "center")
+			player = player+1
+			local t = self.inputs[i]:getType()
+			if t == Input.TYPE_KEYBOARD then
+				love.graphics.draw(self.iconKeyboard, -85+i*150, 111)
+			elseif t == Input.TYPE_MOUSE then
+				love.graphics.draw(self.iconMouse, -85+i*150, 111)
+			elseif t == Input.TYPE_JOYSTICK then
+				love.graphics.draw(self.iconController, -85+i*150, 111)
+			end
+		else
+			love.graphics.printf("AI "..ai, -100+i*150, 65, 150, "center")
+			ai = ai+1
+			love.graphics.draw(self.iconAI, -85+i*150, 111)
+		end
+	end
+
+	-- Draw cursors
 	for i=1,4 do
 		if self.cursors[i] then
 			self.cursors[i]:draw()
