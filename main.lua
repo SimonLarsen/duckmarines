@@ -119,5 +119,6 @@ end
 
 function setScreenMode()
 	love.graphics.setMode(WIDTH, HEIGHT, config.fullscreen, config.vsync)
+	love.timer.sleep(0.25)
 	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 end
