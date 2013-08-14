@@ -32,6 +32,7 @@ function Menu:addButton(text, id, x, y, width, height)
 	local e = {}
 	e.text = text
 	e.id = id
+	e.enabled = true
 	e.width = width or self.width
 	e.height = height or self.height
 	if x and y then
@@ -66,10 +67,15 @@ function Menu:draw()
 
 	love.graphics.setColor(0, 0, 0, 255)
 
-	-- Draw embossed text
+	-- Draw text
 	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.setColor(80, 49, 0)
 	for i,v in ipairs(self.buttons) do
+		if v.enabled then
+			love.graphics.setColor(80, 49, 0, 255)
+		else
+			--love.graphics.setColor(145, 89, 0)
+			love.graphics.setColor(80, 49, 0, 128)
+		end
 		love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
 	end
 	love.graphics.setColor(255, 255, 255, 255)
@@ -77,7 +83,7 @@ end
 
 function Menu:click(x, y)
 	for i,v in ipairs(self.buttons) do
-		if x >= v.x and x <= v.x + v.width
+		if v.enabled == true and x >= v.x and x <= v.x + v.width
 		and y >= v.y and y <= v.y + v.height then
 			self.listener:buttonPressed(v.id, self)
 			return

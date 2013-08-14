@@ -8,10 +8,11 @@ function InputSelectState.create(parent)
 	self.cursors = {}
 
 	self.menu = Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self)
-	self.menu:addButton("LEAVE", "leave1",  60, 250, 130, 32)
-	self.menu:addButton("LEAVE", "leave2", 210, 250, 130, 32)
-	self.menu:addButton("LEAVE", "leave3", 360, 250, 130, 32)
-	self.menu:addButton("LEAVE", "leave4", 510, 250, 130, 32)
+	self.leaveButtons = {}
+	for i=1,4 do
+		self.leaveButtons[i] = self.menu:addButton("LEAVE", "leave"..i, -90+i*150, 250, 130, 32)
+		self.leaveButtons[i].enabled = false
+	end
 
 	self.menu:addButton("CONTINUE", "continue")
 	self.menu:addButton("BACK", "back")
@@ -104,7 +105,8 @@ function InputSelectState:addInput(input)
 	for i=1,4 do
 		if self.inputs[i] == nil then
 			self.inputs[i] = input
-			self.cursors[i] = Cursor.create(-25+i*150, HEIGHT/2, i)
+			self.cursors[i] = Cursor.create(-25+i*150, 165, i)
+			self.leaveButtons[i].enabled = true
 			return
 		end
 	end
@@ -156,15 +158,19 @@ function InputSelectState:buttonPressed(id, source)
 	if id == "leave1" then
 		self.inputs[1] = nil
 		self.cursors[1] = nil
+		self.leaveButtons[1].enabled = false
 	elseif id == "leave2" then
 		self.inputs[2] = nil
 		self.cursors[2] = nil
+		self.leaveButtons[2].enabled = false
 	elseif id == "leave3" then
 		self.inputs[3] = nil
 		self.cursors[3] = nil
+		self.leaveButtons[3].enabled = false
 	elseif id == "leave4" then
 		self.inputs[4] = nil
 		self.cursors[4] = nil
+		self.leaveButtons[4].enabled = false
 
 	elseif id == "continue" then
 		for i=1,4 do
