@@ -10,7 +10,7 @@ function InputSelectState.create(parent)
 	self.menu = Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self)
 	self.leaveButtons = {}
 	for i=1,4 do
-		self.leaveButtons[i] = self.menu:addButton("LEAVE", "leave"..i, -90+i*150, 250, 130, 32)
+		self.leaveButtons[i] = self.menu:addButton("LEAVE", "leave"..i, -90+i*150, 258, 130, 32)
 		self.leaveButtons[i].enabled = false
 	end
 
@@ -114,7 +114,9 @@ end
 
 function InputSelectState:draw()
 	love.graphics.draw(self.bg, 0, 0)
-	love.graphics.draw(self.imgColors, 62, 108)
+	love.graphics.draw(self.imgColors, 62, 116)
+	love.graphics.setFont(ResMgr.getFont("menu"))
+	love.graphics.printf("PRESS ACTION BUTTON TO JOIN", 0, 25, WIDTH, "center")
 	self.menu:draw()
 
 	-- Draw titles
@@ -122,27 +124,27 @@ function InputSelectState:draw()
 	local ai = 1
 	for i=1,4 do
 		love.graphics.setColor(23, 23, 23, 255)
-		love.graphics.rectangle("fill", -88+i*150, 58, 126, 32)
+		love.graphics.rectangle("fill", -88+i*150, 66, 126, 32)
 		love.graphics.setColor(241, 148, 0, 255)
-		love.graphics.rectangle("line", -87.5+i*150, 58.5, 126, 32)
+		love.graphics.rectangle("line", -87.5+i*150, 66.5, 126, 32)
 
 		love.graphics.setColor(255, 255, 255, 255)
 
 		if self.inputs[i] then
-			love.graphics.printf("PLAYER "..player, -100+i*150, 65, 150, "center")
+			love.graphics.printf("PLAYER "..player, -100+i*150, 73, 150, "center")
 			player = player+1
 			local t = self.inputs[i]:getType()
 			if t == Input.TYPE_KEYBOARD then
-				love.graphics.draw(self.iconKeyboard, -85+i*150, 111)
+				love.graphics.draw(self.iconKeyboard, -85+i*150, 119)
 			elseif t == Input.TYPE_MOUSE then
-				love.graphics.draw(self.iconMouse, -85+i*150, 111)
+				love.graphics.draw(self.iconMouse, -85+i*150, 119)
 			elseif t == Input.TYPE_JOYSTICK then
-				love.graphics.draw(self.iconController, -85+i*150, 111)
+				love.graphics.draw(self.iconController, -85+i*150, 119)
 			end
 		else
-			love.graphics.printf("AI "..ai, -100+i*150, 65, 150, "center")
+			love.graphics.printf("AI "..ai, -100+i*150, 73, 150, "center")
 			ai = ai+1
-			love.graphics.draw(self.iconAI, -85+i*150, 111)
+			love.graphics.draw(self.iconAI, -85+i*150, 119)
 		end
 	end
 
@@ -177,9 +179,8 @@ function InputSelectState:buttonPressed(id, source)
 			if self.inputs[i] == nil then
 				self.inputs[i] = NullInput.create()
 			end
-			popState()
-			pushState(IngameState.create(self, "res/maps/test", Rules.create()))
 		end
+		pushState(LevelSelectionState.create(self))
 	elseif id == "back" then
 		popState()
 	end

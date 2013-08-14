@@ -16,12 +16,14 @@ require("rules")
 
 require("mainMenuState")
 require("inputSelectState")
+require("levelSelectionState")
+require("optionsState")
 
 require("ingameState")
 require("eventTextState")
 require("switchAnimState")
 require("gameOverState")
-require("optionsState")
+
 require("levelEditorState")
 require("loadLevelState")
 require("saveLevelState")
