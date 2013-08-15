@@ -47,6 +47,8 @@ function TextInput:setText(text)
 end
 
 function TextInput:keypressed(k, uni)
+	if self.active == false then return end
+
 	if (uni >= string.byte("A") and uni <= string.byte("Z"))
 	or (uni >= string.byte("a") and uni <= string.byte("z"))
 	or (uni >= string.byte("0") and uni <= string.byte("9")) then
