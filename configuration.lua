@@ -7,6 +7,8 @@ function Config.create()
 	self.fullscreen = false
 	self.vsync = true
 	self.scale = 1
+	self.music_volume = 4
+	self.sound_volume = 4
 
 	return self
 end

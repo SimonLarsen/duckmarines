@@ -10,11 +10,12 @@ function OptionsState.create(parent, config)
 	self.cursor = parent.cursor
 
 	self.menu = Menu.create((WIDTH-300)/2, 169, 300, 32, 20, self)
-	self.fullscreenButton = self.menu:addButton("FULLSCREEN: "..boolToStr(config.fullscreen), "fullscreen")
-	self.vsyncButton = self.menu:addButton("VSYNC: "..boolToStr(config.vsync), "vsync")
-	self.menu:addButton("MUSIC VOLUME", "musicvolume")
-	self.menu:addButton("SOUND VOLUME", "soundvolume")
+	self.fullscreenButton = self.menu:addButton("", "fullscreen")
+	self.vsyncButton = self.menu:addButton("", "vsync")
+	self.musicButton = self.menu:addButton("", "musicvolume")
+	self.soundButton = self.menu:addButton("", "soundvolume")
 	self.menu:addButton("BACK", "back")
+	self:updateButtons()
 	
 	self.bg = ResMgr.getImage("mainmenu_bg.png")
 
@@ -39,13 +40,23 @@ end
 function OptionsState:buttonPressed(id)
 	if id == "fullscreen" then
 		self.config.fullscreen = not self.config.fullscreen
-		self.fullscreenButton.text = "FULLSCREEN: " .. boolToStr(self.config.fullscreen)
 		setScreenMode()
 	elseif id == "vsync" then
 		self.config.vsync = not self.config.vsync
-		self.vsyncButton.text = "VSYNC: " .. boolToStr(self.config.vsync)
 		setScreenMode()
+	elseif id == "musicvolume" then
+		self.config.music_volume = self.config.music_volume % 5 + 1
+	elseif id == "soundvolume" then
+		self.config.sound_volume = self.config.sound_volume % 5 + 1
 	elseif id == "back" then
 		popState()
 	end
+	self:updateButtons()
+end
+
+function OptionsState:updateButtons()
+	self.fullscreenButton.text = "FULLSCREEN: " .. boolToStr(self.config.fullscreen)
+	self.vsyncButton.text = "VSYNC: " .. boolToStr(self.config.vsync)
+	self.musicButton.text = "MUSIC VOLUME: " .. string.rep("I", self.config.music_volume) .. string.rep("x", 5 - self.config.music_volume)
+	self.soundButton.text = "SOUND VOLUME: " .. string.rep("I", self.config.sound_volume) .. string.rep("x", 5 - self.config.sound_volume)
 end

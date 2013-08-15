@@ -180,6 +180,7 @@ function InputSelectState:buttonPressed(id, source)
 				self.inputs[i] = NullInput.create()
 			end
 		end
+		popState()
 		pushState(LevelSelectionState.create(self))
 	elseif id == "back" then
 		popState()
