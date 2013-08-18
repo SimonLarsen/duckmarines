@@ -48,7 +48,7 @@ function IngameState.create(parent, mapname, rules)
 	end
 
 	-- Set variables and counters
-	self.time = self.rules.roundtime*60
+	self.time = self.rules.roundtime
 
 	self.event = IngameState.EVENT_NONE
 	self.eventTime = 0
@@ -188,14 +188,18 @@ function IngameState:update(dt)
 					local x = math.floor(self.entities[i].x / 48)*48-2
 					local y = math.floor(self.entities[i].y / 48)*48+1
 					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
+					table.insert(self.particles, BonusTextParticle.create(
+						self.entities[i].x, self.entities[i].y-12, "+25"))
 
 				elseif eType == Entity.TYPE_PINKDUCK then
 					self.score[player] = self.score[player] + 10
 					self:triggerEvent(player)
 
 				elseif eType == Entity.TYPE_ENEMY then
+					table.insert(self.particles, BonusTextParticle.create(
+						self.entities[i].x, self.entities[i].y-12,
+						"-"..math.ceil(self.score[player]*0.3333)))
 					self.score[player] = math.floor(self.score[player]*0.6667)
-					table.insert(self.particles, SkullParticle.create(self.entities[i].x, self.entities[i].y-8))
 				end
 
 				table.remove(self.entities, i)
@@ -243,7 +247,7 @@ function IngameState:draw()
 
 	-- Draw back particles
 	for i,v in ipairs(self.particles) do
-		if v.layer == Particle.LAYER_BACK then
+		if v:getLayer() == Particle.LAYER_BACK then
 			v:draw()
 		end
 	end
@@ -265,7 +269,7 @@ function IngameState:draw()
 
 	-- Draw front particles
 	for i,v in ipairs(self.particles) do
-		if v.layer == Particle.LAYER_FRONT then
+		if v:getLayer() == Particle.LAYER_FRONT then
 			v:draw()
 		end
 	end
@@ -293,15 +297,13 @@ function IngameState:drawHUD()
 
 	love.graphics.setColor(0, 0, 0, 128)
 	love.graphics.print(timeString, 7, 22)
-	love.graphics.print(string.format("%03d", self.score[1]), 8, 47)
-	love.graphics.print(string.format("%03d", self.score[2]), 8, 76)
-	love.graphics.print(string.format("%03d", self.score[3]), 8, 105)
-	love.graphics.print(string.format("%03d", self.score[4]), 8, 134)
+	for i=1,4 do
+		love.graphics.print(string.format("%03d", self.score[i]), 8, 18+i*29)
+	end
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.print(string.format("%03d", self.score[1]), 8, 46)
-	love.graphics.print(string.format("%03d", self.score[2]), 8, 75)
-	love.graphics.print(string.format("%03d", self.score[3]), 8, 104)
-	love.graphics.print(string.format("%03d", self.score[4]), 8, 133)
+	for i=1,4 do
+		love.graphics.print(string.format("%03d", self.score[i]), 8, 17+i*29)
+	end
 
 	love.graphics.pop()
 
@@ -350,11 +352,13 @@ end
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
 	self.eventTime = self.rules.eventTime[self.event]
+
 	if self.event == IngameState.EVENT_SWITCH then
 		local oldsubs = self.map:getSubmarines()
 		self.map:shuffleSubmarines()
 		local newsubs = self.map:getSubmarines()
 		pushState(SwitchAnimState.create(oldsubs, newsubs))
+
 	elseif self.event == IngameState.EVENT_PREDATORS then
 		local subs = self.map:getSubmarines()
 		for i,v in ipairs(subs) do
@@ -364,6 +368,7 @@ function IngameState:triggerEvent(player)
 				table.insert(self.entities, e)
 			end
 		end
+
 	elseif self.event == IngameState.EVENT_VACUUM then
 		local subs = self.map:getSubmarines()
 		local sub = nil

@@ -4,7 +4,7 @@ ResMgr.__index = ResMgr
 local images = {}
 local fonts = {}
 
-local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:-?!()|x"
+local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:+-?!()|x"
 
 function ResMgr.getImage(_path)
 	local path = "res/" .. _path
@@ -21,6 +21,7 @@ function ResMgr.getFont(name)
 		local image = ResMgr.getImage("fonts/".. name .. ".png")
 		local font = love.graphics.newImageFont(image, fontString)
 		fonts[name] = font
+		print("Loaded font: " .. name)
 	end
 	return fonts[name]
 end

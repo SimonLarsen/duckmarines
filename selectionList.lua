@@ -112,6 +112,10 @@ function SelectionList:setSelectionColor(r, g, b, a)
 	self.selectionColor = {r,g,b,a}
 end
 
+function SelectionList:setSelection(index)
+	self.selection = index
+end
+
 function SelectionList:getSelection()
 	return self.items[self.selection]
 end

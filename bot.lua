@@ -69,3 +69,7 @@ function Bot:calculateMove()
 	self.action = 1
 	self.state = Bot.STATE_MOVING
 end
+
+function Bot:getType()
+	return Input.TYPE_BOT
+end

@@ -11,6 +11,7 @@ function LevelSelectionState.create(parent)
 
 	self.list = SelectionList.create((WIDTH-300)/2, 80, 300, 8, 21)
 	self:updateMapList()
+	self.list:setSelection(1)
 
 	self.menu = Menu.create((WIDTH-300)/2, 300, 300, 32, 16, self)
 	self.menu:addButton("ADVANCED SETTINGS", "advanced")
@@ -49,6 +50,7 @@ end
 
 function LevelSelectionState:buttonPressed(id, source)
 	if id == "advanced" then
+		pushState(AdvancedSettingsState.create(self, self.rules))
 	elseif id == "start" then
 		popState()
 		popState()

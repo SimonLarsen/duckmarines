@@ -2,10 +2,11 @@
 Input = {}
 Input.__index = Input
 
-Input.TYPE_NONE = 0
+Input.TYPE_NONE 	= 0
 Input.TYPE_KEYBOARD = 1
-Input.TYPE_MOUSE = 2
+Input.TYPE_MOUSE 	= 2
 Input.TYPE_JOYSTICK = 3
+Input.TYPE_BOT		= 4
 
 function Input.create()
 	local self = setmetatable({}, Input)
