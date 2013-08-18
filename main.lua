@@ -25,9 +25,11 @@ require("switchAnimState")
 require("gameOverState")
 
 require("levelEditorState")
+
 require("loadLevelState")
 require("saveLevelState")
 require("messageBoxState")
+require("confirmBoxState")
 
 require("sprite")
 require("anim")

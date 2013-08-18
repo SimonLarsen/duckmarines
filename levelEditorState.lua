@@ -101,8 +101,11 @@ function LevelEditorState:update(dt)
 					if self.cursor.y <= 59 then
 						-- New file
 						if self.cursor.x <= 58 then
-							self.map:clear()
-							self.map:updateSpriteBatch(true)
+							pushState(ConfirmBoxState.create(self,
+							"CLEAR MAP?", function()
+								self.map:clear()
+								self.map:updateSpriteBatch(true)
+							end))
 						-- Save file
 						else
 							local valid, msg = self.map:verify()
@@ -120,7 +123,10 @@ function LevelEditorState:update(dt)
 							pushState(self.loadDialog)
 						-- Quit editor
 						else
-							popState()
+							pushState(ConfirmBoxState.create(self,
+							"ARE YOU SURE YOU WANT TO QUIT?", function()
+								popState()
+							end))
 						end
 					end
 				end
@@ -190,7 +196,8 @@ function LevelEditorState:draw()
 end
 
 function LevelEditorState:cursorInMap()
-	return self.cursor.x >= 121 and self.cursor.x <= WIDTH-4 and self.cursor.y >= 8 and self.cursor.y <= HEIGHT-4
+	return self.cursor.x >= 121 and self.cursor.x <= WIDTH-4
+	and self.cursor.y >= 8 and self.cursor.y <= HEIGHT-4
 end
 
 function LevelEditorState:addFence(x1, y1, x2, y2)
