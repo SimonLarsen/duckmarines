@@ -15,7 +15,6 @@ IngameState.EVENT_SLOWDOWN	= 8
 function IngameState.create(parent, mapname, rules)
 	local self = setmetatable(State.create(), IngameState)
 
-	self.inputs = parent.inputs
 	self.mapname = mapname
 	self.rules = rules
 
@@ -36,6 +35,15 @@ function IngameState.create(parent, mapname, rules)
 	self.cursors[2] = Cursor.create(504,  72, 2)
 	self.cursors[3] = Cursor.create( 72, 360, 3)
 	self.cursors[4] = Cursor.create(504, 360, 4)
+
+	self.inputs = {}
+	for i=1,4 do
+		if parent.inputs[i]:getType() == Input.TYPE_NONE then
+			self.inputs[i] = Bot.create(self.cursors[i], self.map)
+		else
+			self.inputs[i] = parent.inputs[i]
+		end
+	end
 
 	-- Set variables and counters
 	self.time = self.rules.roundtime*60
@@ -82,6 +90,7 @@ function IngameState:update(dt)
 	if self.event ~= IngameState.EVENT_FREEZE then
 		self.nextEntity = self.nextEntity - dt
 	end
+
 	-- Spawn new entity when counter runs out
 	if self.nextEntity <= 0 then
 		local freq

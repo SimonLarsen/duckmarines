@@ -2,6 +2,7 @@
 Input = {}
 Input.__index = Input
 
+Input.TYPE_NONE = 0
 Input.TYPE_KEYBOARD = 1
 Input.TYPE_MOUSE = 2
 Input.TYPE_JOYSTICK = 3
@@ -53,9 +54,11 @@ end
 function NullInput:getType() return Input.TYPE_NONE end
 
 --- Keyboard input
-KeyboardInput = { SPEED = 300 }
+KeyboardInput = {}
 KeyboardInput.__index = KeyboardInput
 setmetatable(KeyboardInput, Input)
+
+KeyboardInput.SPEED = 300
 
 function KeyboardInput.create()
 	local self = setmetatable(Input.create(), KeyboardInput)
@@ -157,9 +160,11 @@ end
 function MouseInput:getType() return Input.TYPE_MOUSE end
 
 --- Joystick Input
-JoystickInput = { SPEED = 300 }
+JoystickInput = {}
 JoystickInput.__index = JoystickInput
 setmetatable(JoystickInput, Input)
+
+JoystickInput.SPEED = 300
 
 function JoystickInput.create(id)
 	local self = setmetatable(Input.create(), JoystickInput)

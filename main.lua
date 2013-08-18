@@ -33,6 +33,7 @@ require("sprite")
 require("anim")
 
 require("cursor")
+require("bot")
 require("arrow")
 require("entity")
 require("duck")
