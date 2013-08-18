@@ -70,14 +70,9 @@ function SelectionList:click(x, y)
 		if y <= self.y+14 then
 			self.scroll = math.max(1, self.scroll-1)
 		elseif y <= self.y+self.height-14 then
-			local old = self.selection
-			self.selection = math.floor((y-self.y-14)/self.spacing)+self.scroll
-			if self.selection > #self.items then
-				self.selection = old
-			else
-				if self.listener then
-					self.listener:selectionChanged(self:getText(), self)
-				end
+			local sel = math.floor((y-self.y-14)/self.spacing)+self.scroll
+			if sel <= #self.items then
+				self:setSelection(sel)
 			end
 		else
 			self.scroll = math.min(self.scroll+1, #self.items-self.length+1)
@@ -114,6 +109,9 @@ end
 
 function SelectionList:setSelection(index)
 	self.selection = index
+	if self.listener then
+		self.listener:selectionChanged(self:getText(), self)
+	end
 end
 
 function SelectionList:getSelection()

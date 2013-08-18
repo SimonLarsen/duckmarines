@@ -27,7 +27,7 @@ function Rules.create()
 	self.eventTime = {}
 	self.eventTime[IngameState.EVENT_RUSH] 		= 15
 	self.eventTime[IngameState.EVENT_PREDRUSH]	= 15
-	self.eventTime[IngameState.EVENT_FREEZE] 	= 7
+	self.eventTime[IngameState.EVENT_FREEZE] 	= 5
 	self.eventTime[IngameState.EVENT_SWITCH] 	= 0
 	self.eventTime[IngameState.EVENT_PREDATORS]	= 0
 	self.eventTime[IngameState.EVENT_VACUUM] 	= 0
