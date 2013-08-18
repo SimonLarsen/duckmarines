@@ -12,6 +12,8 @@ IngameState.EVENT_VACUUM	= 6
 IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
+IngameState.EVENT_COUNT 	= 8
+
 function IngameState.create(parent, mapname, rules)
 	local self = setmetatable(State.create(), IngameState)
 
@@ -31,15 +33,15 @@ function IngameState.create(parent, mapname, rules)
 
 	-- Initialize cursors
 	self.cursors = {}
-	self.cursors[1] = Cursor.create( 72,  72, 1)
-	self.cursors[2] = Cursor.create(504,  72, 2)
-	self.cursors[3] = Cursor.create( 72, 360, 3)
-	self.cursors[4] = Cursor.create(504, 360, 4)
+	for i,v in ipairs(self.map:getSubmarines()) do
+		self.cursors[v.player] = Cursor.create(v.x*48+24, v.y*48+24, v.player)
+	end
 
+	-- Create inputs and bots
 	self.inputs = {}
 	for i=1,4 do
 		if parent.inputs[i]:getType() == Input.TYPE_NONE then
-			self.inputs[i] = Bot.create(self.cursors[i], self.map)
+			self.inputs[i] = Bot.create(self.map, self.cursors[i], i, entities)
 		else
 			self.inputs[i] = parent.inputs[i]
 		end
@@ -346,7 +348,7 @@ function IngameState:canPlaceArrow(x, y)
 end
 
 function IngameState:triggerEvent(player)
-	self.event = math.random(1, 8)
+	self.event = math.random(1, IngameState.EVENT_COUNT)
 	self.eventTime = self.rules.eventTime[self.event]
 	if self.event == IngameState.EVENT_SWITCH then
 		local oldsubs = self.map:getSubmarines()

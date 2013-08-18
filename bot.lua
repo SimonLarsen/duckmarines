@@ -6,11 +6,15 @@ Bot.SPEED 			= 300
 Bot.DIST_THRESHOLD 	= 18
 Bot.STATE_NONE 		= 0
 Bot.STATE_MOVING	= 1
+Bot.STATE_ACTION	= 2
 
-function Bot.create(cursor, map)
+function Bot.create(map, cursor, id, entities)
 	local self = setmetatable(Input.create(), Bot)
 
+	self.map = map
 	self.cursor = cursor
+	self.id = id
+	self.entities = entities
 
 	self.state = Bot.STATE_NONE
 
@@ -35,22 +39,33 @@ function Bot:getMovement(dt, lock)
 			dy = dy / dist * dt * Bot.SPEED
 			return dx, dy, false
 		else
-			self.action = 1
-			self.state = Bot.STATE_NONE
+			self.state = Bot.STATE_ACTION
 			return 0, 0, false
 		end
+	end
+
+	return 0, 0, false
+end
+
+function Bot:getAction()
+	if self.state == Bot.STATE_ACTION then
+		local ac = self.action
+		self.action = nil
+		self.state = Bot.STATE_NONE
+		return ac
+	else
+		return nil
 	end
 end
 
 function Bot:calculateMove()
-	self.targetx = 24
-	self.targety = 24
-	self.state = Bot.STATE_MOVING
-end
+	local sub
+	for i,v in ipairs(self.map:getSubmarines()) do
+		if v.player == self.id then sub = v end
+	end
 
-function Bot:getAction()
-	local ac = self.action
-	self.action = nil
-	self.state = Bot.STATE_NONE
-	return ac
+	self.targetx = sub.x*48+24
+	self.targety = sub.y*48+24
+	self.action = 1
+	self.state = Bot.STATE_MOVING
 end

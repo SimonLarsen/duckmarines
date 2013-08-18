@@ -46,10 +46,8 @@ end
 function GameOverState:buttonPressed(id, source)
 	if id == "rematch" then
 		popState()
-		popState()
 		pushState(IngameState.create(self, self.mapname, self.rules))
 	elseif id == "mainmenu" then
-		popState()
 		popState()
 	end
 end

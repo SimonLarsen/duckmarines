@@ -7,7 +7,7 @@ SwitchAnimState.RAISE_TIME = 1
 SwitchAnimState.TOTAL_TIME = SwitchAnimState.SINK_TIME + SwitchAnimState.RAISE_TIME
 
 function SwitchAnimState.create(oldsubs, newsubs)
-	local self = setmetatable({}, SwitchAnimState)
+	local self = setmetatable(State.create(), SwitchAnimState)
 
 	self.oldsubs = oldsubs
 	self.newsubs = newsubs
