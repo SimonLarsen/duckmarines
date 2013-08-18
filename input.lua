@@ -165,6 +165,7 @@ JoystickInput.__index = JoystickInput
 setmetatable(JoystickInput, Input)
 
 JoystickInput.SPEED = 300
+JoystickInput.DEADZONE = 0.05
 
 function JoystickInput.create(id)
 	local self = setmetatable(Input.create(), JoystickInput)
@@ -184,14 +185,14 @@ function JoystickInput:getMovement(dt, lock)
 
 	if axis1 and axis2 then
 		if not self:isDown() or lock == false then
-			if axis1 then
+			if axis1 and math.abs(axis1) > JoystickInput.DEADZONE then
 				dx = axis1 * self.SPEED * dt
 			end
-			if axis2 then
+			if axis2 and math.abs(axis2) > JoystickInput.DEADZONE then
 				dy = axis2 * self.SPEED * dt
 			end
 		elseif self.down == true then
-			if axis1 ~= 0 or axis2 ~= 0 then
+			if math.abs(axis1) > JoystickInput.DEADZONE or math.abs(axis2) > JoystickInput.DEADZONE then
 				self.down = false
 				self.action = vecToDir(axis1, axis2)
 			end
