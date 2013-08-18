@@ -46,6 +46,10 @@ function TextInput:setText(text)
 	self.text = text
 end
 
+function TextInput:setActive(active)
+	self.active = active
+end
+
 function TextInput:keypressed(k, uni)
 	if self.active == false then return end
 

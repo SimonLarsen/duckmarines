@@ -11,6 +11,8 @@ function SaveLevelState.create(parent)
 
 	self.list = SelectionList.create(178, 133, 200, 6, 21, self)
 	self.input = TextInput.create(178, 307, 200, 24)
+	self.input:setActive(true)
+
 	self.menu = Menu.create(390, 212, 134, 32, 11, self)
 	self.menu:addButton("SAVE", "save")
 	self.menu:addButton("DELETE", "delete")
@@ -64,14 +66,32 @@ end
 
 function SaveLevelState:buttonPressed(id, source)
 	if id == "save" then
-		local strdata = self.parent.map:pack()
-		love.filesystem.write(self:getFilename(), strdata)
-		love.timer.sleep(0.25)
-		popState()
+		if love.filesystem.exists(self:getFilename()) then
+			pushState(ConfirmBoxState.create(self,
+				"OVERWRITE " .. self.input:getText():upper() .. "?",
+				function()
+					local strdata = self.parent.map:pack()
+					love.filesystem.write(self:getFilename(), strdata)
+					love.timer.sleep(0.25)
+					popState()
+				end
+			))
+		else
+			local strdata = self.parent.map:pack()
+			love.filesystem.write(self:getFilename(), strdata)
+			love.timer.sleep(0.25)
+			popState()
+		end
 	elseif id == "delete" then
 		if love.filesystem.exists(self:getFilename()) then
-			love.filesystem.remove(self:getFilename())
-			self:updateFileList()
+			pushState(
+				ConfirmBoxState.create(self,
+				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",
+				function()
+					love.filesystem.remove(self:getFilename())
+					self:updateFileList()
+				end
+			))
 		end
 	elseif id == "cancel" then
 		love.timer.sleep(0.25)

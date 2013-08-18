@@ -12,7 +12,7 @@ function SelectionList.create(x, y, width, length, spacing, listener)
 	self.spacing = spacing or 14
 	self.listener = listener
 	self.scroll = 1
-	self.selection = 1
+	self.selection = 0
 	self.id = ""
 
 	self.items = {}
@@ -89,7 +89,7 @@ end
 function SelectionList:setItems(items)
 	self.items = items
 	self.height = self.length*self.spacing + 28
-	self.selection = 1
+	self.selection = 0
 end
 
 function SelectionList:setId(id)
@@ -97,7 +97,11 @@ function SelectionList:setId(id)
 end
 
 function SelectionList:getText()
-	return self.items[self.selection]
+	if self.selection > 0 then
+		return self.items[self.selection]
+	else
+		return ""
+	end
 end
 
 function SelectionList:setBackgroundColor(r,g,b,a)

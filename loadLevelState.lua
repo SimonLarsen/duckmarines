@@ -11,6 +11,8 @@ function LoadLevelState.create(parent, map)
 
 	self.list = SelectionList.create(178, 133, 200, 6, 21, self)
 	self.input = TextInput.create(178, 307, 200, 24)
+	self.input:setActive(true)
+
 	self.menu = Menu.create(390, 212, 134, 32, 11, self)
 	self.menu:addButton("LOAD", "Load")
 	self.menu:addButton("DELETE", "delete")
@@ -64,14 +66,25 @@ end
 
 function LoadLevelState:buttonPressed(id, source)
 	if id == "Load" then
-		self.parent.map = Map.create(self:getFilename())
-		self.parent.map:updateSpriteBatch(true)
-		love.timer.sleep(0.25)
-		popState()
+		if love.filesystem.exists(self:getFilename()) then
+			self.parent.map = Map.create(self:getFilename())
+			self.parent.map:updateSpriteBatch(true)
+			love.timer.sleep(0.25)
+			popState()
+		else
+			pushState(MessageBoxState.create(self,
+			"MAP " .. self.input:getText():upper() .. " DOES NOT EXIST"))
+		end
 	elseif id == "delete" then
 		if love.filesystem.exists(self:getFilename()) then
-			love.filesystem.remove(self:getFilename())
-			self:updateFileList()
+			pushState(
+				ConfirmBoxState.create(self,
+				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",
+				function()
+					love.filesystem.remove(self:getFilename())
+					self:updateFileList()
+				end
+			))
 		end
 	elseif id == "cancel" then
 		love.timer.sleep(0.25)
