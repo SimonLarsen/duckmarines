@@ -3,10 +3,18 @@ Object holding current game rules.
 Set from game menu before starting game.
 ]]
 Rules = {}
+Rules.__index = Rules
 
 function Rules.create()
-	local self = {}
+	local self = setmetatable({}, Rules)
 
+	self.eventTime = {}
+	self:setDefaults()
+
+	return self
+end
+
+function Rules:setDefaults()
 	-- Round time in minutes
 	self.roundtime = 3*60
 	-- Number of entities pr. minute
@@ -24,7 +32,6 @@ function Rules.create()
 	-- Duck rush multiplier
 	self.rushfrequency = 1000
 
-	self.eventTime = {}
 	self.eventTime[IngameState.EVENT_RUSH] 		= 15
 	self.eventTime[IngameState.EVENT_PREDRUSH]	= 15
 	self.eventTime[IngameState.EVENT_FREEZE] 	= 5
@@ -33,6 +40,4 @@ function Rules.create()
 	self.eventTime[IngameState.EVENT_VACUUM] 	= 0
 	self.eventTime[IngameState.EVENT_SPEEDUP] 	= 10
 	self.eventTime[IngameState.EVENT_SLOWDOWN] 	= 10
-
-	return self
 end
