@@ -41,7 +41,7 @@ function IngameState.create(parent, mapname, rules)
 	self.inputs = {}
 	for i=1,4 do
 		if parent.inputs[i]:getType() == Input.TYPE_NONE then
-			self.inputs[i] = Bot.create(self.map, self.cursors[i], i, entities)
+			self.inputs[i] = Bot.create(self.map, self.cursors[i], i, self.entities)
 		else
 			self.inputs[i] = parent.inputs[i]
 		end

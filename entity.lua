@@ -127,6 +127,10 @@ function Entity:getTile()
 	return self.tile
 end
 
+function Entity:getDir()
+	return self.dir
+end
+
 function Entity:getType()
 	return Entity.TYPE_NONE
 end

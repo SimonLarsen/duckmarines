@@ -13,6 +13,19 @@ function vecToDir(dx, dy)
 	end
 end
 
+-- Converts integer direction to unit vector
+function dirToVec(dir)
+	if dir == 0 then
+		return 0, -1
+	elseif dir == 1 then
+		return 1, 0
+	elseif dir == 2 then
+		return 0, 1
+	else
+		return -1, 0
+	end
+end
+
 --- Returns a random element from a table
 function table.random(t)
 	return t[math.random(1,#t)]
@@ -26,6 +39,16 @@ end
 --- Caps x in the interval [a,b]
 function math.cap(x, a, b)
 	return math.min(math.max(x, a), b)
+end
+
+-- Returns sign of x
+function math.sign(x)
+	return x < 0 and -1 or 1
+end
+
+-- Returns sign of x (or 0 if x == 0)
+function math.signz(x)
+	return x < 0 and -1 or x > 0 and 1 or 0
 end
 
 --- Creates time string from number of seconds.

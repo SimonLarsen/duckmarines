@@ -63,11 +63,84 @@ function Bot:calculateMove()
 	for i,v in ipairs(self.map:getSubmarines()) do
 		if v.player == self.id then sub = v end
 	end
+	local subx = sub.x*48+24
+	local suby = sub.y*48+24
 
-	self.targetx = sub.x*48+24
-	self.targety = sub.y*48+24
-	self.action = 1
-	self.state = Bot.STATE_MOVING
+	-- Check if a predator is steering towards submarine
+	local minDist = 1000000
+	local closest = nil
+	for i,v in ipairs(self.entities) do
+		if v:getType() == Entity.TYPE_ENEMY then
+			if self:walkingTowards(v, subx, suby) then
+				local dist = (subx-v.x)^2 + (suby-v.y)^2
+				if dist < minDist then
+					minDist = dist
+					closest = v
+				end
+			end
+		end
+	end
+	-- Cut off predator if any danger
+	if closest ~= nil then
+		local xdir, ydir = dirToVec(closest:getDir())
+		local cx = math.floor(closest.x / 48)
+		local cy = math.floor(closest.y / 48)
+
+		if xdir ~= 0 then
+			for ix=sub.x, cx, -xdir do
+				if self.map:getTile(ix, sub.y) == 0 then
+					self.targetx = ix*48+24
+					self.targety = suby
+					self.action = (closest:getDir() + 2) % 4
+					self.state = Bot.STATE_MOVING
+					return
+				end
+			end
+		end
+	end
+	
+	-- If no threats found,
+	-- look for ducks that that can be guided towards sub
+	-- with a single arrow
+	local target = nil
+	for i,v in ipairs(self.entities) do
+		if v:getType() ~= Entity.TYPE_ENEMY then
+			if self:walkingTowardsInOneAxis(v, subx, suby) then
+				target = v
+				break
+			end
+		end
+	end
+
+	-- If a dick is found, place arrow
+	if target ~= nil then
+		local xdir, ydir = dirToVec(target:getDir())
+		if xdir == 0 then
+			self.targetx = target.x
+			self.targety = suby
+		else
+			self.targetx = subx
+			self.targety = target.y
+		end
+		self.action = vecToDir(subx-self.targetx, suby-self.targety)
+		self.state = Bot.STATE_MOVING
+		return
+	end
+end
+
+function Bot:walkingTowards(entity, x, y)
+	local xdir, ydir = dirToVec(entity:getDir())
+	return (entity.y == y and math.sign(x - entity.x) == xdir)
+	or     (entity.x == x and math.sign(y - entity.y) == ydir)
+end
+
+function Bot:walkingTowardsInOneAxis(entity, x, y)
+	local xdir1, ydir1 = dirToVec(entity:getDir())
+	local xdir2 = math.signz(x - entity.x)
+	local ydir2 = math.signz(y - entity.y)
+
+	return (xdir1 == xdir2 or xdir1*xdir2 == 0)
+	and    (ydir1 == ydir2 or ydir1*ydir2 == 0)
 end
 
 function Bot:getType()
