@@ -92,3 +92,15 @@ function bubblesort(a, t)
 		if swapped == false then return end
 	end
 end
+
+--- Iterator that traverses an entire table in order
+--  but starting from a random element
+function offset_iter(t)
+	local i = 0
+	local n = #t
+	local offset = math.random(1, n)
+	return function ()
+		i = i + 1
+		if i <= n then return t[(i+offset)%n+1] end
+	end
+end

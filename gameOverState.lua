@@ -6,6 +6,12 @@ function GameOverState.create(parent, scores)
 	local self = setmetatable(State.create(), GameOverState)
 
 	self.inputs = parent.inputs
+	for i=1,4 do
+		if self.inputs[i]:getType() == Input.TYPE_BOT then
+			self.inputs[i] = NullInput.create()
+		end
+	end
+
 	self.mapname = parent.mapname
 	self.rules = parent.rules
 	self.scores = scores
@@ -46,8 +52,10 @@ end
 function GameOverState:buttonPressed(id, source)
 	if id == "rematch" then
 		popState()
+		popState()
 		pushState(IngameState.create(self, self.mapname, self.rules))
 	elseif id == "mainmenu" then
+		popState()
 		popState()
 	end
 end

@@ -8,13 +8,16 @@ Bot.STATE_NONE 		= 0
 Bot.STATE_MOVING	= 1
 Bot.STATE_ACTION	= 2
 
-function Bot.create(map, cursor, id, entities)
+Bot.DANGER_THRESHOLD = (4*48)^2
+
+function Bot.create(map, cursor, id, entities, arrows)
 	local self = setmetatable(Input.create(), Bot)
 
 	self.map = map
 	self.cursor = cursor
 	self.id = id
 	self.entities = entities
+	self.arrows = arrows
 
 	self.state = Bot.STATE_NONE
 
@@ -25,11 +28,22 @@ function Bot.create(map, cursor, id, entities)
 end
 
 function Bot:getMovement(dt, lock)
+	-- If no current target, try to find one
 	if self.state == Bot.STATE_NONE then
 		self:calculateMove()
 	end
 
+	-- Move towards target if any
 	if self.state == Bot.STATE_MOVING then
+		-- Check if target cell is still free
+		local cx = math.floor(self.targetx / 48)
+		local cy = math.floor(self.targety / 48)
+		if self:canPlaceArrow(cx, cy) == false then
+			self.state = Bot.STATE_NONE
+		end
+
+		-- Check if target has been reached,
+		-- move towards target if not
 		local dx = self.targetx - self.cursor.x
 		local dy = self.targety - self.cursor.y
 		local sqdist = dx^2 + dy^2
@@ -40,7 +54,6 @@ function Bot:getMovement(dt, lock)
 			return dx, dy, false
 		else
 			self.state = Bot.STATE_ACTION
-			return 0, 0, false
 		end
 	end
 
@@ -69,7 +82,7 @@ function Bot:calculateMove()
 	-- Check if a predator is steering towards submarine
 	local minDist = 1000000
 	local closest = nil
-	for i,v in ipairs(self.entities) do
+	for v in offset_iter(self.entities) do
 		if v:getType() == Entity.TYPE_ENEMY then
 			if self:walkingTowards(v, subx, suby) then
 				local dist = (subx-v.x)^2 + (suby-v.y)^2
@@ -88,22 +101,29 @@ function Bot:calculateMove()
 
 		if xdir ~= 0 then
 			for ix=sub.x, cx, -xdir do
-				if self.map:getTile(ix, sub.y) == 0 then
+				if self:canPlaceArrow(ix, sub.y) then
 					self.targetx = ix*48+24
 					self.targety = suby
-					self.action = (closest:getDir() + 2) % 4
-					self.state = Bot.STATE_MOVING
-					return
+				end
+			end
+		else
+			for iy=sub.y, cy, -ydir do
+				if self:canPlaceArrow(sub.x, iy) then
+					self.targetx = subx
+					self.targety = iy*48+24
 				end
 			end
 		end
+		self.action = (closest:getDir() + 2) % 4
+		self.state = Bot.STATE_MOVING
+		return
 	end
 	
 	-- If no threats found,
 	-- look for ducks that that can be guided towards sub
 	-- with a single arrow
 	local target = nil
-	for i,v in ipairs(self.entities) do
+	for v in offset_iter(self.entities) do
 		if v:getType() ~= Entity.TYPE_ENEMY then
 			if self:walkingTowardsInOneAxis(v, subx, suby) then
 				target = v
@@ -122,9 +142,13 @@ function Bot:calculateMove()
 			self.targetx = subx
 			self.targety = target.y
 		end
-		self.action = vecToDir(subx-self.targetx, suby-self.targety)
-		self.state = Bot.STATE_MOVING
-		return
+
+		local cx = math.floor(self.targetx / 48)
+		local cy = math.floor(self.targety / 48)
+		if self:canPlaceArrow(cx, cy) then
+			self.action = vecToDir(subx-self.targetx, suby-self.targety)
+			self.state = Bot.STATE_MOVING
+		end
 	end
 end
 
@@ -141,6 +165,25 @@ function Bot:walkingTowardsInOneAxis(entity, x, y)
 
 	return (xdir1 == xdir2 or xdir1*xdir2 == 0)
 	and    (ydir1 == ydir2 or ydir1*ydir2 == 0)
+end
+
+--- Checks if an arrow can be placed at (x,y)
+--  @return True if placement is possible, false otherwise
+function Bot:canPlaceArrow(x, y)
+	-- Check if tile is empty
+	if self.map:getTile(x, y) ~= 0 then
+		return false
+	end
+	-- Check if another arrow is already placed there
+	for i=1,4 do
+		for j,v in ipairs(self.arrows[i]) do
+			if v.x == x and v.y == y then
+				return false
+			end
+		end
+	end
+
+	return true
 end
 
 function Bot:getType()

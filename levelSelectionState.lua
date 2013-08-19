@@ -71,7 +71,6 @@ function LevelSelectionState:buttonPressed(id, source)
 		pushState(AdvancedSettingsState.create(self, self.rules))
 	elseif id == "start" then
 		popState()
-		popState()
 		pushState(IngameState.create(self, self:getFilename(), self.rules))
 	elseif id == "back" then
 		popState()
