@@ -40,18 +40,6 @@ function MainMenuState:draw()
 	self.cursor:draw()
 end
 
-function MainMenuState:keypressed(k, uni)
-	State.keypressed(self, k, uni)
-
-	if k == "1" then
-		pushState(IngameState.create(self, "res/maps/test", Rules.create()))
-	elseif k == "2" then
-		pushState(IngameState.create(self, "res/maps/test2", Rules.create()))
-	elseif k == "3" then
-		pushState(IngameState.create(self, "usermaps/custom", Rules.create()))
-	end
-end
-
 function MainMenuState:buttonPressed(id, source)
 	if id == "start" then
 		pushState(InputSelectState.create(self))

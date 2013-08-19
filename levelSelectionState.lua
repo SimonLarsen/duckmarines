@@ -45,14 +45,14 @@ function LevelSelectionState:draw()
 	love.graphics.draw(self.bg, 0, 0)
 
 	love.graphics.setColor(0, 0, 0)
-	love.graphics.rectangle("fill", WIDTH/2, 62, 298, 229)
+	love.graphics.rectangle("fill", WIDTH/2, 62, 297, 228)
 	love.graphics.setColor(255, 194, 49)
-	love.graphics.rectangle("line", WIDTH/2+0.5, 62.5, 298, 229)
+	love.graphics.rectangle("line", WIDTH/2+0.5, 62.5, 297, 228)
 	love.graphics.setColor(255,255,255)
 
 	love.graphics.draw(self.imgBlueprint, WIDTH/2+8, 70)
 	love.graphics.draw(self.batch, WIDTH/2+11, 73)
-	love.graphics.draw(self.imgDogear, WIDTH/2+266, 70)
+	love.graphics.draw(self.imgDogear, WIDTH/2+265, 70)
 
 	love.graphics.setFont(ResMgr.getFont("menu"))
 	love.graphics.printf("SELECT A LEVEL", 0, 25, WIDTH, "center")
@@ -132,10 +132,10 @@ function LevelSelectionState:selectionChanged(text, source)
 		for ix=0,11 do
 			local wall = map:getWall(ix, iy)
 			if iy > 0 and wall % 2 == 1 then
-				self.batch:addq(quadFenceHor, ix*23-2, iy*23-2)
+				self.batch:addq(quadFenceHor, ix*23-3, iy*23-3)
 			end
 			if ix > 0 and wall > 1 then
-				self.batch:addq(quadFenceVer, ix*23-2, iy*23-2)
+				self.batch:addq(quadFenceVer, ix*23-3, iy*23-3)
 			end
 		end
 	end
