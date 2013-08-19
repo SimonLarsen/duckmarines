@@ -10,6 +10,8 @@ function LevelSelectionState.create(parent)
 	self.rules = Rules.create()
 
 	self.bg = ResMgr.getImage("bg_stars.png")
+	self.imgBlueprint = ResMgr.getImage("blueprint.png")
+	self.imgDogear = ResMgr.getImage("blueprint_dogear.png")
 	self.imgPreview = ResMgr.getImage("preview_assets.png")
 	self.batch = love.graphics.newSpriteBatch(self.imgPreview, 128)
 
@@ -44,18 +46,16 @@ function LevelSelectionState:draw()
 
 	love.graphics.setColor(0, 0, 0)
 	love.graphics.rectangle("fill", WIDTH/2, 62, 298, 229)
-	love.graphics.setColor(40, 68, 111)
-	love.graphics.rectangle("fill", WIDTH/2+8, 70, 282, 213)
-	love.graphics.setColor(220, 226, 234)
-	love.graphics.rectangle("line", WIDTH/2+10.5, 72.5, 277, 208)
 	love.graphics.setColor(255, 194, 49)
 	love.graphics.rectangle("line", WIDTH/2+0.5, 62.5, 298, 229)
 	love.graphics.setColor(255,255,255)
 
+	love.graphics.draw(self.imgBlueprint, WIDTH/2+8, 70)
 	love.graphics.draw(self.batch, WIDTH/2+11, 73)
+	love.graphics.draw(self.imgDogear, WIDTH/2+266, 70)
 
 	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.printf("SELECT LEVEL", 0, 25, WIDTH, "center")
+	love.graphics.printf("SELECT A LEVEL", 0, 25, WIDTH, "center")
 
 	self.list:draw()
 	self.menu:draw()
