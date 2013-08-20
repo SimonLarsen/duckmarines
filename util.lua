@@ -98,7 +98,12 @@ end
 function offset_iter(t)
 	local i = 0
 	local n = #t
-	local offset = math.random(1, n)
+	local offset
+	if n > 1 then
+		offset = math.random(1, n)
+	else
+		offset = 0
+	end
 	return function ()
 		i = i + 1
 		if i <= n then return t[(i+offset)%n+1] end
