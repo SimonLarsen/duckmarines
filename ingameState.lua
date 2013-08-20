@@ -174,7 +174,7 @@ function IngameState:update(dt)
 			local tile = self.entities[i]:getTile()
 
 			-- Check if entities hit submarine
-			if tile >= 10 and tile <= 14 then
+			if tile >= 10 and tile <= 13 then
 				local eType = self.entities[i]:getType()
 				local player = tile-9
 				if eType == Entity.TYPE_DUCK then

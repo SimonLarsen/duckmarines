@@ -1,6 +1,15 @@
 Map = {}
 Map.__index = Map
 
+Map.TILE_EMPTY			= 0
+Map.TILE_HOLE 			= 2
+
+Map.TILE_SPAWNER		= 3
+Map.TILE_SPAWNER_UP 	= 4
+Map.TILE_SPAWNER_RIGHT 	= 5
+Map.TILE_SPAWNER_DOWN	= 6
+Map.TILE_SPAWNER_LEFT	= 7
+
 function Map.create(name)
 	local self = setmetatable({}, Map)
 
@@ -43,15 +52,13 @@ function Map:updateSpriteBatch(debug)
 
 			local tile = self:getTile(ix, iy)
 			if tile > 0 then
-				if tile >= 4 and tile <= 7 and not debug then
-					tile = 3
+				if tile >= Map.TILE_SPAWNER_UP
+				and tile <= Map.TILE_SPAWNER_LEFT and not debug then
+					tile = Map.TILE_SPAWNER
 				end
 
 				local cx = (tile % 10) * 48
-				local cy = 0
-				if tile > 0 then
-					cy = math.floor(tile / 10) * 48
-				end
+				local cy = math.floor(tile / 10) * 48
 				quad:setViewport(cx, cy, 48, 48)
 				self.backBatch:addq(quad, ix*48, iy*48)
 			end
@@ -133,7 +140,7 @@ function Map:findSubmarines()
 	for iy=0,8 do
 		for ix=0,11 do
 			local tile = self:getTile(ix, iy)
-			if tile >= 10 and tile <= 14 then
+			if tile >= 10 and tile <= 13 then
 				local e = {}
 				e.x = ix
 				e.y = iy

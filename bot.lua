@@ -89,34 +89,33 @@ function Bot:calculateMove()
 				if dist < minDist then
 					minDist = dist
 					closest = v
+					break
 				end
 			end
 		end
 	end
 	-- Cut off predator if any danger
 	if closest ~= nil then
-		local xdir, ydir = dirToVec(closest:getDir())
+		local dir = closest:getDir()
+		local xdir, ydir = dirToVec(dir)
 		local cx = math.floor(closest.x / 48)
 		local cy = math.floor(closest.y / 48)
 
-		if xdir ~= 0 then
-			for ix=sub.x, cx, -xdir do
-				if self:canPlaceArrow(ix, sub.y) then
-					self.targetx = ix*48+24
-					self.targety = suby
-				end
+		local ix, iy = sub.x, sub.y
+		while ix ~= cx or iy ~= cy do
+			local free, tile, arrow = self:canPlaceArrow(ix, iy)
+			if free then
+				self.targetx = ix*48+24
+				self.targety = iy*48+24
+				self.action = (closest:getDir() + 2) % 4
+				self.state = Bot.STATE_MOVING
+				return
+			elseif arrow and arrow.dir ~= dir then
+				break
 			end
-		else
-			for iy=sub.y, cy, -ydir do
-				if self:canPlaceArrow(sub.x, iy) then
-					self.targetx = subx
-					self.targety = iy*48+24
-				end
-			end
+			ix = ix - xdir
+			iy = iy - ydir
 		end
-		self.action = (closest:getDir() + 2) % 4
-		self.state = Bot.STATE_MOVING
-		return
 	end
 	
 	-- If no threats found,
@@ -132,7 +131,7 @@ function Bot:calculateMove()
 		end
 	end
 
-	-- If a dick is found, place arrow
+	-- If a duck is found, place arrow
 	if target ~= nil then
 		local xdir, ydir = dirToVec(target:getDir())
 		if xdir == 0 then
@@ -171,19 +170,20 @@ end
 --  @return True if placement is possible, false otherwise
 function Bot:canPlaceArrow(x, y)
 	-- Check if tile is empty
-	if self.map:getTile(x, y) ~= 0 then
-		return false
+	local tile = self.map:getTile(x, y)
+	if tile ~= 0 then
+		return false, tile, nil
 	end
 	-- Check if another arrow is already placed there
 	for i=1,4 do
 		for j,v in ipairs(self.arrows[i]) do
 			if v.x == x and v.y == y then
-				return false
+				return false, tile, v
 			end
 		end
 	end
 
-	return true
+	return true, tile, nil
 end
 
 function Bot:getType()
