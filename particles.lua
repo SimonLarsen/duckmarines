@@ -56,6 +56,13 @@ function BonusTextParticle.create(x,y,text,color)
 	self.alive = true
 	self.color = color or {255, 255, 255, 255}
 
+	local number = tonumber(self.text)
+	if number and number <= 0 then
+		self.bar = ResMgr.getImage("bonus_bar_negative.png")
+	else
+		self.bar = ResMgr.getImage("bonus_bar_positive.png")
+	end
+
 	return self
 end
 
@@ -68,6 +75,8 @@ function BonusTextParticle:update(dt)
 end
 
 function BonusTextParticle:draw()
+	love.graphics.draw(self.bar, self.x-27, self.y+24)
+
 	love.graphics.setFont(ResMgr.getFont("bold"))
 	love.graphics.push()
 	love.graphics.scale(3, 3)
