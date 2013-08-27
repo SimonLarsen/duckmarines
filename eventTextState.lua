@@ -10,7 +10,9 @@ local eventName = {
 	"PREDATORS",
 	"VACUUM",
 	"SPEED UP",
-	"SLOW DOWN"
+	"SLOW DOWN",
+
+	"DUCK DASH"
 }
 
 function EventTextState.create(event)

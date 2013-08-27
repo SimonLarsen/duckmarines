@@ -12,7 +12,9 @@ IngameState.EVENT_VACUUM	= 6
 IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
-IngameState.EVENT_COUNT 	= 8
+IngameState.EVENT_DUCKDASH  = 9
+
+IngameState.EVENT_COUNT 	= 9
 
 function IngameState.create(parent, mapname, rules)
 	local self = setmetatable(State.create(), IngameState)
@@ -184,7 +186,7 @@ function IngameState:update(dt)
 					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 
 				elseif eType == Entity.TYPE_GOLDDUCK then
-					self.score[player] = self.score[player] + 25
+					self.score[player] = self.score[player] + self.rules.goldbonus
 					local x = math.floor(self.entities[i].x / 48)*48-2
 					local y = math.floor(self.entities[i].y / 48)*48+1
 					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
@@ -192,7 +194,7 @@ function IngameState:update(dt)
 						self.entities[i].x, self.entities[i].y-12, "+25"))
 
 				elseif eType == Entity.TYPE_PINKDUCK then
-					self.score[player] = self.score[player] + 10
+					self.score[player] = self.score[player] + self.rules.pinkbonus
 					self:triggerEvent(player)
 
 				elseif eType == Entity.TYPE_ENEMY then
@@ -384,6 +386,9 @@ function IngameState:triggerEvent(player)
 				v:setFlying(sub.x*48+24, sub.y*48+24)
 			end
 		end
+	
+	elseif self.event == IngameState.EVENT_DUCKDASH then
+		pushState(DuckDashState.create(self, self.score, self.rules))
 	end
 
 	pushState(EventTextState.create(self.event))

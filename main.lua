@@ -23,6 +23,7 @@ require("optionsState")
 require("ingameState")
 require("eventTextState")
 require("switchAnimState")
+require("duckDashState")
 require("gameOverState")
 
 require("levelEditorState")
