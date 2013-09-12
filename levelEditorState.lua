@@ -106,6 +106,8 @@ function LevelEditorState:update(dt)
 								self.map:clear()
 								self.map:updateSpriteBatch(true)
 							end))
+							self.loadDialog = LoadLevelState.create(self)
+							self.saveDialog = SaveLevelState.create(self)
 						-- Save file
 						else
 							local valid, msg = self.map:verify()
