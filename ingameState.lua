@@ -191,17 +191,17 @@ function IngameState:update(dt)
 					local y = math.floor(self.entities[i].y / 48)*48+1
 					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 					table.insert(self.particles, BonusTextParticle.create(
-						self.entities[i].x, self.entities[i].y-12, "+25"))
+						self.entities[i].x, self.entities[i].y-12, "+"..self.rules.goldbonus))
 
 				elseif eType == Entity.TYPE_PINKDUCK then
 					self.score[player] = self.score[player] + self.rules.pinkbonus
 					self:triggerEvent(player)
 
 				elseif eType == Entity.TYPE_ENEMY then
+					self.score[player] = math.floor(self.score[player]*0.6667)
 					table.insert(self.particles, BonusTextParticle.create(
 						self.entities[i].x, self.entities[i].y-12,
 						"-"..math.ceil(self.score[player]*0.3333)))
-					self.score[player] = math.floor(self.score[player]*0.6667)
 				end
 
 				table.remove(self.entities, i)
