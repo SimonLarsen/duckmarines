@@ -84,8 +84,8 @@ function AdvancedSettingsState:updateButtons()
 	self.buttons.roundtime.text = "ROUND TIME: " .. secsToString(self.rules.roundtime)
 	self.buttons.frequency.text = "DUCKS: " .. self.rules.frequency .. " PER MINUTE"
 	self.buttons.enemyperc.text = "PREDATORS: " .. self.rules.enemyperc .. " PCT."
-	self.buttons.goldperc.text = "GOLD: " .. self.rules.goldperc .. " PCT."
-	self.buttons.pinkperc.text = "PINK: " .. self.rules.pinkperc .. " PCT."
+	self.buttons.goldperc.text = "GOLD DUCKS: " .. self.rules.goldperc .. " PCT."
+	self.buttons.pinkperc.text = "PINK DUCKS: " .. self.rules.pinkperc .. " PCT."
 	self.buttons.arrowtime.text = "ARROWS STAY " .. self.rules.arrowtime .. " S"
 	self.buttons.maxarrows.text = "MAX ARROWS: " .. self.rules.maxarrows
 end
