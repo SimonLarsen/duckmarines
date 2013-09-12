@@ -52,6 +52,7 @@ SCALE = 1
 
 local stateStack
 local config
+local focused
 
 function love.load()
 	-- Setup screen
@@ -72,6 +73,7 @@ function love.load()
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
+	focused = true
 
 	-- Setup gamestate stack
 	stateStack = Stack.create()
@@ -79,6 +81,8 @@ function love.load()
 end
 
 function love.update(dt)
+	if focused == false then return end
+
 	if dt > 1/30 then
 		dt = 1/30
 	end
@@ -122,6 +126,10 @@ end
 
 function popState()
 	stateStack:pop()
+end
+
+function love.focus(f)
+	focused = f
 end
 
 function setScreenMode()
