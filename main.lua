@@ -21,6 +21,7 @@ require("advancedSettingsState")
 require("optionsState")
 
 require("ingameState")
+require("countdownState")
 require("eventTextState")
 require("switchAnimState")
 require("duckDashState")

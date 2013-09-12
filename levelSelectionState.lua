@@ -72,6 +72,7 @@ function LevelSelectionState:buttonPressed(id, source)
 	elseif id == "start" then
 		popState()
 		pushState(IngameState.create(self, self:getFilename(), self.rules))
+		pushState(CountdownState.create())
 	elseif id == "back" then
 		popState()
 	end
