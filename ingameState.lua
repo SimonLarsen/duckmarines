@@ -80,6 +80,7 @@ function IngameState:update(dt)
 	if self.time < 1 then
 		self.time = 0
 		pushState(GameOverState.create(self, self.score))
+		pushState(EventTextState.create(EventTextState.EVENT_TIMEUP))
 	end
 
 	-- Advance event time

@@ -2,6 +2,8 @@ EventTextState = {}
 EventTextState.__index = EventTextState
 setmetatable(EventTextState, State)
 
+EventTextState.EVENT_TIMEUP = 32
+
 local eventName = {
 	"DUCK RUSH",
 	"PREDATOR RUSH",
@@ -18,8 +20,15 @@ local eventName = {
 function EventTextState.create(event)
 	local self = setmetatable(State.create(), EventTextState)
 
-	self.event = event
-	self.imgBox = ResMgr.getImage("event_box.png")
+	if event == EventTextState.EVENT_TIMEUP then
+		self.text = "TIME UP"
+		self.imgBox = ResMgr.getImage("timeup_box.png")
+		self.offset = 38
+	else
+		self.text = eventName[event]
+		self.imgBox = ResMgr.getImage("event_box.png")
+		self.offset = 10
+	end
 	self.boxy = -106
 	self.time = 0
 
@@ -48,9 +57,9 @@ function EventTextState:draw()
 	love.graphics.push()
 	love.graphics.scale(4, 4)
 	love.graphics.setColor(0, 0, 0, 128)
-	love.graphics.print(eventName[self.event], 10, math.floor((self.boxy+40)/4)+1)
+	love.graphics.print(self.text, self.offset, math.floor((self.boxy+40)/4)+1)
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.print(eventName[self.event], 10, math.floor((self.boxy+40)/4))
+	love.graphics.print(self.text, self.offset, math.floor((self.boxy+40)/4))
 	love.graphics.pop()
 end
 
