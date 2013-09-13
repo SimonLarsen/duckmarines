@@ -409,3 +409,11 @@ function IngameState:triggerEvent(player)
 
 	pushState(EventTextState.create(self.event))
 end
+
+function IngameState:keypressed(k, uni)
+	if k == "escape" then
+		pushState(PauseGameState.create(self))
+	else
+		State.keypressed(self, k, uni)
+	end
+end
