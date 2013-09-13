@@ -16,6 +16,8 @@ IngameState.EVENT_DUCKDASH  = 9
 
 IngameState.EVENT_COUNT 	= 9
 
+IngameState.NSTATS = 10
+
 function IngameState.create(parent, mapname, rules)
 	local self = setmetatable(State.create(), IngameState)
 
@@ -50,16 +52,19 @@ function IngameState.create(parent, mapname, rules)
 	end
 
 	-- Set variables and counters
-	self.time = self.rules.roundtime
+	self.timeLeft = self.rules.roundtime
+	self.time = 0
 
 	self.event = IngameState.EVENT_NONE
 	self.eventTime = 0
+	self.nextEntity = 2
 
 	self.score = {}
 	for i=1,4 do
 		self.score[i] = 0
 	end
-	self.nextEntity = 2
+	self.stats = {}
+	self.nextStat = 0
 
 	-- Get sidebar image
 	self.imgSidebar = ResMgr.getImage("sidebar.png")
@@ -76,10 +81,11 @@ end
 
 function IngameState:update(dt)
 	-- Advance time
-	self.time = self.time - dt
-	if self.time < 1 then
-		self.time = 0
-		pushState(GameOverState.create(self, self.score))
+	self.timeLeft = self.timeLeft - dt
+	self.time = self.time + dt
+	if self.timeLeft < 1 then
+		self.timeLeft = 0
+		pushState(GameOverState.create(self, self.score, self.stats))
 		pushState(EventTextState.create(EventTextState.EVENT_TIMEUP))
 	end
 
@@ -229,6 +235,15 @@ function IngameState:update(dt)
 	for i=1,3 do
 		self.score[i] = math.cap(self.score[i], 0, 999)
 	end
+
+	-- Update stats
+	if self.time >= self.nextStat*(self.rules.roundtime/IngameState.NSTATS) then
+		self.stats[self.nextStat] = {}
+		for i = 1,4 do
+			self.stats[self.nextStat][i] = self.score[i]
+		end
+		self.nextStat = self.nextStat + 1
+	end
 end
 
 function IngameState:draw()
@@ -295,7 +310,7 @@ function IngameState:drawHUD()
 	love.graphics.push()
 	love.graphics.scale(3, 3)
 
-	local timeString = secsToString(self.time)
+	local timeString = secsToString(self.timeLeft)
 	love.graphics.print(timeString, 7, 21)
 
 	love.graphics.setColor(0, 0, 0, 128)

@@ -24,7 +24,7 @@ function AdvancedSettingsState.create(parent, rules)
 	self:addProperty("maxarrows",   1,  1,   8)
 
 	self.rightMenu:addButton("RESET TO DEFAULTS", "defaults")
-	self.rightMenu:addButton("EXIT", "exit")
+	self.rightMenu:addButton("BACK", "back")
 
 	self:updateButtons()
 
@@ -70,7 +70,7 @@ function AdvancedSettingsState:buttonPressed(id, source)
 	if id == "defaults" then
 		self.rules:setDefaults()
 		self:updateButtons()
-	elseif id == "exit" then
+	elseif id == "back" then
 		popState()
 	end
 end

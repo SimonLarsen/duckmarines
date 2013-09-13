@@ -104,6 +104,8 @@ end
 function love.keypressed(k, uni)
 	if k == "escape" then
 		love.event.quit()
+	elseif k == "f3" then
+		love.mouse.setGrab(not love.mouse.isGrabbed())
 	else
 		stateStack:peek():keypressed(k, uni)
 	end

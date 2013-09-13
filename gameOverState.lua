@@ -4,7 +4,10 @@ setmetatable(GameOverState, State)
 
 GameOverState.LENGTH = 440
 
-function GameOverState.create(parent, scores)
+GameOverState.STATE_BARS = 0
+GameOverState.STATE_GRAPH = 1
+
+function GameOverState.create(parent, scores, stats)
 	local self = setmetatable(State.create(), GameOverState)
 
 	self.inputs = parent.inputs
@@ -17,23 +20,31 @@ function GameOverState.create(parent, scores)
 	self.mapname = parent.mapname
 	self.rules = parent.rules
 	self.scores = scores
+	self.stats = stats
+
+	self.state = GameOverState.STATE_BARS
 
 	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 
-	self.menu = Menu.create(408-220, 26, 200, 32, 20, self)
-	self.menu:addButton("REMATCH", "rematch", 408-220, 26)
-	self.menu:addButton("MAIN MENU", "mainmenu", 408+20, 26)
+	self.menu = Menu.create(408-220, 26, 180, 32, 20, self)
+	self.menu:addButton("REMATCH", "rematch", 125, 26)
+	self.menu:addButton("MAIN MENU", "mainmenu", 316, 26)
+	self.showButton = self.menu:addButton("SHOW GRAPH", "show", 507, 26)
 
 	self.counts = {}
 	self.bars = {}
 	self.maxscore = 0
+	self.maxstat = 0
 	for i=1,4 do
 		self.counts[i] = 0
 		self.bars[i] = ResMgr.getImage("scorebar"..i..".png")
-		if self.scores[i] > self.maxscore then
-			self.maxscore = self.scores[i]
+		self.maxscore = math.max(self.maxscore, self.scores[i])
+		for j=0,9 do
+			self.maxstat = math.max(self.maxstat, self.stats[j][i])
 		end
 	end
+	self.maxstat = math.max(self.maxstat, self.maxscore)
+
 	self.imgCrown = ResMgr.getImage("crown.png")
 
 	return self
@@ -63,16 +74,45 @@ function GameOverState:draw()
 	-- Draw buttons
 	self.menu:draw()
 
-	-- Draw bars
-	if self.maxscore > 0 then
-		for i=1,4 do
-			local length = math.floor(self.counts[i]/self.maxscore*GameOverState.LENGTH)
-			love.graphics.draw(self.bars[i], 116, 7+i*87, 0, length, 1)
-			if self.counts[i] >= self.maxscore then
-				love.graphics.draw(self.imgCrown, 128+length, 29+i*87)
+	if self.state == GameOverState.STATE_BARS then
+		-- Draw bars
+		if self.maxscore > 0 then
+			for i=1,4 do
+				local length = math.floor(self.counts[i]/self.maxscore*GameOverState.LENGTH)
+				love.graphics.draw(self.bars[i], 116, 7+i*87, 0, length, 1)
+				if self.counts[i] >= self.maxscore then
+					love.graphics.draw(self.imgCrown, 128+length, 29+i*87)
+				end
 			end
 		end
+	elseif self.state == GameOverState.STATE_GRAPH then
+		love.graphics.setLineWidth(2)
+		local colors = {
+			{234,73,89}, {76,74,145}, {255,130,46}, {150,75,164}
+		}
+		for i=1,4 do
+			for j=0,9 do
+				local y = 390-self.stats[j][i]/self.maxstat*292
+				local nexty
+				if j < 9 then
+					nexty = 390-self.stats[j+1][i]/self.maxstat*292
+				else
+					nexty = 390-self.scores[i]/self.maxstat*292
+				end
+				love.graphics.setColor(0,0,0)
+				love.graphics.line(122.5+j*48, y+4.5, 122.5+(j+1)*48, nexty+4.5)
+				love.graphics.rectangle("fill", 120+j*48, y+2, 6,6)
+				love.graphics.setColor(colors[i])
+				love.graphics.line(122.5+j*48, y+2.5, 122.5+(j+1)*48, nexty+2.5)
+				love.graphics.rectangle("fill", 120+j*48, y, 6,6)
+			end
+			love.graphics.setColor(0,0,0)
+			love.graphics.rectangle("fill", 600, 392-self.scores[i]/self.maxstat*292, 6,6)
+			love.graphics.setColor(colors[i])
+			love.graphics.rectangle("fill", 600, 390-self.scores[i]/self.maxstat*292, 6,6)
+		end
 	end
+	love.graphics.setColor(255,255,255)
 
 	self.cursor:draw()
 end
@@ -85,6 +125,14 @@ function GameOverState:buttonPressed(id, source)
 	elseif id == "mainmenu" then
 		popState()
 		popState()
+	elseif id == "show" then
+		if self.state == GameOverState.STATE_BARS then
+			self.state = GameOverState.STATE_GRAPH
+			self.showButton.text = "SHOW BARS"
+		else
+			self.state = GameOverState.STATE_BARS
+			self.showButton.text = "SHOW GRAPH"
+		end
 	end
 end
 
