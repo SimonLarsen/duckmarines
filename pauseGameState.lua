@@ -59,6 +59,7 @@ function PauseGameState:buttonPressed(id, source)
 	elseif id == "quit" then
 		popState()
 		popState()
+		pushState(LevelSelectionState.create(self))
 	end
 end
 

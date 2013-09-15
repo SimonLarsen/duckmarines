@@ -28,7 +28,7 @@ function GameOverState.create(parent, scores, stats)
 
 	self.menu = Menu.create(408-220, 26, 180, 32, 20, self)
 	self.menu:addButton("REMATCH", "rematch", 125, 26)
-	self.menu:addButton("MAIN MENU", "mainmenu", 316, 26)
+	self.menu:addButton("EXIT", "exit", 316, 26)
 	self.showButton = self.menu:addButton("SHOW GRAPH", "show", 507, 26)
 
 	self.counts = {}
@@ -122,9 +122,10 @@ function GameOverState:buttonPressed(id, source)
 		popState()
 		popState()
 		pushState(IngameState.create(self, self.mapname, self.rules))
-	elseif id == "mainmenu" then
+	elseif id == "exit" then
 		popState()
 		popState()
+		pushState(LevelSelectionState.create(self))
 	elseif id == "show" then
 		if self.state == GameOverState.STATE_BARS then
 			self.state = GameOverState.STATE_GRAPH

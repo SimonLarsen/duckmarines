@@ -369,7 +369,6 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
-	self.event = IngameState.EVENT_DUCKDASH
 	self.eventTime = self.rules.eventTime[self.event]
 
 	if self.event == IngameState.EVENT_SWITCH then
