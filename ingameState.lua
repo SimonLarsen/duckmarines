@@ -140,6 +140,7 @@ function IngameState:update(dt)
 
 	-- Move cursors
 	for i=1,4 do
+		self.inputs[i]:wasClicked()
 		self.cursors[i]:move(self.inputs[i]:getMovement(dt))
 		self.cursors[i].x = math.cap(self.cursors[i].x, 0, 570)
 		self.cursors[i].y = math.cap(self.cursors[i].y, 0, 428)
