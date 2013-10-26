@@ -57,6 +57,7 @@ function PauseGameState:buttonPressed(id, source)
 		popState()
 		popState()
 		pushState(IngameState.create(self, self.mapname, self.rules))
+		pushState(CountdownState.create())
 	elseif id == "selectlevel" then
 		popState()
 		popState()

@@ -8,9 +8,10 @@ function MainMenuState.create(config)
 	self.config = config
 
 	self.inputs[1] = KeyboardInput.create()
-	self.inputs[2] = MouseInput.create()
-	self.inputs[3] = JoystickInput.create(1)
-	self.inputs[4] = JoystickInput.create(2)
+	self.inputs[2] = JoystickInput.create(1)
+	self.inputs[3] = JoystickInput.create(2)
+	self.inputs[4] = JoystickInput.create(3)
+	self.inputs[5] = JoystickInput.create(4)
 	
 	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 

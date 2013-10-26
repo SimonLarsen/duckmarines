@@ -122,6 +122,7 @@ function GameOverState:buttonPressed(id, source)
 		popState()
 		popState()
 		pushState(IngameState.create(self, self.mapname, self.rules))
+		pushState(CountdownState.create())
 	elseif id == "exit" then
 		popState()
 		popState()

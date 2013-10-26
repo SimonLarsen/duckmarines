@@ -42,6 +42,7 @@ function InputSelectState:update(dt)
 	end
 end
 
+--[[
 function InputSelectState:mousepressed(x, y, button)
 	for i=1,4 do
 		if self.inputs[i] then
@@ -60,6 +61,7 @@ function InputSelectState:mousepressed(x, y, button)
 		self:addInput(MouseInput.create())
 	end
 end
+]]
 
 function InputSelectState:keypressed(k, uni)
 	for i=1,4 do

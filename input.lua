@@ -166,7 +166,7 @@ JoystickInput.__index = JoystickInput
 setmetatable(JoystickInput, Input)
 
 JoystickInput.SPEED = 300
-JoystickInput.DEADZONE = 0.05
+JoystickInput.DEADZONE = 0.20
 
 function JoystickInput.create(id)
 	local self = setmetatable(Input.create(), JoystickInput)
@@ -184,6 +184,9 @@ function JoystickInput:getMovement(dt, lock)
 	local axis1 = love.joystick.getAxis(self.id, 1)
 	local axis2 = love.joystick.getAxis(self.id, 2)
 
+	local axis3 = love.joystick.getAxis(self.id, 3)
+	local axis4 = love.joystick.getAxis(self.id, 4)
+
 	if axis1 and axis2 then
 		if not self:isDown() or lock == false then
 			if axis1 and math.abs(axis1) > JoystickInput.DEADZONE then
@@ -200,18 +203,24 @@ function JoystickInput:getMovement(dt, lock)
 		end
 	end
 
+	if axis3 and axis4 then
+		if math.abs(axis3) > JoystickInput.DEADZONE or math.abs(axis4) > JoystickInput.DEADZONE then
+			self.action = vecToDir(axis3, axis4)
+		end
+	end
+
 	return dx, dy, false
 end
 
 function JoystickInput:joystickpressed(joystick, button)
-	if joystick == self.id and button >= 1 and button <= 6 then
+	if joystick == self.id then
 		self.down = true
 		self.clicked = true
 	end
 end
 
 function JoystickInput:isDown()
-	return love.joystick.isDown(self.id, 1, 2, 3, 4, 5, 6)
+	return love.joystick.isDown(self.id, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
 end
 
 function JoystickInput:getType() return Input.TYPE_JOYSTICK end
