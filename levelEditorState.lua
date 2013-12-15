@@ -17,7 +17,11 @@ function LevelEditorState.create(parent)
 	self.tile = 0
 
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors[1] = Cursor.create(WIDTH/2, HEIGHT/2, 1)
+	self.cursor = self.cursors[1]
+	for i,v in ipairs(self.inputs) do
+		self.cursors[1]:addInput(v)
+	end
 
 	self.marker = ResMgr.getImage("marker1.png")
 	self.fence_marker = ResMgr.getImage("fence_marker.png")
@@ -37,10 +41,6 @@ function LevelEditorState.create(parent)
 end
 
 function LevelEditorState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		self.cursor:move(v:getMovement(dt, false))
-	end
-
 	-- Draw tiles and fences if an input is held down
 	for i,v in ipairs(self.inputs) do
 		if v:isDown() and self:cursorInMap() then
@@ -192,9 +192,6 @@ function LevelEditorState:draw()
 	elseif self.state == LevelEditorState.STATE_REM_FENCE then
 		love.graphics.draw(self.marker, 60, 384)
 	end
-
-	-- Draw cursor
-	self.cursor:draw()
 end
 
 function LevelEditorState:cursorInMap()

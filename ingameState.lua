@@ -49,6 +49,7 @@ function IngameState.create(parent, mapname, rules)
 		else
 			self.inputs[i] = parent.inputs[i]
 		end
+		self.cursors[i]:addInput(self.inputs[i])
 	end
 
 	-- Set variables and counters
@@ -138,10 +139,8 @@ function IngameState:update(dt)
 		end
 	end
 
-	-- Move cursors
+	-- Cap cursor positions
 	for i=1,4 do
-		self.inputs[i]:wasClicked()
-		self.cursors[i]:move(self.inputs[i]:getMovement(dt))
 		self.cursors[i].x = math.cap(self.cursors[i].x, 0, 570)
 		self.cursors[i].y = math.cap(self.cursors[i].y, 0, 428)
 	end
@@ -271,7 +270,7 @@ function IngameState:draw()
 		end
 	end
 
-	-- Draw cursors
+	-- Draw cursor markers
 	for i,v in ipairs(self.cursors) do
 		local mx = math.floor(v.x / 48)*48
 		local my = math.floor(v.y / 48)*48
@@ -293,10 +292,6 @@ function IngameState:draw()
 		end
 	end
 
-	-- Draw cursors
-	for i,v in ipairs(self.cursors) do
-		v:draw()
-	end
 	-- Draw hud
 	love.graphics.pop()
 	self:drawHUD()

@@ -6,7 +6,7 @@ function SaveLevelState.create(parent)
 	local self = setmetatable(State.create(), SaveLevelState)
 
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors = parent.cursors
 	self.parent = parent
 
 	self.list = SelectionList.create(178, 133, 200, 6, 21, self)
@@ -27,17 +27,6 @@ function SaveLevelState.create(parent)
 	return self
 end
 
-function SaveLevelState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			for j,c in ipairs(self:getComponents()) do
-				c:click(self.cursor.x, self.cursor.y)
-			end
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function SaveLevelState:draw()
 	love.graphics.setColor(23, 23, 23, 255)
 	love.graphics.rectangle("fill", 142, 96, 415, 271)
@@ -48,7 +37,6 @@ function SaveLevelState:draw()
 	self.list:draw()
 	self.input:draw()
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function SaveLevelState:updateFileList()

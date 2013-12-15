@@ -10,11 +10,13 @@ GameOverState.STATE_GRAPH = 1
 function GameOverState.create(parent, scores, stats)
 	local self = setmetatable(State.create(), GameOverState)
 
+	self.cursors[1] = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	self.inputs = parent.inputs
 	for i=1,4 do
 		if self.inputs[i]:getType() == Input.TYPE_BOT then
 			self.inputs[i] = NullInput.create()
 		end
+		self.cursors[1]:addInput(self.inputs[i])
 	end
 
 	self.mapname = parent.mapname
@@ -23,8 +25,6 @@ function GameOverState.create(parent, scores, stats)
 	self.stats = stats
 
 	self.state = GameOverState.STATE_BARS
-
-	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 
 	self.menu = Menu.create(408-220, 26, 180, 32, 20, self)
 	self.menu:addButton("REMATCH", "rematch", 125, 26)
@@ -51,13 +51,6 @@ function GameOverState.create(parent, scores, stats)
 end
 
 function GameOverState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			self.menu:click(self.cursor.x, self.cursor.y)
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-
 	for i=1,4 do
 		if self.counts[i] < self.scores[i] then
 			local inc = math.max(8, (self.scores[i] - self.counts[i]))*dt
@@ -113,8 +106,6 @@ function GameOverState:draw()
 		end
 	end
 	love.graphics.setColor(255,255,255)
-
-	self.cursor:draw()
 end
 
 function GameOverState:buttonPressed(id, source)

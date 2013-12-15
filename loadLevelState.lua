@@ -6,7 +6,7 @@ function LoadLevelState.create(parent, map)
 	local self = setmetatable(State.create(), LoadLevelState)
 
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors = parent.cursors
 	self.parent = parent
 
 	self.list = SelectionList.create(178, 133, 200, 6, 21, self)
@@ -27,17 +27,6 @@ function LoadLevelState.create(parent, map)
 	return self
 end
 
-function LoadLevelState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			for j,c in ipairs(self:getComponents()) do
-				c:click(self.cursor.x, self.cursor.y)
-			end
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function LoadLevelState:draw()
 	love.graphics.setColor(23, 23, 23, 255)
 	love.graphics.rectangle("fill", 142, 96, 415, 271)
@@ -48,7 +37,6 @@ function LoadLevelState:draw()
 	self.list:draw()
 	self.input:draw()
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function LoadLevelState:updateFileList()

@@ -10,6 +10,7 @@ function State.create()
 	local self = setmetatable({}, State)
 
 	self.inputs = {}
+	self.cursors = {}
 	self.components = {}
 
 	return self
@@ -23,6 +24,27 @@ function State:addComponent(c) table.insert(self.components, c) end
 function State:buttonPressed(id, source) end
 
 function State:isTransparent() return false end
+
+function State:baseUpdate(dt)
+	for i,v in ipairs(self.cursors) do
+		for j,w in ipairs(v:getInputs()) do
+			if w:wasClicked() then
+				for k,c in ipairs(self:getComponents()) do
+					c:click(v.x, v.y)
+				end
+			end
+			v:move(w:getMovement(dt, false))
+		end
+	end
+	self:update(dt)
+end
+
+function State:baseDraw()
+	self:draw()
+	for i,v in ipairs(self.cursors) do
+		v:draw()
+	end
+end
 
 function State:keypressed(...)
 	for i,v in ipairs(self:getComponents()) do

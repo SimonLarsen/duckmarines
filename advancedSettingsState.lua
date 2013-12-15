@@ -6,7 +6,7 @@ function AdvancedSettingsState.create(parent, rules)
 	local self = setmetatable(State.create(), AdvancedSettingsState)
 
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors = parent.cursors
 	self.rules = rules
 
 	self.leftMenu = Menu.create(25, 70, 300, 32, 20, self)
@@ -36,17 +36,6 @@ function AdvancedSettingsState.create(parent, rules)
 	return self
 end
 
-function AdvancedSettingsState:update(dt)
-	for i,v in ipairs(self:getInputs()) do
-		if v:wasClicked() then
-			for j,c in ipairs(self:getComponents()) do
-				c:click(self.cursor.x, self.cursor.y)
-			end
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function AdvancedSettingsState:draw()
 	love.graphics.draw(self.bg, 0, 0)
 
@@ -55,7 +44,6 @@ function AdvancedSettingsState:draw()
 
 	self.leftMenu:draw()
 	self.rightMenu:draw()
-	self.cursor:draw()
 end
 
 function AdvancedSettingsState:buttonPressed(id, source)

@@ -5,8 +5,6 @@ setmetatable(InputSelectState, State)
 function InputSelectState.create(parent)
 	local self = setmetatable(State.create(), InputSelectState)
 
-	self.cursors = {}
-
 	self.menu = Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self)
 	self.leaveButtons = {}
 	for i=1,4 do
@@ -28,40 +26,6 @@ function InputSelectState.create(parent)
 
 	return self
 end
-
-function InputSelectState:update(dt)
-	for i=1,4 do
-		if self.inputs[i] then
-			if self.cursors[i] then
-				self.cursors[i]:move(self.inputs[i]:getMovement(dt, false))
-			end
-			if self.inputs[i]:wasClicked() then
-				self.menu:click(self.cursors[i].x, self.cursors[i].y)
-			end
-		end
-	end
-end
-
---[[
-function InputSelectState:mousepressed(x, y, button)
-	for i=1,4 do
-		if self.inputs[i] then
-			self.inputs[i]:mousepressed(x, y, button)
-		end
-	end
-
-	local found = false
-	for i=1,4 do
-		if self.inputs[i] and self.inputs[i]:getType() == Input.TYPE_MOUSE then
-			found = true
-			break
-		end
-	end
-	if found == false then
-		self:addInput(MouseInput.create())
-	end
-end
-]]
 
 function InputSelectState:keypressed(k, uni)
 	for i=1,4 do
@@ -108,6 +72,7 @@ function InputSelectState:addInput(input)
 		if self.inputs[i] == nil then
 			self.inputs[i] = input
 			self.cursors[i] = Cursor.create(-25+i*150, 165, i)
+			self.cursors[i]:addInput(input)
 			self.leaveButtons[i].enabled = true
 			return
 		end
@@ -147,13 +112,6 @@ function InputSelectState:draw()
 			love.graphics.printf("AI "..ai, -100+i*150, 73, 150, "center")
 			ai = ai+1
 			love.graphics.draw(self.iconAI, -85+i*150, 119)
-		end
-	end
-
-	-- Draw cursors
-	for i=1,4 do
-		if self.cursors[i] then
-			self.cursors[i]:draw()
 		end
 	end
 end

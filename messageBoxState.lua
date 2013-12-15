@@ -6,7 +6,7 @@ function MessageBoxState.create(parent, message)
 	local self = setmetatable(State.create(), MessageBoxState)
 
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors = parent.cursors
 	self.message = message
 
 	local font = ResMgr.getFont("menu")
@@ -22,15 +22,6 @@ function MessageBoxState.create(parent, message)
 	return self
 end
 
-function MessageBoxState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			self.menu:click(self.cursor.x, self.cursor.y)
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function MessageBoxState:draw()
 	love.graphics.setFont(ResMgr.getFont("menu"))
 	love.graphics.setColor(23, 23, 23, 255)
@@ -41,7 +32,6 @@ function MessageBoxState:draw()
 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
 
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function MessageBoxState:buttonPressed(id, source)

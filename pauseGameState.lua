@@ -12,31 +12,20 @@ function PauseGameState.create(parent)
 	self.menu:addButton("QUIT", "quit")
 	self:addComponent(self.menu)
 
-	self.inputs = {}
+	self.cursors[1] = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	for i=1,4 do
 		if parent.inputs[i]:getType() == Input.TYPE_BOT then
 			self.inputs[i] = NullInput.create()
 		else
 			self.inputs[i] = parent.inputs[i]
 		end
+		self.cursors[1]:addInput(self.inputs[i])
 	end
-	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 
 	self.mapname = parent.mapname
 	self.rules = parent.rules
 
 	return self
-end
-
-function PauseGameState:update(dt)
-	for i,v in ipairs(self:getInputs()) do
-		if v:wasClicked() then
-			for j,c in ipairs(self:getComponents()) do
-				c:click(self.cursor.x, self.cursor.y)
-			end
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
 end
 
 function PauseGameState:draw()
@@ -47,7 +36,6 @@ function PauseGameState:draw()
 	love.graphics.printf("PAUSED", 0, 94, WIDTH, "center")
 
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function PauseGameState:buttonPressed(id, source)

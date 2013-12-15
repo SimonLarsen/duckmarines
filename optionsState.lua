@@ -7,9 +7,10 @@ function OptionsState.create(parent, config)
 
 	self.config = config
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors = parent.cursors
 
 	self.menu = Menu.create((WIDTH-300)/2, 169, 300, 32, 20, self)
+	self:addComponent(self.menu)
 	self.fullscreenButton = self.menu:addButton("", "fullscreen")
 	self.vsyncButton = self.menu:addButton("", "vsync")
 	self.musicButton = self.menu:addButton("", "musicvolume")
@@ -22,19 +23,9 @@ function OptionsState.create(parent, config)
 	return self
 end
 
-function OptionsState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			self.menu:click(self.cursor.x, self.cursor.y)
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function OptionsState:draw()
 	love.graphics.draw(self.bg, 0, 0)
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function OptionsState:buttonPressed(id)

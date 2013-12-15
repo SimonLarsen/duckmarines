@@ -10,6 +10,8 @@ function Cursor.create(x,y,player)
 	self.sprite = Sprite.create(img)
 	self.sprite:setOffset(2, 2)
 
+	self.inputs = {}
+
 	return self
 end
 
@@ -32,4 +34,12 @@ end
 
 function Cursor:draw()
 	self.sprite:draw(self.x, self.y)
+end
+
+function Cursor:addInput(i)
+	table.insert(self.inputs, i)
+end
+
+function Cursor:getInputs()
+	return self.inputs
 end

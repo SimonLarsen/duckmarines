@@ -6,7 +6,7 @@ function LevelSelectionState.create(parent)
 	local self = setmetatable(State.create(), LevelSelectionState)
 
 	self.inputs = parent.inputs
-	self.cursor = Cursor.create(WIDTH/2, HEIGHT/2, 1)
+	self.cursors = parent.cursors
 	self.rules = Rules.create()
 
 	self.bg = ResMgr.getImage("bg_stars.png")
@@ -31,17 +31,6 @@ function LevelSelectionState.create(parent)
 	return self
 end
 
-function LevelSelectionState:update(dt)
-	for i,v in ipairs(self:getInputs()) do
-		if v:wasClicked() then
-			for j,c in ipairs(self:getComponents()) do
-				c:click(self.cursor.x, self.cursor.y)
-			end
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function LevelSelectionState:draw()
 	love.graphics.draw(self.bg, 0, 0)
 
@@ -63,7 +52,6 @@ function LevelSelectionState:draw()
 
 	self.list:draw()
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function LevelSelectionState:buttonPressed(id, source)

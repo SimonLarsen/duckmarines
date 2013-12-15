@@ -6,7 +6,7 @@ function ConfirmBoxState.create(parent, message, func)
 	local self = setmetatable(State.create(), ConfirmBoxState)
 
 	self.inputs = parent.inputs
-	self.cursor = parent.cursor
+	self.cursors = parent.cursors
 
 	self.message = message
 	self.func = func
@@ -26,15 +26,6 @@ function ConfirmBoxState.create(parent, message, func)
 	return self
 end
 
-function ConfirmBoxState:update(dt)
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			self.menu:click(self.cursor.x, self.cursor.y)
-		end
-		self.cursor:move(v:getMovement(dt, false))
-	end
-end
-
 function ConfirmBoxState:draw()
 	love.graphics.setFont(ResMgr.getFont("menu"))
 	love.graphics.setColor(23, 23, 23, 255)
@@ -45,7 +36,6 @@ function ConfirmBoxState:draw()
 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
 
 	self.menu:draw()
-	self.cursor:draw()
 end
 
 function ConfirmBoxState:buttonPressed(id, source)

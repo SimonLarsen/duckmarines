@@ -72,7 +72,7 @@ function love.load()
 	end
 
 	-- Setup mouse
-	love.mouse.setGrab(true)
+	--love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 	focused = true
@@ -88,7 +88,7 @@ function love.update(dt)
 	if dt > 1/30 then
 		dt = 1/30
 	end
-	stateStack:peek():update(dt)
+	stateStack:peek():baseUpdate(dt)
 end
 
 function love.draw()
@@ -98,7 +98,7 @@ function love.draw()
 		bottom = bottom + 1
 	end
 	for i=bottom, 1, -1 do
-		stateStack:peek(i):draw()
+		stateStack:peek(i):baseDraw()
 	end
 end
 
