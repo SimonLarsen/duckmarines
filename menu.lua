@@ -2,6 +2,8 @@ Menu = {}
 Menu.__index = Menu
 setmetatable(Menu, Component)
 
+Menu.TEXT_BUTTON = 0
+Menu.IMAGE_BUTTON = 1
 function Menu.create(x, y, width, height, spacing, listener)
 	local self = setmetatable({}, Menu)
 
@@ -30,6 +32,7 @@ end
 
 function Menu:addButton(text, id, x, y, width, height)
 	local e = {}
+	e.type = Menu.TEXT_BUTTON
 	e.text = text
 	e.id = id
 	e.enabled = true
@@ -47,38 +50,48 @@ function Menu:addButton(text, id, x, y, width, height)
 	return e
 end
 
+function Menu:addImageButton(img, quad, id, x, y, width, height)
+	local e = {}
+	e.type = Menu.IMAGE_BUTTON
+	e.img = img
+	e.quad = quad
+	e.id = id
+	e.x, e.y = x,y
+	e.enabled = true
+	e.width, e.height = width, height
+	table.insert(self.buttons, e)
+	return e
+end
+
 function Menu:draw()
+	love.graphics.setFont(ResMgr.getFont("menu"))
 	-- Draw button graphics
 	for i,v in ipairs(self.buttons) do
-		love.graphics.drawq(self.imgButton, self.quadTopLeft, v.x, v.y)
-		love.graphics.drawq(self.imgButton, self.quadTopRight, v.x+v.width-3, v.y)
-		love.graphics.drawq(self.imgButton, self.quadBottomLeft, v.x, v.y+v.height-3)
-		love.graphics.drawq(self.imgButton, self.quadBottomRight, v.x+v.width-3, v.y+v.height-3)
+		if v.type == Menu.TEXT_BUTTON then
+			love.graphics.drawq(self.imgButton, self.quadTopLeft, v.x, v.y)
+			love.graphics.drawq(self.imgButton, self.quadTopRight, v.x+v.width-3, v.y)
+			love.graphics.drawq(self.imgButton, self.quadBottomLeft, v.x, v.y+v.height-3)
+			love.graphics.drawq(self.imgButton, self.quadBottomRight, v.x+v.width-3, v.y+v.height-3)
 
-		love.graphics.drawq(self.imgButton, self.quadTopEdge, v.x+3, v.y, 0, v.width-6, 1)
-		love.graphics.drawq(self.imgButton, self.quadBottomEdge, v.x+3, v.y+v.height-3, 0, v.width-6, 1)
-		love.graphics.drawq(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
-		love.graphics.drawq(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
+			love.graphics.drawq(self.imgButton, self.quadTopEdge, v.x+3, v.y, 0, v.width-6, 1)
+			love.graphics.drawq(self.imgButton, self.quadBottomEdge, v.x+3, v.y+v.height-3, 0, v.width-6, 1)
+			love.graphics.drawq(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
+			love.graphics.drawq(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
 
-		love.graphics.setColor(255, 194, 49, 255)
-		love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
-		love.graphics.setColor(255, 255, 255, 255)
-	end
-
-	love.graphics.setColor(0, 0, 0, 255)
-
-	-- Draw text
-	love.graphics.setFont(ResMgr.getFont("menu"))
-	for i,v in ipairs(self.buttons) do
-		if v.enabled then
-			love.graphics.setColor(80, 49, 0, 255)
-		else
-			--love.graphics.setColor(145, 89, 0)
-			love.graphics.setColor(80, 49, 0, 128)
+			love.graphics.setColor(255, 194, 49, 255)
+			love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
+			love.graphics.setColor(255, 255, 255, 255)
+			if v.enabled then
+				love.graphics.setColor(80, 49, 0, 255)
+			else
+				love.graphics.setColor(80, 49, 0, 128)
+			end
+			love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
+			love.graphics.setColor(255,255,255,255)
+		elseif v.type == Menu.IMAGE_BUTTON then
+			love.graphics.drawq(v.img, v.quad, v.x, v.y)
 		end
-		love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
 	end
-	love.graphics.setColor(255, 255, 255, 255)
 end
 
 function Menu:click(x, y)

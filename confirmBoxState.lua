@@ -22,6 +22,7 @@ function ConfirmBoxState.create(parent, message, func)
 	self.menu = Menu.create((WIDTH-180)/2, self.y+self.height-32, 120, 32, 24, self)
 	self.menu:addButton("OK", "ok", WIDTH/2-130, self.y+self.height-32)
 	self.menu:addButton("CANCEL", "cancel", WIDTH/2+10, self.y+self.height-32)
+	self:addComponent(self.menu)
 
 	return self
 end

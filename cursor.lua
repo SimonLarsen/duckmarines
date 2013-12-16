@@ -33,7 +33,7 @@ function Cursor:move(dx, dy, absolute)
 end
 
 function Cursor:draw()
-	self.sprite:draw(self.x, self.y)
+	self.sprite:draw(math.floor(self.x), math.floor(self.y))
 end
 
 function Cursor:addInput(i)

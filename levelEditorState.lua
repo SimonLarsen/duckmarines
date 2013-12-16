@@ -26,13 +26,26 @@ function LevelEditorState.create(parent)
 	self.marker = ResMgr.getImage("marker1.png")
 	self.fence_marker = ResMgr.getImage("fence_marker.png")
 
-	self.buttons = ResMgr.getImage("editor_buttons.png")
-	self.buttonQuad = {}
-	for iy=0,3 do
-		for ix=0,3 do
-			self.buttonQuad[ix+iy*4] = love.graphics.newQuad(ix*48, iy*48, 48, 48, 192, 192)
-		end
+	local imgButtons = ResMgr.getImage("editor_buttons.png")
+
+	self.menu = Menu.create(0, 0, 0, 0, 0, self)
+	self:addComponent(self.menu)
+	local nq = love.graphics.newQuad
+	-- File operations
+	self.menu:addImageButton(imgButtons, nq(0,0,48,48,192,192), "new", 10,11,48,48)
+	self.menu:addImageButton(imgButtons, nq(48,0,48,48,192,192), "save", 60,11,48,48)
+	self.menu:addImageButton(imgButtons, nq(96,0,48,48,192,192), "load", 10,61,48,48)
+	self.menu:addImageButton(imgButtons, nq(144,0,48,48,192,192), "exit", 60,61,48,48)
+	-- Tile buttons
+	for i=0,9 do
+		local x = 10 + (i%2)*50
+		local y = 122 + math.floor(i/2)*50
+		local quad = nq(i%4*48,48+math.floor(i/4)*48,48,48,192,192)
+		self.menu:addImageButton(imgButtons, quad, i, x, y, 48, 48)
 	end
+	-- Fence tools
+	self.menu:addImageButton(imgButtons, nq(96,144,48,48,192,192), "fence_add", 10,384,48,48)
+	self.menu:addImageButton(imgButtons, nq(144,144,48,48,192,192), "fence_delete", 60,384,48,48)
 
 	self.loadDialog = LoadLevelState.create(self)
 	self.saveDialog = SaveLevelState.create(self)
@@ -41,7 +54,7 @@ function LevelEditorState.create(parent)
 end
 
 function LevelEditorState:update(dt)
-	-- Draw tiles and fences if an input is held down
+	-- Place tiles and fences if an input is held down
 	for i,v in ipairs(self.inputs) do
 		if v:isDown() and self:cursorInMap() then
 			if self.state == LevelEditorState.STATE_TILE then
@@ -69,73 +82,8 @@ function LevelEditorState:update(dt)
 			break
 		end
 	end
-	-- Check for clicks in the HUD
-	for i,v in ipairs(self.inputs) do
-		if v:wasClicked() then
-			-- Check if in menu area
-			if self.cursor.x >= 10 and self.cursor.x <= 107 then
-				-- In tile selection area
-				if self.cursor.y >= 122 and self.cursor.y <= 369 then
-					self.state = LevelEditorState.STATE_TILE
-					local id = math.floor((self.cursor.x-10) / 50)
-						+ math.floor((self.cursor.y-122) / 50)*2
-					if id == 0 then
-						self.tile = 0
-					elseif id == 1 then
-						self.tile = 2
-					elseif id >= 2 and id <= 5 then
-						self.tile = id+2
-					else
-						self.tile = id+4
-					end
-					self.selection = id
-				-- Fence tool area
-				elseif self.cursor.y >= 384 and self.cursor.y <= 431 then
-					if self.cursor.x <= 58 then
-						self.state = LevelEditorState.STATE_ADD_FENCE
-					else
-						self.state = LevelEditorState.STATE_REM_FENCE
-					end
-				-- File menu
-				elseif self.cursor.y >= 11 and self.cursor.y <= 108 then
-					if self.cursor.y <= 59 then
-						-- New file
-						if self.cursor.x <= 58 then
-							pushState(ConfirmBoxState.create(self,
-							"CLEAR MAP?", function()
-								self.map:clear()
-								self.map:updateSpriteBatch(true)
-							end))
-							self.loadDialog = LoadLevelState.create(self)
-							self.saveDialog = SaveLevelState.create(self)
-						-- Save file
-						else
-							local valid, msg = self.map:verify()
-							if valid == true then
-								self.saveDialog:updateFileList()
-								pushState(self.saveDialog)
-							else
-								pushState(MessageBoxState.create(self, msg))
-							end
-						end
-					else
-						-- Open file
-						if self.cursor.x <= 58 then
-							self.loadDialog:updateFileList()
-							pushState(self.loadDialog)
-						-- Quit editor
-						else
-							pushState(ConfirmBoxState.create(self,
-							"ARE YOU SURE YOU WANT TO QUIT?", function()
-								popState()
-							end))
-						end
-					end
-				end
-			end
-			break
-		end
-	end
+
+	-- Draw fence marker if cursor in map
 	if self.state == LevelEditorState.STATE_ADD_FENCE
 	or self.state == LevelEditorState.STATE_REM_FENCE then
 		if self:cursorInMap() then
@@ -163,22 +111,7 @@ function LevelEditorState:draw()
 
 	-- Draw map front layer
 	love.graphics.draw(self.map:getFrontBatch(), 121, 8)
-
-	-- Draw buttons
-	-- Menu buttons
-	for iy=0,1 do
-		for ix=0,1 do
-			love.graphics.drawq(self.buttons, self.buttonQuad[ix+iy*2], 10+ix*50, 11+iy*50)
-		end
-	end
-	-- Tile buttons
-	for iy=0,4 do
-		for ix=0,1 do
-			love.graphics.drawq(self.buttons, self.buttonQuad[4+ix+iy*2], 10+ix*50, 122+iy*50)
-		end
-	end
-	love.graphics.drawq(self.buttons, self.buttonQuad[14], 10, 384)
-	love.graphics.drawq(self.buttons, self.buttonQuad[15], 60, 384)
+	self.menu:draw()
 
 	-- Draw menu selection marker
 	if self.state == LevelEditorState.STATE_TILE then
@@ -232,5 +165,52 @@ function LevelEditorState:removeFence(x1, y1, x2, y2)
 		local y = math.min(y1, y2)
 		local val = self.map:getWall(x1, y)
 		self.map:setWall(x1, y, val%2)
+	end
+end
+
+function LevelEditorState:buttonPressed(id, source)
+	if type(id) == "number" then
+		if id == 0 then
+			self.tile = 0
+		elseif id == 1 then
+			self.tile = 2
+		elseif id >= 2 and id <= 5 then
+			self.tile = id+2
+		else
+			self.tile = id+4
+		end
+		self.selection = id
+	else
+		if id == "new" then
+			pushState(ConfirmBoxState.create(self, "CLEAR MAP?",
+				function()
+					self.map:clear()
+					self.map:updateSpriteBatch(true)
+				end)
+			)
+			self.loadDialog = LoadLevelState.create(self)
+			self.saveDialog = SaveLevelState.create(self)
+		elseif id == "save" then
+			local valid, msg = self.map:verify()
+			if valid == true then
+				self.saveDialog:updateFileList()
+				pushState(self.saveDialog)
+			else
+				pushState(MessageBoxState.create(self, msg))
+			end
+		elseif id == "load" then
+			self.loadDialog:updateFileList()
+			pushState(self.loadDialog)
+		elseif id == "exit" then
+			pushState(ConfirmBoxState.create(self, "ARE YOU SURE YOU WANT TO QUIT?",
+				function()
+					popState()
+				end)
+			)
+		elseif id == "fence_add" then
+			self.state = LevelEditorState.STATE_ADD_FENCE
+		elseif id == "fence_delete" then
+			self.state = LevelEditorState.STATE_REM_FENCE
+		end
 	end
 end
