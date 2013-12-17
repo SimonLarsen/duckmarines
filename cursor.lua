@@ -5,6 +5,7 @@ function Cursor.create(x,y,player)
 	local self = setmetatable({}, Cursor)
 
 	self.x, self.y = x,y
+	self.offsetx, self.offsety = 0,0
 	self.player = player
 	local img = ResMgr.getImage("cursor"..player..".png")
 	self.sprite = Sprite.create(img)
@@ -33,7 +34,7 @@ function Cursor:move(dx, dy, absolute)
 end
 
 function Cursor:draw()
-	self.sprite:draw(math.floor(self.x), math.floor(self.y))
+	self.sprite:draw(math.floor(self.x+self.offsetx), math.floor(self.y+self.offsety))
 end
 
 function Cursor:addInput(i)
@@ -42,4 +43,9 @@ end
 
 function Cursor:getInputs()
 	return self.inputs
+end
+
+function Cursor:setOffset(x,y)
+	self.offsetx = x
+	self.offsety = y
 end

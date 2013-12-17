@@ -39,6 +39,7 @@ function IngameState.create(parent, mapname, rules)
 	self.cursors = {}
 	for i,v in ipairs(self.map:getSubmarines()) do
 		self.cursors[v.player] = Cursor.create(v.x*48+24, v.y*48+24, v.player)
+		self.cursors[v.player]:setOffset(121,8)
 	end
 
 	-- Create inputs and bots

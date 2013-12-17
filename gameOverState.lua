@@ -30,6 +30,7 @@ function GameOverState.create(parent, scores, stats)
 	self.menu:addButton("REMATCH", "rematch", 125, 26)
 	self.menu:addButton("EXIT", "exit", 316, 26)
 	self.showButton = self.menu:addButton("SHOW GRAPH", "show", 507, 26)
+	self:addComponent(self.menu)
 
 	self.counts = {}
 	self.bars = {}
