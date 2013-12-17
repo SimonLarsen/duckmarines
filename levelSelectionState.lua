@@ -77,11 +77,11 @@ end
 
 function LevelSelectionState:updateMapList()
 	local items = {}
-	local files = love.filesystem.enumerate("res/maps")
+	local files = love.filesystem.getDirectoryItems("res/maps")
 	for i,v in ipairs(files) do
 		table.insert(items, v:upper())
 	end
-	files = love.filesystem.enumerate("usermaps")
+	files = love.filesystem.getDirectoryItems("usermaps")
 	for i,v in ipairs(files) do
 		table.insert(items, "CUSTOM: " .. v:upper())
 	end
@@ -105,17 +105,17 @@ function LevelSelectionState:selectionChanged(text, source)
 		for ix=0,11 do
 			local tile = map:getTile(ix, iy)
 			if tile >= 10 and tile <= 14 then
-				self.batch:addq(quadSub, ix*23, iy*23+1)
+				self.batch:add(quadSub, ix*23, iy*23+1)
 			elseif tile == 2 then
-				self.batch:addq(quadPit, ix*23, iy*23)
+				self.batch:add(quadPit, ix*23, iy*23)
 			elseif tile == 4 then
-				self.batch:addq(quadSpawnUp, ix*23-1, iy*23+2)
+				self.batch:add(quadSpawnUp, ix*23-1, iy*23+2)
 			elseif tile == 5 then
-				self.batch:addq(quadSpawnRight, ix*23-1, iy*23+9)
+				self.batch:add(quadSpawnRight, ix*23-1, iy*23+9)
 			elseif tile == 6 then
-				self.batch:addq(quadSpawnDown, ix*23-1, iy*23+9)
+				self.batch:add(quadSpawnDown, ix*23-1, iy*23+9)
 			elseif tile == 7 then
-				self.batch:addq(quadSpawnLeft, ix*23-8, iy*23+9)
+				self.batch:add(quadSpawnLeft, ix*23-8, iy*23+9)
 			end
 		end
 	end
@@ -124,10 +124,10 @@ function LevelSelectionState:selectionChanged(text, source)
 		for ix=0,11 do
 			local wall = map:getWall(ix, iy)
 			if iy > 0 and wall % 2 == 1 then
-				self.batch:addq(quadFenceHor, ix*23-3, iy*23-3)
+				self.batch:add(quadFenceHor, ix*23-3, iy*23-3)
 			end
 			if ix > 0 and wall > 1 then
-				self.batch:addq(quadFenceVer, ix*23-3, iy*23-3)
+				self.batch:add(quadFenceVer, ix*23-3, iy*23-3)
 			end
 		end
 	end

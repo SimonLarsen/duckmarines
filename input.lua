@@ -166,12 +166,12 @@ JoystickInput.__index = JoystickInput
 setmetatable(JoystickInput, Input)
 
 JoystickInput.SPEED = 300
-JoystickInput.DEADZONE = 0.20
+JoystickInput.DEADZONE = 0.5
 
-function JoystickInput.create(id)
+function JoystickInput.create(joystick)
 	local self = setmetatable(Input.create(), JoystickInput)
 
-	self.id = id
+	self.joystick = joystick
 	self.down = false
 
 	return self
@@ -181,31 +181,30 @@ function JoystickInput:getMovement(dt, lock)
 	local dx = 0
 	local dy = 0
 
-	local axis1 = love.joystick.getAxis(self.id, 1)
-	local axis2 = love.joystick.getAxis(self.id, 2)
+	local leftx = self.joystick:getGamepadAxis("leftx")
+	local lefty = self.joystick:getGamepadAxis("lefty")
 
-	local axis3 = love.joystick.getAxis(self.id, 3)
-	local axis4 = love.joystick.getAxis(self.id, 4)
+	local rightx = self.joystick:getGamepadAxis("rightx")
+	local righty = self.joystick:getGamepadAxis("righty")
 
-	if axis1 and axis2 then
-		if not self:isDown() or lock == false then
-			if axis1 and math.abs(axis1) > JoystickInput.DEADZONE then
-				dx = axis1 * self.SPEED * dt
+	if leftx and lefty then
+		if not self:isDown() then
+			if leftx and math.abs(leftx) > JoystickInput.DEADZONE then
+				dx = leftx * self.SPEED * dt
 			end
-			if axis2 and math.abs(axis2) > JoystickInput.DEADZONE then
-				dy = axis2 * self.SPEED * dt
+			if lefty and math.abs(lefty) > JoystickInput.DEADZONE then
+				dy = lefty * self.SPEED * dt
 			end
-		elseif self.down == true then
-			if math.abs(axis1) > JoystickInput.DEADZONE or math.abs(axis2) > JoystickInput.DEADZONE then
-				self.down = false
-				self.action = vecToDir(axis1, axis2)
+		else
+			if math.abs(leftx) > JoystickInput.DEADZONE or math.abs(lefty) > JoystickInput.DEADZONE then
+				self.action = vecToDir(leftx, lefty)
 			end
 		end
 	end
 
-	if axis3 and axis4 then
-		if math.abs(axis3) > JoystickInput.DEADZONE or math.abs(axis4) > JoystickInput.DEADZONE then
-			self.action = vecToDir(axis3, axis4)
+	if rightx and righty then
+		if math.abs(rightx) > JoystickInput.DEADZONE or math.abs(righty) > JoystickInput.DEADZONE then
+			self.action = vecToDir(rightx, righty)
 		end
 	end
 
@@ -213,14 +212,13 @@ function JoystickInput:getMovement(dt, lock)
 end
 
 function JoystickInput:joystickpressed(joystick, button)
-	if joystick == self.id then
-		self.down = true
+	if joystick:getID() == self.joystick:getID() then
 		self.clicked = true
 	end
 end
 
 function JoystickInput:isDown()
-	return love.joystick.isDown(self.id, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+	return self.joystick:isGamepadDown("a", "b", "x", "y")
 end
 
 function JoystickInput:getType() return Input.TYPE_JOYSTICK end

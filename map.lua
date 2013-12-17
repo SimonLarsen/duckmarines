@@ -45,9 +45,9 @@ function Map:updateSpriteBatch(debug)
 	for iy = 0, 8 do
 		for ix = 0, 11 do
 			if (ix+iy) % 2 == 1 then
-				self.backBatch:addq(groundQuad1, ix*48, iy*48)
+				self.backBatch:add(groundQuad1, ix*48, iy*48)
 			else
-				self.backBatch:addq(groundQuad2, ix*48, iy*48)
+				self.backBatch:add(groundQuad2, ix*48, iy*48)
 			end
 
 			local tile = self:getTile(ix, iy)
@@ -60,7 +60,7 @@ function Map:updateSpriteBatch(debug)
 				local cx = (tile % 10) * 48
 				local cy = math.floor(tile / 10) * 48
 				quad:setViewport(cx, cy, 48, 48)
-				self.backBatch:addq(quad, ix*48, iy*48)
+				self.backBatch:add(quad, ix*48, iy*48)
 			end
 		end
 	end
@@ -75,20 +75,20 @@ function Map:updateSpriteBatch(debug)
 			if wall > 0 then
 				-- Right fence
 				if ix < 12 and wall % 2 == 1 then
-					self.frontBatch:addq(fenceHorzQuad, ix*48, iy*48-5)
+					self.frontBatch:add(fenceHorzQuad, ix*48, iy*48-5)
 					if self:getWall(ix+1, iy) == 0 then
-						self.frontBatch:addq(postQuad, ix*48+45, iy*48-8)
+						self.frontBatch:add(postQuad, ix*48+45, iy*48-8)
 					end
 				end
 				-- Downwards fence
 				if iy < 9 and wall > 1 then
-					self.frontBatch:addq(fenceVertQuad, ix*48-2, iy*48-3)
+					self.frontBatch:add(fenceVertQuad, ix*48-2, iy*48-3)
 					if self:getWall(ix, iy+1) == 0 then
-						self.frontBatch:addq(postQuad, ix*48-3, iy*48+40)
+						self.frontBatch:add(postQuad, ix*48-3, iy*48+40)
 					end
 				end
 				-- Post
-				self.frontBatch:addq(postQuad, ix*48-3, iy*48-8)
+				self.frontBatch:add(postQuad, ix*48-3, iy*48-8)
 			end
 		end
 	end

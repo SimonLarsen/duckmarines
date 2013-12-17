@@ -56,7 +56,7 @@ function InputSelectState:joystickpressed(joy, button)
 	local found = false
 	for i=1,4 do
 		if self.inputs[i] and self.inputs[i]:getType() == Input.TYPE_JOYSTICK then
-			if self.inputs[i].id == joy then
+			if self.inputs[i].joystick == joy then
 				found = true
 				break
 			end

@@ -54,7 +54,7 @@ function DuckDashState:draw()
 	end
 
 	local frame = math.floor(self.frame)
-	love.graphics.drawq(self.anim, self.anim_quads[frame], 296, 81)
+	love.graphics.draw(self.anim, self.anim_quads[frame], 296, 81)
 end
 
 function DuckDashState:isTransparent()

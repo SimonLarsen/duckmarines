@@ -26,10 +26,10 @@ function State:buttonPressed(id, source) end
 function State:isTransparent() return false end
 
 function State:baseUpdate(dt)
-	for i,v in ipairs(self.cursors) do
-		for j,w in ipairs(v:getInputs()) do
+	for i,v in pairs(self.cursors) do
+		for j,w in pairs(v:getInputs()) do
 			if w:wasClicked() then
-				for k,c in ipairs(self:getComponents()) do
+				for k,c in pairs(self:getComponents()) do
 					c:click(v.x, v.y)
 				end
 			end
@@ -41,34 +41,34 @@ end
 
 function State:baseDraw()
 	self:draw()
-	for i,v in ipairs(self.cursors) do
+	for i,v in pairs(self.cursors) do
 		v:draw()
 	end
 end
 
 function State:keypressed(...)
-	for i,v in ipairs(self:getComponents()) do
+	for i,v in pairs(self:getComponents()) do
 		v:keypressed(...)
 	end
-	for i,v in ipairs(self:getInputs()) do
+	for i,v in pairs(self:getInputs()) do
 		v:keypressed(...)
 	end
 end
 
 function State:mousepressed(...)
-	for i,v in ipairs(self:getInputs()) do
+	for i,v in pairs(self:getInputs()) do
 		v:mousepressed(...)
 	end
 end
 
 function State:mousereleased(...)
-	for i,v in ipairs(self:getInputs()) do
+	for i,v in pairs(self:getInputs()) do
 		v:mousereleased(...)
 	end
 end
 
 function State:joystickpressed(...)
-	for i,v in ipairs(self:getInputs()) do
+	for i,v in pairs(self:getInputs()) do
 		v:joystickpressed(...)
 	end
 end

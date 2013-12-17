@@ -58,8 +58,8 @@ local focused
 
 function love.load()
 	-- Setup screen
-	love.graphics.setMode(WIDTH*SCALE, HEIGHT*SCALE, false, true)
-	love.graphics.setDefaultImageFilter("nearest", "nearest")
+	love.window.setMode(WIDTH*SCALE, HEIGHT*SCALE, {fullscreen=false, vsync=true})
+	love.graphics.setDefaultFilter("nearest", "nearest")
 
 	-- Setup user data
 	if love.filesystem.exists("usermaps") == false then
@@ -74,7 +74,6 @@ function love.load()
 	-- Setup mouse
 	--love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
-	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 	focused = true
 
 	-- Setup gamestate stack
@@ -135,9 +134,5 @@ function love.focus(f)
 end
 
 function setScreenMode()
-	love.graphics.setMode(WIDTH, HEIGHT, config.fullscreen, config.vsync)
-	love.timer.sleep(0.25)
-	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
-	love.mouse.setGrab(true)
-	love.mouse.setVisible(false)
+	love.window.setMode(WIDTH, HEIGHT, {fullscreen=config.fullscreen, vsync=config.vsync})
 end

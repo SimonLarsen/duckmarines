@@ -7,11 +7,10 @@ function MainMenuState.create(config)
 
 	self.config = config
 
-	self.inputs[1] = KeyboardInput.create()
-	self.inputs[2] = JoystickInput.create(1)
-	self.inputs[3] = JoystickInput.create(2)
-	self.inputs[4] = JoystickInput.create(3)
-	self.inputs[5] = JoystickInput.create(4)
+	table.insert(self.inputs, KeyboardInput.create())
+	for i,v in ipairs(love.joystick.getJoysticks()) do
+		table.insert(self.inputs, JoystickInput.create(v))
+	end
 	
 	self.cursors[1] = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	for i=1,5 do

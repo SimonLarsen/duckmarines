@@ -68,15 +68,15 @@ function Menu:draw()
 	-- Draw button graphics
 	for i,v in ipairs(self.buttons) do
 		if v.type == Menu.TEXT_BUTTON then
-			love.graphics.drawq(self.imgButton, self.quadTopLeft, v.x, v.y)
-			love.graphics.drawq(self.imgButton, self.quadTopRight, v.x+v.width-3, v.y)
-			love.graphics.drawq(self.imgButton, self.quadBottomLeft, v.x, v.y+v.height-3)
-			love.graphics.drawq(self.imgButton, self.quadBottomRight, v.x+v.width-3, v.y+v.height-3)
+			love.graphics.draw(self.imgButton, self.quadTopLeft, v.x, v.y)
+			love.graphics.draw(self.imgButton, self.quadTopRight, v.x+v.width-3, v.y)
+			love.graphics.draw(self.imgButton, self.quadBottomLeft, v.x, v.y+v.height-3)
+			love.graphics.draw(self.imgButton, self.quadBottomRight, v.x+v.width-3, v.y+v.height-3)
 
-			love.graphics.drawq(self.imgButton, self.quadTopEdge, v.x+3, v.y, 0, v.width-6, 1)
-			love.graphics.drawq(self.imgButton, self.quadBottomEdge, v.x+3, v.y+v.height-3, 0, v.width-6, 1)
-			love.graphics.drawq(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
-			love.graphics.drawq(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
+			love.graphics.draw(self.imgButton, self.quadTopEdge, v.x+3, v.y, 0, v.width-6, 1)
+			love.graphics.draw(self.imgButton, self.quadBottomEdge, v.x+3, v.y+v.height-3, 0, v.width-6, 1)
+			love.graphics.draw(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
+			love.graphics.draw(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
 
 			love.graphics.setColor(255, 194, 49, 255)
 			love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
@@ -89,7 +89,7 @@ function Menu:draw()
 			love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
 			love.graphics.setColor(255,255,255,255)
 		elseif v.type == Menu.IMAGE_BUTTON then
-			love.graphics.drawq(v.img, v.quad, v.x, v.y)
+			love.graphics.draw(v.img, v.quad, v.x, v.y)
 		end
 	end
 end

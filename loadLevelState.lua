@@ -41,7 +41,7 @@ end
 
 function LoadLevelState:updateFileList()
 	local items = {}
-	local files = love.filesystem.enumerate("usermaps")
+	local files = love.filesystem.getDirectoryItems("usermaps")
 	for i,v in ipairs(files) do
 		table.insert(items, v:upper())
 	end

@@ -89,7 +89,7 @@ end
 -- @param Scale factor (x-axis).
 -- @param Scale factor (y-axis).
 function Animation:draw(x, y, r, sx, sy)
-	love.graphics.drawq(self.image, self.quads[self.frame], x, y, r or 0, sx or 1, sy or 1, self.ox, self.oy)
+	love.graphics.draw(self.image, self.quads[self.frame], x, y, r or 0, sx or 1, sy or 1, self.ox, self.oy)
 end
 
 --- Play the animation
