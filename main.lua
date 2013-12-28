@@ -60,6 +60,7 @@ function love.load()
 	-- Setup screen
 	love.window.setMode(WIDTH*SCALE, HEIGHT*SCALE, {fullscreen=false, vsync=true})
 	love.graphics.setDefaultFilter("nearest", "nearest")
+	love.graphics.setLineStyle("rough")
 
 	-- Setup user data
 	if love.filesystem.exists("usermaps") == false then
