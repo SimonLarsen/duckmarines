@@ -20,7 +20,7 @@ function State:update(dt) end
 function State:draw() end
 function State:getInputs() return self.inputs end
 function State:getComponents() return self.components end 
-function State:addComponent(c) table.insert(self.components, c) end
+function State:addComponent(c) table.insert(self.components, c) return c end
 function State:buttonPressed(id, source) end
 
 function State:isTransparent() return false end

@@ -9,6 +9,7 @@ require("component")
 require("menu")
 require("selectionList")
 require("textInput")
+require("slider")
 
 require("stack")
 require("state")

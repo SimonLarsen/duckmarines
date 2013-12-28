@@ -51,6 +51,10 @@ function math.signz(x)
 	return x < 0 and -1 or x > 0 and 1 or 0
 end
 
+function math.round(x)
+	return math.floor(x + 0.5)
+end
+
 --- Creates time string from number of seconds.
 --  s = 123.4 produces "2:03"
 function secsToString(s)
