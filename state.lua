@@ -26,6 +26,7 @@ function State:buttonPressed(id, source) end
 function State:isTransparent() return false end
 
 function State:baseUpdate(dt)
+	-- Update components and cursors
 	for i,v in pairs(self.cursors) do
 		for j,w in pairs(v:getInputs()) do
 			if w:wasClicked() then
@@ -36,7 +37,14 @@ function State:baseUpdate(dt)
 			v:move(w:getMovement(dt, false))
 		end
 	end
+
+	-- Update state
 	self:update(dt)
+
+	-- Consume input actions and clicks
+	for i,v in ipairs(self.inputs) do
+		v:clear()
+	end
 end
 
 function State:baseDraw()

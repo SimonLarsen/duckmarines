@@ -18,19 +18,20 @@ function Input.create()
 end
 
 function Input:getAction()
-	local ac = self.action
-	self.action = nil
-	return ac
+	return self.action
 end
 
 function Input:wasClicked()
-	local cl = self.clicked
-	self.clicked = false
-	return cl
+	return self.clicked
 end
 
 function Input:isDown()
 	return false
+end
+
+function Input:clear()
+	self.action = nil
+	self.clicked = false
 end
 
 function Input:keypressed(k, uni) end
