@@ -14,7 +14,8 @@ local eventName = {
 	"SPEED UP",
 	"SLOW DOWN",
 
-	"DUCK DASH"
+	"DUCK DASH",
+	"ESCAPE"
 }
 
 function EventTextState.create(event)

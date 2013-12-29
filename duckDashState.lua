@@ -38,15 +38,16 @@ function DuckDashState:update(dt)
 			self.positions[i] = self.positions[i] + DuckDashState.INCREMENT
 		end
 		if self.positions[i] >= 380 then
-			self.scores[i] = self.scores[i] + self.rules.duckdashprize
-			popState()
+			local deltas = {0, 0, 0, 0}
+			deltas[i] = self.rules.duckdashprize
+			pushState(EventScoreState.create(self, self.scores, deltas))
 			break
 		end
 	end
 end
 
 function DuckDashState:draw()
-	love.graphics.draw(self.bg, 56, 47)
+	love.graphics.draw(self.bg, 42, 33)
 
 	for i=1,4 do
 		love.graphics.draw(self.dolls[i], 133-(i-1)*20+self.positions[i], 258+(i-1)*20+math.sin(self.positions[i]/10)*10)

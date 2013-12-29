@@ -40,13 +40,13 @@ function Rules:setDefaults()
 	self.eventTime[IngameState.EVENT_VACUUM] 	= 0
 	self.eventTime[IngameState.EVENT_SPEEDUP] 	= 10
 	self.eventTime[IngameState.EVENT_SLOWDOWN] 	= 10
-	self.eventTime[IngameState.EVENT_DUCKDASH]  = 0
 
 	-- Gold duck bonus
 	self.goldbonus = 25
 	-- Pink duck bonus
 	self.pinkbonus = 10
 
-	-- Duck dash prize
+	-- Event prizes
 	self.duckdashprize = 50
+	self.escapeprize = 50
 end

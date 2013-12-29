@@ -13,8 +13,9 @@ IngameState.EVENT_SPEEDUP	= 7
 IngameState.EVENT_SLOWDOWN	= 8
 
 IngameState.EVENT_DUCKDASH  = 9
+IngameState.EVENT_ESCAPE    = 10
 
-IngameState.EVENT_COUNT 	= 9
+IngameState.EVENT_COUNT 	= 10
 
 IngameState.NSTATS = 10
 
@@ -366,7 +367,7 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
-	self.eventTime = self.rules.eventTime[self.event]
+	self.eventTime = self.rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then
 		local oldsubs = self.map:getSubmarines()
@@ -402,6 +403,10 @@ function IngameState:triggerEvent(player)
 	
 	elseif self.event == IngameState.EVENT_DUCKDASH then
 		pushState(DuckDashState.create(self, self.score, self.rules))
+		pushState(CountdownState.create(4, 0))
+	
+	elseif self.event == IngameState.EVENT_ESCAPE then
+		pushState(EscapeState.create(self, self.score, self.rules))
 		pushState(CountdownState.create(4, 0))
 	end
 

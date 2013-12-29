@@ -20,21 +20,20 @@ require("inputSelectState")
 require("levelSelectionState")
 require("advancedSettingsState")
 require("optionsState")
-
 require("ingameState")
 require("pauseGameState")
 require("countdownState")
 require("eventTextState")
 require("switchAnimState")
-require("duckDashState")
 require("gameOverState")
-
+require("duckDashState")
+require("escapeState")
 require("levelEditorState")
-
 require("loadLevelState")
 require("saveLevelState")
 require("messageBoxState")
 require("confirmBoxState")
+require("eventScoreState")
 
 require("sprite")
 require("anim")
@@ -55,7 +54,6 @@ SCALE = 1
 
 local stateStack
 local config
-local focused
 
 function love.load()
 	-- Setup screen
@@ -74,9 +72,7 @@ function love.load()
 	end
 
 	-- Setup mouse
-	--love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
-	focused = true
 
 	-- Setup gamestate stack
 	stateStack = Stack.create()
@@ -84,8 +80,6 @@ function love.load()
 end
 
 function love.update(dt)
-	if focused == false then return end
-
 	if dt > 1/30 then
 		dt = 1/30
 	end
@@ -129,10 +123,6 @@ end
 
 function popState()
 	stateStack:pop()
-end
-
-function love.focus(f)
-	focused = f
 end
 
 function setScreenMode()
