@@ -111,7 +111,6 @@ function LevelEditorState:draw()
 
 	-- Draw map front layer
 	love.graphics.draw(self.map:getFrontBatch(), 121, 8)
-	self.menu:draw()
 
 	-- Draw menu selection marker
 	if self.state == LevelEditorState.STATE_TILE then

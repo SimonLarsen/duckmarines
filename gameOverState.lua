@@ -26,11 +26,10 @@ function GameOverState.create(parent, scores, stats)
 
 	self.state = GameOverState.STATE_BARS
 
-	self.menu = Menu.create(408-220, 26, 180, 32, 20, self)
+	self.menu = self:addComponent(Menu.create(408-220, 26, 180, 32, 20, self))
 	self.menu:addButton("REMATCH", "rematch", 125, 26)
 	self.menu:addButton("EXIT", "exit", 316, 26)
 	self.showButton = self.menu:addButton("SHOW GRAPH", "show", 507, 26)
-	self:addComponent(self.menu)
 
 	self.counts = {}
 	self.bars = {}
@@ -64,9 +63,6 @@ function GameOverState:draw()
 	love.graphics.setColor(0, 0, 0, 128)
 	love.graphics.rectangle("fill", 116, 0, WIDTH-116, HEIGHT)
 	love.graphics.setColor(255, 255, 255)
-
-	-- Draw buttons
-	self.menu:draw()
 
 	if self.state == GameOverState.STATE_BARS then
 		-- Draw bars

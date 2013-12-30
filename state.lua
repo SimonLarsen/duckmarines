@@ -49,6 +49,9 @@ end
 
 function State:baseDraw()
 	self:draw()
+	for i,v in pairs(self:getComponents()) do
+		v:draw()
+	end
 	for i,v in pairs(self.cursors) do
 		v:draw()
 	end
@@ -60,6 +63,12 @@ function State:keypressed(...)
 	end
 	for i,v in pairs(self:getInputs()) do
 		v:keypressed(...)
+	end
+end
+
+function State:textinput(...)
+	for i,v in ipairs(self:getComponents()) do
+		v:textinput(...)
 	end
 end
 

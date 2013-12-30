@@ -16,7 +16,7 @@ function MessageBoxState.create(parent, message)
 	self.x = (WIDTH-self.width)/2
 	self.y = (HEIGHT-self.height)/2
 
-	self.menu = Menu.create((WIDTH-180)/2, self.y+self.height-32, 180, 32, 24, self)
+	self.menu = self:addComponent(Menu.create((WIDTH-180)/2, self.y+self.height-32, 180, 32, 24, self))
 	self.menu:addButton("OKAY", "okay")
 
 	return self
@@ -30,8 +30,6 @@ function MessageBoxState:draw()
 	love.graphics.rectangle("line", self.x-24.5, self.y-24.5, self.width+50, self.height+50)
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
-
-	self.menu:draw()
 end
 
 function MessageBoxState:buttonPressed(id, source)

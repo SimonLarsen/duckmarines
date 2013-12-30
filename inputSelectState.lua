@@ -5,17 +5,14 @@ setmetatable(InputSelectState, State)
 function InputSelectState.create(parent)
 	local self = setmetatable(State.create(), InputSelectState)
 
-	self.menu = Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self)
+	self.menu = self:addComponent(Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self))
 	self.leaveButtons = {}
 	for i=1,4 do
 		self.leaveButtons[i] = self.menu:addButton("LEAVE", "leave"..i, -90+i*150, 258, 130, 32)
 		self.leaveButtons[i].enabled = false
 	end
-
 	self.menu:addButton("CONTINUE", "continue")
 	self.menu:addButton("BACK", "back")
-
-	self:addComponent(self.menu)
 
 	self.bg = ResMgr.getImage("bg_stars.png")
 	self.imgColors = ResMgr.getImage("icon_colors.png")
@@ -27,10 +24,10 @@ function InputSelectState.create(parent)
 	return self
 end
 
-function InputSelectState:keypressed(k, uni)
+function InputSelectState:keypressed(k)
 	for i=1,4 do
 		if self.inputs[i] then
-			self.inputs[i]:keypressed(k, uni)
+			self.inputs[i]:keypressed(k)
 		end
 	end
 
@@ -84,7 +81,6 @@ function InputSelectState:draw()
 	love.graphics.draw(self.imgColors, 62, 116)
 	love.graphics.setFont(ResMgr.getFont("menu"))
 	love.graphics.printf("PRESS ACTION BUTTON TO JOIN", 0, 25, WIDTH, "center")
-	self.menu:draw()
 
 	-- Draw titles
 	local player = 1

@@ -34,7 +34,7 @@ function Input:clear()
 	self.clicked = false
 end
 
-function Input:keypressed(k, uni) end
+function Input:keypressed(k) end
 function Input:mousepressed(x, y, button) end
 function Input:mousereleased(x, y, button) end
 function Input:joystickpressed(joystick, button) end
@@ -88,7 +88,7 @@ function KeyboardInput:getMovement(dt, lock)
 	return dx, dy, false
 end
 
-function KeyboardInput:keypressed(k, uni)
+function KeyboardInput:keypressed(k)
 	if k == " " then
 		self.clicked = true
 	elseif love.keyboard.isDown(" ") then

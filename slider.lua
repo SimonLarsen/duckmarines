@@ -2,7 +2,15 @@ Slider = {}
 Slider.__index = Slider
 setmetatable(Slider, Component)
 
-function Slider.create(x, y, width, values, selection, listener)
+Slider.timeFormatter = function(v)
+	return secsToString(v)
+end
+
+Slider.onOffFormatter = function(v)
+	return v and "on" or "off"
+end
+
+function Slider.create(x, y, width, values, selection, listener, formatter)
 	local self = setmetatable({}, Slider)
 
 	self.x, self.y = x,y
@@ -10,6 +18,7 @@ function Slider.create(x, y, width, values, selection, listener)
 	self.values = values
 	self.selection = selection
 	self.listener = listener
+	self.formatter = formatter
 
 	self.left = self.x+21
 	self.right = self.x+self.width-21
@@ -40,7 +49,13 @@ function Slider:draw()
 	love.graphics.draw(self.buttons, self.rightButton, self.x+self.width-21, self.y)
 
 	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.printf(self:getValue(), self.left, self.y+6, self.innerWidth, "center")
+	local str
+	if self.formatter then
+		str = self.formatter(self:getValue())
+	else
+		str = tostring(self:getValue())
+	end
+	love.graphics.printf(str, self.left, self.y+6, self.innerWidth, "center")
 end
 
 function Slider:click(x, y)

@@ -97,12 +97,12 @@ function love.draw()
 	end
 end
 
-function love.keypressed(k, uni)
-	if k == "f3" then
-		love.mouse.setGrab(not love.mouse.isGrabbed())
-	else
-		stateStack:peek():keypressed(k, uni)
-	end
+function love.keypressed(k)
+	stateStack:peek():keypressed(k)
+end
+
+function love.textinput(text)
+	stateStack:peek():textinput(text)
 end
 
 function love.mousepressed(x, y, button)

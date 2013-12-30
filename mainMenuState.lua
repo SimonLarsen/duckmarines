@@ -31,7 +31,6 @@ end
 
 function MainMenuState:draw()
 	love.graphics.draw(self.bg, 0, 0)
-	self.menu:draw()
 end
 
 function MainMenuState:buttonPressed(id, source)

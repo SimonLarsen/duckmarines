@@ -16,17 +16,14 @@ function LevelSelectionState.create(parent)
 	self.imgTexture = ResMgr.getImage("blueprint_texture.png")
 	self.batch = love.graphics.newSpriteBatch(self.imgPreview, 128)
 
-	self.list = SelectionList.create(WIDTH/2-295, 62, 260, 15, 21, self)
+	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 15, 21, self))
 	self:updateMapList()
 	self.list:setSelection(1)
 
-	self.menu = Menu.create(WIDTH/2, 300, 298, 32, 10, self)
+	self.menu = self:addComponent(Menu.create(WIDTH/2, 300, 298, 32, 10, self))
 	self.menu:addButton("START GAME", "start")
 	self.menu:addButton("ADVANCED SETTINGS", "advanced")
 	self.menu:addButton("BACK", "back")
-
-	self:addComponent(self.list)
-	self:addComponent(self.menu)
 
 	return self
 end
@@ -49,9 +46,6 @@ function LevelSelectionState:draw()
 
 	love.graphics.setFont(ResMgr.getFont("menu"))
 	love.graphics.printf("SELECT A LEVEL", 0, 25, WIDTH, "center")
-
-	self.list:draw()
-	self.menu:draw()
 end
 
 function LevelSelectionState:buttonPressed(id, source)

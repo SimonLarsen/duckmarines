@@ -9,18 +9,14 @@ function SaveLevelState.create(parent)
 	self.cursors = parent.cursors
 	self.parent = parent
 
-	self.list = SelectionList.create(178, 133, 200, 6, 21, self)
-	self.input = TextInput.create(178, 307, 200, 24)
+	self.list = self:addComponent(SelectionList.create(178, 133, 200, 6, 21, self))
+	self.input = self:addComponent(TextInput.create(178, 307, 200, 24))
 	self.input:setActive(true)
 
-	self.menu = Menu.create(390, 212, 134, 32, 11, self)
+	self.menu = self:addComponent(Menu.create(390, 212, 134, 32, 11, self))
 	self.menu:addButton("SAVE", "save")
 	self.menu:addButton("DELETE", "delete")
 	self.menu:addButton("CANCEL", "cancel")
-
-	self:addComponent(self.list)
-	self:addComponent(self.input)
-	self:addComponent(self.menu)
 
 	self:updateFileList()
 
@@ -32,11 +28,7 @@ function SaveLevelState:draw()
 	love.graphics.rectangle("fill", 142, 96, 415, 271)
 	love.graphics.setColor(241, 148, 0, 255)
 	love.graphics.rectangle("line", 142.5, 96.5, 415, 271)
-
 	love.graphics.setColor(255, 255, 255, 255)
-	self.list:draw()
-	self.input:draw()
-	self.menu:draw()
 end
 
 function SaveLevelState:updateFileList()

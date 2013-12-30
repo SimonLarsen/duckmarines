@@ -19,10 +19,9 @@ function ConfirmBoxState.create(parent, message, func)
 	self.x = (WIDTH-self.width)/2
 	self.y = (HEIGHT-self.height)/2
 
-	self.menu = Menu.create((WIDTH-180)/2, self.y+self.height-32, 120, 32, 24, self)
+	self.menu = self:addComponent(Menu.create((WIDTH-180)/2, self.y+self.height-32, 120, 32, 24, self))
 	self.menu:addButton("OK", "ok", WIDTH/2-130, self.y+self.height-32)
 	self.menu:addButton("CANCEL", "cancel", WIDTH/2+10, self.y+self.height-32)
-	self:addComponent(self.menu)
 
 	return self
 end
@@ -35,8 +34,6 @@ function ConfirmBoxState:draw()
 	love.graphics.rectangle("line", self.x-24.5, self.y-24.5, self.width+50, self.height+50)
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
-
-	self.menu:draw()
 end
 
 function ConfirmBoxState:buttonPressed(id, source)

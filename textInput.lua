@@ -50,16 +50,21 @@ function TextInput:setActive(active)
 	self.active = active
 end
 
-function TextInput:keypressed(k, uni)
+function TextInput:keypressed(k)
 	if self.active == false then return end
 
+	if k == "backspace" and self.text:len() > 0 then
+		self.text = self.text:sub(1, self.text:len()-1)
+		return true
+	end
+end
+
+function TextInput:textinput(text)
+	local uni = text:byte(1)
 	if (uni >= string.byte("A") and uni <= string.byte("Z"))
 	or (uni >= string.byte("a") and uni <= string.byte("z"))
 	or (uni >= string.byte("0") and uni <= string.byte("9")) then
-		self.text = self.text .. k:upper()
-		return true
-	elseif k == "backspace" and self.text:len() > 0 then
-		self.text = self.text:sub(1, self.text:len()-1)
+		self.text = self.text .. text:upper()
 		return true
 	end
 end
