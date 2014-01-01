@@ -60,6 +60,8 @@ function TextInput:keypressed(k)
 end
 
 function TextInput:textinput(text)
+	if self.active == false then return end
+
 	local uni = text:byte(1)
 	if (uni >= string.byte("A") and uni <= string.byte("Z"))
 	or (uni >= string.byte("a") and uni <= string.byte("z"))
