@@ -49,7 +49,7 @@ function NullInput.create()
 	return self
 end
 
-function NullInput:getMovement(dt, lock)
+function NullInput:getMovement(dt)
 	return 0, 0, false
 end
 
@@ -62,19 +62,20 @@ setmetatable(KeyboardInput, Input)
 
 KeyboardInput.SPEED = 300
 
-function KeyboardInput.create()
+function KeyboardInput.create(lock)
 	local self = setmetatable(Input.create(), KeyboardInput)
 
 	self.type = Input.TYPE_KEYBOARD
+	self.lock = lock or false
 
 	return self
 end
 
-function KeyboardInput:getMovement(dt, lock)
+function KeyboardInput:getMovement(dt)
 	local dx = 0
 	local dy = 0
 
-	if not love.keyboard.isDown(" ") or lock == false then
+	if not love.keyboard.isDown(" ") or self.lock == false then
 		if love.keyboard.isDown("left") then
 			dx = dx - self.SPEED * dt end
 		if love.keyboard.isDown("right") then
@@ -136,7 +137,7 @@ function MouseInput:getMovement(dt)
 end
 
 function MouseInput:mousepressed(x, y, button)
-	if button == "l" or button == "r" then
+	if button == "l" then
 		self.clicked = true
 		self.clickx = x
 		self.clicky = y
@@ -144,7 +145,7 @@ function MouseInput:mousepressed(x, y, button)
 end
 
 function MouseInput:mousereleased(x, y, button)
-	if self.clicked == true and (button == "l" or button == "r") then
+	if self.clicked == true and (button == "l") then
 		local dx = x - self.clickx
 		local dy = y - self.clicky
 		if dx ~= 0 or dy ~= 0 then
@@ -156,7 +157,7 @@ function MouseInput:mousereleased(x, y, button)
 end
 
 function MouseInput:isDown()
-	return love.mouse.isDown("l", "r")
+	return love.mouse.isDown("l")
 end
 
 function MouseInput:getType() return Input.TYPE_MOUSE end
@@ -167,45 +168,54 @@ JoystickInput.__index = JoystickInput
 setmetatable(JoystickInput, Input)
 
 JoystickInput.SPEED = 300
-JoystickInput.DEADZONE = 0.5
+JoystickInput.DEADZONE = 0.25
 
-function JoystickInput.create(joystick)
+function JoystickInput.create(joystick, lock)
 	local self = setmetatable(Input.create(), JoystickInput)
 
 	self.joystick = joystick
+
+	if joystick:isGamepad() then
+		local _
+		_, self.leftXAxis  = joystick:getGamepadMapping("leftx")
+		_, self.leftYAxis  = joystick:getGamepadMapping("lefty")
+		_, self.rightXAxis = joystick:getGamepadMapping("rightx")
+		_, self.rightYAxis = joystick:getGamepadMapping("righty")
+
+		_, self.button1 = joystick:getGamepadMapping("a")
+	else
+		self.leftXAxis = 1
+		self.leftYAxis = 2
+		self.rightXAxis = 3
+		self.rightYAxis = 4
+		self.button1 = 1
+	end
+
 	self.down = false
+	self.lock = lock or false
 
 	return self
 end
 
-function JoystickInput:getMovement(dt, lock)
+function JoystickInput:getMovement(dt)
 	local dx = 0
 	local dy = 0
 
-	local leftx = self.joystick:getGamepadAxis("leftx")
-	local lefty = self.joystick:getGamepadAxis("lefty")
+	local leftx = self.joystick:getAxis(self.leftXAxis)
+	local lefty = self.joystick:getAxis(self.leftYAxis)
+	local rightx = self.joystick:getAxis(self.rightXAxis)
+	local righty = self.joystick:getAxis(self.rightYAxis)
 
-	local rightx = self.joystick:getGamepadAxis("rightx")
-	local righty = self.joystick:getGamepadAxis("righty")
+	if rightx and righty and not self:inDeadZone(rightx, righty) then
+		self.action = vecToDir(rightx, righty)
 
-	if leftx and lefty then
-		if not self:isDown() then
-			if leftx and math.abs(leftx) > JoystickInput.DEADZONE then
-				dx = leftx * self.SPEED * dt
-			end
-			if lefty and math.abs(lefty) > JoystickInput.DEADZONE then
-				dy = lefty * self.SPEED * dt
-			end
-		else
-			if math.abs(leftx) > JoystickInput.DEADZONE or math.abs(lefty) > JoystickInput.DEADZONE then
-				self.action = vecToDir(leftx, lefty)
-			end
+	elseif leftx and lefty and not self:inDeadZone(leftx, lefty) then
+		if not self:isDown() or not self.lock then
+			dx = leftx * self.SPEED * dt
+			dy = lefty * self.SPEED * dt
 		end
-	end
-
-	if rightx and righty then
-		if math.abs(rightx) > JoystickInput.DEADZONE or math.abs(righty) > JoystickInput.DEADZONE then
-			self.action = vecToDir(rightx, righty)
+		if self:isDown() then
+			self.action = vecToDir(leftx, lefty)
 		end
 	end
 
@@ -213,13 +223,18 @@ function JoystickInput:getMovement(dt, lock)
 end
 
 function JoystickInput:joystickpressed(joystick, button)
-	if joystick:getID() == self.joystick:getID() then
+	if joystick:getID() == self.joystick:getID() and button == self.button1 then
 		self.clicked = true
 	end
 end
 
 function JoystickInput:isDown()
-	return self.joystick:isGamepadDown("a", "b", "x", "y")
+	-- Subtract one from button id due to bug i LÖVE 0.9.0
+	return self.joystick:isDown(self.button1-1)
+end
+
+function JoystickInput:inDeadZone(axis1, axis2)
+	return math.abs(axis1)^2 + math.abs(axis2)^2 < JoystickInput.DEADZONE^2
 end
 
 function JoystickInput:getType() return Input.TYPE_JOYSTICK end

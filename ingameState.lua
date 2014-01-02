@@ -50,6 +50,7 @@ function IngameState.create(parent, mapname, rules)
 			self.inputs[i] = Bot.create(self.map, self.cursors[i], i, self.entities, self.arrows)
 		else
 			self.inputs[i] = parent.inputs[i]
+			self.inputs[i].lock = true
 		end
 		self.cursors[i]:addInput(self.inputs[i])
 	end
