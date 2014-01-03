@@ -5,7 +5,7 @@ setmetatable(EscapeState, State)
 EscapeState.STATE_GAME = 0
 EscapeState.STATE_OVER = 1
 
-EscapeState.TIME_SCALE = 2
+EscapeState.TIME_SCALE = 4
 
 function EscapeState.create(parent, scores, rules)
 	local self = setmetatable(State.create(), EscapeState)

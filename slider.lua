@@ -10,6 +10,10 @@ Slider.onOffFormatter = function(v)
 	return v and "on" or "off"
 end
 
+Slider.percentFormatter = function(v)
+	return v .. " %"
+end
+
 function Slider.create(x, y, width, values, selection, listener, formatter)
 	local self = setmetatable({}, Slider)
 

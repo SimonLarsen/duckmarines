@@ -310,10 +310,10 @@ function IngameState:drawHUD()
 	love.graphics.scale(3, 3)
 
 	local timeString = secsToString(self.timeLeft)
-	love.graphics.print(timeString, 7, 21)
+	love.graphics.printf(timeString, 0, 20, 40, "center")
 
 	love.graphics.setColor(0, 0, 0, 128)
-	love.graphics.print(timeString, 7, 22)
+	love.graphics.printf(timeString, 0, 21, 40, "center")
 	for i=1,4 do
 		love.graphics.print(string.format("%03d", self.score[i]), 8, 18+i*29)
 	end
