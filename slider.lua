@@ -14,13 +14,14 @@ Slider.percentFormatter = function(v)
 	return v .. " %"
 end
 
-function Slider.create(x, y, width, values, selection, listener, formatter)
+function Slider.create(x, y, width, values, value, listener, formatter)
 	local self = setmetatable({}, Slider)
 
 	self.x, self.y = x,y
 	self.width = width
 	self.values = values
-	self.selection = selection
+	self.selection = 1
+	self:setValue(value)
 	self.listener = listener
 	self.formatter = formatter
 
@@ -86,5 +87,15 @@ function Slider:setSelection(index)
 
 	if self.listener then
 		self.listener:valueChanged(self:getValue(), self)
+	end
+end
+
+function Slider:setValue(value)
+	self.selection = 1
+	for i,v in pairs(self.values) do
+		if v == value then
+			self.selection = i
+			break
+		end
 	end
 end

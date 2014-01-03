@@ -16,7 +16,7 @@ end
 
 function Rules:setDefaults()
 	-- Round time in minutes
-	self.roundtime = 3*60
+	self.roundtime = 180
 	-- Number of entities pr. minute
 	self.frequency = 100
 	-- Percentage of entities that are enemies
