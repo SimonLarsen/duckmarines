@@ -5,6 +5,8 @@ setmetatable(PauseGameState, State)
 function PauseGameState.create(parent)
 	local self = setmetatable(State.create(), PauseGameState)
 
+	self:addComponent(Label.create("PAUSE", 0, 94, WIDTH, "center"))
+
 	self.menu = self:addComponent(Menu.create((WIDTH-200)/2, 143, 200, 32, 24, self))
 	self.menu:addButton("CONTINUE", "continue")
 	self.menu:addButton("RESTART", "restart")
@@ -31,8 +33,6 @@ function PauseGameState:draw()
 	love.graphics.setColor(0, 0, 0, 128)
 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
 	love.graphics.setColor(255,255,255,255)
-	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.printf("PAUSED", 0, 94, WIDTH, "center")
 end
 
 function PauseGameState:buttonPressed(id, source)

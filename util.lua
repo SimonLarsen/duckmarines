@@ -55,6 +55,15 @@ function math.round(x)
 	return math.floor(x + 0.5)
 end
 
+function math.seq(first, last, increment)
+	local t = {}
+	local inch = increment or 1
+	for i=first,last,inch do
+		table.insert(t, i)
+	end
+	return t
+end
+
 --- Creates time string from number of seconds.
 --  s = 123.4 produces "2:03"
 function secsToString(s)

@@ -6,6 +6,7 @@ require("input")
 require("configuration")
 
 require("component")
+require("label")
 require("menu")
 require("selectionList")
 require("textInput")

@@ -5,6 +5,8 @@ setmetatable(InputSelectState, State)
 function InputSelectState.create(parent)
 	local self = setmetatable(State.create(), InputSelectState)
 
+	self:addComponent(Label.create("PRESS ACTION BUTTON TO JOIN", 0, 25, WIDTH, "center"))
+
 	self.menu = self:addComponent(Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self))
 	self.leaveButtons = {}
 	for i=1,4 do
@@ -22,6 +24,40 @@ function InputSelectState.create(parent)
 	self.iconAI = ResMgr.getImage("icon_ai.png")
 
 	return self
+end
+
+function InputSelectState:draw()
+	love.graphics.draw(self.bg, 0, 0)
+	love.graphics.draw(self.imgColors, 62, 116)
+
+	-- Draw titles
+	local player = 1
+	local ai = 1
+	for i=1,4 do
+		love.graphics.setColor(23, 23, 23, 255)
+		love.graphics.rectangle("fill", -88+i*150, 66, 126, 32)
+		love.graphics.setColor(241, 148, 0, 255)
+		love.graphics.rectangle("line", -87.5+i*150, 66.5, 126, 32)
+
+		love.graphics.setColor(255, 255, 255, 255)
+
+		if self.inputs[i] then
+			love.graphics.printf("PLAYER "..player, -100+i*150, 73, 150, "center")
+			player = player+1
+			local t = self.inputs[i]:getType()
+			if t == Input.TYPE_KEYBOARD then
+				love.graphics.draw(self.iconKeyboard, -85+i*150, 119)
+			elseif t == Input.TYPE_MOUSE then
+				love.graphics.draw(self.iconMouse, -85+i*150, 119)
+			elseif t == Input.TYPE_JOYSTICK then
+				love.graphics.draw(self.iconController, -85+i*150, 119)
+			end
+		else
+			love.graphics.printf("AI "..ai, -100+i*150, 73, 150, "center")
+			ai = ai+1
+			love.graphics.draw(self.iconAI, -85+i*150, 119)
+		end
+	end
 end
 
 function InputSelectState:keypressed(k)
@@ -72,42 +108,6 @@ function InputSelectState:addInput(input)
 			self.cursors[i]:addInput(input)
 			self.leaveButtons[i].enabled = true
 			return
-		end
-	end
-end
-
-function InputSelectState:draw()
-	love.graphics.draw(self.bg, 0, 0)
-	love.graphics.draw(self.imgColors, 62, 116)
-	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.printf("PRESS ACTION BUTTON TO JOIN", 0, 25, WIDTH, "center")
-
-	-- Draw titles
-	local player = 1
-	local ai = 1
-	for i=1,4 do
-		love.graphics.setColor(23, 23, 23, 255)
-		love.graphics.rectangle("fill", -88+i*150, 66, 126, 32)
-		love.graphics.setColor(241, 148, 0, 255)
-		love.graphics.rectangle("line", -87.5+i*150, 66.5, 126, 32)
-
-		love.graphics.setColor(255, 255, 255, 255)
-
-		if self.inputs[i] then
-			love.graphics.printf("PLAYER "..player, -100+i*150, 73, 150, "center")
-			player = player+1
-			local t = self.inputs[i]:getType()
-			if t == Input.TYPE_KEYBOARD then
-				love.graphics.draw(self.iconKeyboard, -85+i*150, 119)
-			elseif t == Input.TYPE_MOUSE then
-				love.graphics.draw(self.iconMouse, -85+i*150, 119)
-			elseif t == Input.TYPE_JOYSTICK then
-				love.graphics.draw(self.iconController, -85+i*150, 119)
-			end
-		else
-			love.graphics.printf("AI "..ai, -100+i*150, 73, 150, "center")
-			ai = ai+1
-			love.graphics.draw(self.iconAI, -85+i*150, 119)
 		end
 	end
 end

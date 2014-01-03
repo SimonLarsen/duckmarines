@@ -4,6 +4,7 @@ setmetatable(Menu, Component)
 
 Menu.TEXT_BUTTON = 0
 Menu.IMAGE_BUTTON = 1
+
 function Menu.create(x, y, width, height, spacing, listener)
 	local self = setmetatable({}, Menu)
 

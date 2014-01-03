@@ -16,6 +16,8 @@ function LevelSelectionState.create(parent)
 	self.imgTexture = ResMgr.getImage("blueprint_texture.png")
 	self.batch = love.graphics.newSpriteBatch(self.imgPreview, 128)
 
+	self:addComponent(Label.create("SELECT A LEVEL", 0, 25, WIDTH, "center"))
+
 	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 15, 21, self))
 	self:updateMapList()
 	self.list:setSelection(1)
@@ -43,9 +45,6 @@ function LevelSelectionState:draw()
 	love.graphics.setBlendMode("multiplicative")
 	love.graphics.draw(self.imgTexture, WIDTH/2+11, 73)
 	love.graphics.setBlendMode("alpha")
-
-	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.printf("SELECT A LEVEL", 0, 25, WIDTH, "center")
 end
 
 function LevelSelectionState:buttonPressed(id, source)

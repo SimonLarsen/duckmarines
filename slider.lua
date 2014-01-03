@@ -81,6 +81,6 @@ function Slider:setSelection(index)
 	if self.selection > self.count then self.selection = 1 end
 
 	if self.listener then
-		--self.listener:valueChanged(self:getValue(), self)
+		self.listener:valueChanged(self:getValue(), self)
 	end
 end
