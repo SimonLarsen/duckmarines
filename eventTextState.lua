@@ -30,7 +30,11 @@ function EventTextState.create(event)
 		self.imgBox = ResMgr.getImage("event_box.png")
 		self.offset = 10
 	end
-	self.boxy = -106
+	self.y = -106
+	self.speed = 400
+	self.gravity = 400
+	self.hits = 0
+
 	self.time = 0
 
 	return self
@@ -38,11 +42,20 @@ end
 
 function EventTextState:update(dt)
 	self.time = self.time + dt
-	if self.time < 0.5 then
-		self.boxy = self.time*2*274 - 106
-	elseif self.time < 1.5 then
-		self.boxy = 168
-	else
+
+	self.speed = self.speed + self.gravity*dt
+	self.y = self.y + self.speed*dt
+	if self.y > 168 then
+		self.y = 168
+		if self.hits < 3 then
+			self.speed = self.speed * -0.25
+		else
+			self.speed = 0
+		end
+		self.hits = self.hits + 1
+	end
+
+	if self.time >= 1.5 then
 		popState()
 	end
 end
@@ -52,15 +65,15 @@ function EventTextState:draw()
 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
 	love.graphics.setColor(255, 255, 255, 255)
 
-	love.graphics.draw(self.imgBox, 0, self.boxy)
+	love.graphics.draw(self.imgBox, 0, self.y)
 
 	love.graphics.setFont(ResMgr.getFont("bold"))
 	love.graphics.push()
 	love.graphics.scale(4, 4)
 	love.graphics.setColor(0, 0, 0, 128)
-	love.graphics.print(self.text, self.offset, math.floor((self.boxy+40)/4)+1)
+	love.graphics.print(self.text, self.offset, math.floor((self.y+40)/4)+1)
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.print(self.text, self.offset, math.floor((self.boxy+40)/4))
+	love.graphics.print(self.text, self.offset, math.floor((self.y+40)/4))
 	love.graphics.pop()
 end
 

@@ -5,7 +5,7 @@ setmetatable(EscapeState, State)
 EscapeState.STATE_GAME = 0
 EscapeState.STATE_OVER = 1
 
-EscapeState.TIME_SCALE = 4
+EscapeState.TIME_SCALE = 3
 
 function EscapeState.create(parent, scores, rules)
 	local self = setmetatable(State.create(), EscapeState)
@@ -106,17 +106,17 @@ function EscapeState:draw()
 
 	elseif self.state == EscapeState.STATE_OVER then
 		love.graphics.draw(self.mouth_closed, 63, 54)
-		if self.time > 1 then
-			love.graphics.setColor(255, 255, 255, (2-self.time)*255)
-		end
 		for i=1,4 do
 			if self.escaped == i then
-				love.graphics.draw(self.ducks, self.duck_quads[i], 206+(i-1)*53, 340+self.time*100, -2*self.time, 1, 1, 26, 42)
+				love.graphics.draw(self.ducks, self.duck_quads[i], 206+(i-1)*53-self.time*250, 340-self.time*250, -6*self.time, 1+self.time, 1+self.time, 26, 42)
 			else
-				love.graphics.draw(self.ghosts, self.ghost_quads[i], 181+(i-1)*53, 305-self.time*100)
+				if self.time > 1 then
+					love.graphics.setColor(255, 255, 255, (2-self.time)*255)
+				end
+				love.graphics.draw(self.ghosts, self.ghost_quads[i], 181+(i-1)*53, 305-self.time*140)
+				love.graphics.setColor(255,255,255,255)
 			end
 		end
-		love.graphics.setColor(255,255,255,255)
 	end
 	love.graphics.setScissor()
 end
