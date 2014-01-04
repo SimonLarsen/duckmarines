@@ -65,7 +65,7 @@ function love.load()
 
 	-- Setup user data
 	if love.filesystem.exists("usermaps") == false then
-		love.filesystem.mkdir("usermaps")
+		love.filesystem.createDirectory("usermaps")
 	end
 	-- Read configuration
 	config = Config.load()
