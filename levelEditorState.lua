@@ -31,11 +31,13 @@ function LevelEditorState.create(parent)
 	self.menu = Menu.create(0, 0, 0, 0, 0, self)
 	self:addComponent(self.menu)
 	local nq = love.graphics.newQuad
+
 	-- File operations
 	self.menu:addImageButton(imgButtons, nq(0,0,48,48,192,192), "new", 10,11,48,48)
 	self.menu:addImageButton(imgButtons, nq(48,0,48,48,192,192), "save", 60,11,48,48)
 	self.menu:addImageButton(imgButtons, nq(96,0,48,48,192,192), "load", 10,61,48,48)
 	self.menu:addImageButton(imgButtons, nq(144,0,48,48,192,192), "exit", 60,61,48,48)
+
 	-- Tile buttons
 	for i=0,9 do
 		local x = 10 + (i%2)*50
@@ -43,6 +45,7 @@ function LevelEditorState.create(parent)
 		local quad = nq(i%4*48,48+math.floor(i/4)*48,48,48,192,192)
 		self.menu:addImageButton(imgButtons, quad, i, x, y, 48, 48)
 	end
+
 	-- Fence tools
 	self.menu:addImageButton(imgButtons, nq(96,144,48,48,192,192), "fence_add", 10,384,48,48)
 	self.menu:addImageButton(imgButtons, nq(144,144,48,48,192,192), "fence_delete", 60,384,48,48)
@@ -111,7 +114,9 @@ function LevelEditorState:draw()
 
 	-- Draw map front layer
 	love.graphics.draw(self.map:getFrontBatch(), 121, 8)
+end
 
+function LevelEditorState:drawAfter()
 	-- Draw menu selection marker
 	if self.state == LevelEditorState.STATE_TILE then
 		if self.selection <= 1 then
@@ -179,6 +184,7 @@ function LevelEditorState:buttonPressed(id, source)
 			self.tile = id+4
 		end
 		self.selection = id
+		self.state = LevelEditorState.STATE_TILE
 	else
 		if id == "new" then
 			pushState(ConfirmBoxState.create(self, "CLEAR MAP?",

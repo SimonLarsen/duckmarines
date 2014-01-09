@@ -18,6 +18,7 @@ end
 
 function State:update(dt) end
 function State:draw() end
+function State:drawAfter() end
 function State:getInputs() return self.inputs end
 function State:getComponents() return self.components end 
 function State:addComponent(c) table.insert(self.components, c) return c end
@@ -55,6 +56,7 @@ function State:baseDraw()
 	for i,v in pairs(self.cursors) do
 		v:draw()
 	end
+	self:drawAfter()
 end
 
 function State:keypressed(...)
