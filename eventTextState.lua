@@ -24,11 +24,11 @@ function EventTextState.create(event)
 	if event == EventTextState.EVENT_TIMEUP then
 		self.text = "TIME UP"
 		self.imgBox = ResMgr.getImage("timeup_box.png")
-		self.offset = 38
+		self.offset = 160
 	else
 		self.text = eventName[event]
 		self.imgBox = ResMgr.getImage("event_box.png")
-		self.offset = 10
+		self.offset = 35
 	end
 	self.y = -106
 	self.speed = 400
@@ -67,14 +67,11 @@ function EventTextState:draw()
 
 	love.graphics.draw(self.imgBox, 0, self.y)
 
-	love.graphics.setFont(ResMgr.getFont("bold"))
-	love.graphics.push()
-	love.graphics.scale(4, 4)
+	love.graphics.setFont(ResMgr.getFont("joystix40"))
 	love.graphics.setColor(0, 0, 0, 128)
-	love.graphics.print(self.text, self.offset, math.floor((self.y+40)/4)+1)
+	love.graphics.print(self.text, self.offset, self.y+30+4)
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.print(self.text, self.offset, math.floor((self.y+40)/4))
-	love.graphics.pop()
+	love.graphics.print(self.text, self.offset, self.y+30)
 end
 
 function EventTextState:isTransparent()

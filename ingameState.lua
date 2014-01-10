@@ -303,17 +303,20 @@ end
 function IngameState:drawHUD()
 	love.graphics.draw(self.imgSidebar, 0, 0)
 
-	love.graphics.setColor(0,0,0)
+	love.graphics.setFont(ResMgr.getFont("joystix30"))
+
 	love.graphics.setFont(ResMgr.getFont("bold"))
 
 	love.graphics.push()
 	love.graphics.scale(3, 3)
 
 	local timeString = secsToString(self.timeLeft)
+	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.printf(timeString, 0, 21, 40, "center")
+	love.graphics.setColor(0, 0, 0, 255)
 	love.graphics.printf(timeString, 0, 20, 40, "center")
 
 	love.graphics.setColor(0, 0, 0, 128)
-	love.graphics.printf(timeString, 0, 21, 40, "center")
 	for i=1,4 do
 		love.graphics.print(string.format("%03d", self.score[i]), 8, 18+i*29)
 	end
@@ -368,6 +371,7 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
+	self.event = IngameState.EVENT_DUCKDASH
 	self.eventTime = self.rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then
@@ -417,6 +421,14 @@ end
 function IngameState:keypressed(k)
 	if k == "escape" then
 		pushState(PauseGameState.create(self))
+	elseif k == "f1" then
+		local spawns = self.map:getSpawnPoints()
+		local e = spawns[1]
+		table.insert(self.entities, PinkDuck.create(e.x*48+24, e.y*48+24, e.dir))
+	elseif k == "f2" then
+		local spawns = self.map:getSpawnPoints()
+		local e = spawns[1]
+		table.insert(self.entities, GoldDuck.create(e.x*48+24, e.y*48+24, e.dir))
 	else
 		State.keypressed(self, k)
 	end

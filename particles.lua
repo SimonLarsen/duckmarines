@@ -75,16 +75,13 @@ function BonusTextParticle:update(dt)
 end
 
 function BonusTextParticle:draw()
-	love.graphics.draw(self.bar, self.x-27, self.y+24)
+	love.graphics.draw(self.bar, self.x-40, self.y+26)
 
-	love.graphics.setFont(ResMgr.getFont("bold"))
-	love.graphics.push()
-	love.graphics.scale(3, 3)
+	love.graphics.setFont(ResMgr.getFont("joystix30"))
 	love.graphics.setColor(0, 0, 0, 255)
-	love.graphics.printf(self.text, self.x/3-50, self.y/3+1, 100, "center")
+	love.graphics.printf(self.text, self.x-75, self.y+3, 150, "center")
 	love.graphics.setColor(self.color)
-	love.graphics.printf(self.text, self.x/3-50, self.y/3, 100, "center")
-	love.graphics.pop()
+	love.graphics.printf(self.text, self.x-75, self.y, 150, "center")
 	love.graphics.setColor(255, 255, 255, 255)
 end
 

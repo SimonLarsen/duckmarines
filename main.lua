@@ -73,6 +73,9 @@ function love.load()
 		config = Config.create()
 	end
 
+	-- Preload assets
+	ResMgr.loadFonts()
+
 	-- Setup mouse
 	love.mouse.setVisible(false)
 

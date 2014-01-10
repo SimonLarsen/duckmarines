@@ -16,12 +16,13 @@ function ResMgr.getImage(_path)
 	return images[path]
 end
 
+function ResMgr.loadFonts()
+	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString)
+	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
+	fonts["joystix30"] = love.graphics.newFont("res/fonts/joystix.ttf", 30)
+	fonts["joystix40"] = love.graphics.newFont("res/fonts/joystix.ttf", 40)
+end
+
 function ResMgr.getFont(name)
-	if fonts[name] == nil then
-		local image = ResMgr.getImage("fonts/".. name .. ".png")
-		local font = love.graphics.newImageFont(image, fontString)
-		fonts[name] = font
-		print("Loaded font: " .. name)
-	end
 	return fonts[name]
 end
