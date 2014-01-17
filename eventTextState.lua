@@ -25,11 +25,16 @@ function EventTextState.create(event)
 		self.text = "TIME UP"
 		self.imgBox = ResMgr.getImage("timeup_box.png")
 		self.offset = 160
-	else
+	elseif event <= IngameState.EVENT_SLOWDOWN then
 		self.text = eventName[event]
 		self.imgBox = ResMgr.getImage("event_box.png")
 		self.offset = 35
+	else
+		self.text = eventName[event]
+		self.imgBox = ResMgr.getImage("minigame_box.png")
+		self.offset = 35
 	end
+
 	self.y = -106
 	self.speed = 400
 	self.gravity = 500
