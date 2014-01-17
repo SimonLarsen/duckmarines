@@ -13,7 +13,7 @@ function vecToDir(dx, dy)
 	end
 end
 
--- Converts integer direction to unit vector
+--- Converts integer direction to unit vector
 function dirToVec(dir)
 	if dir == 0 then
 		return 0, -1
@@ -41,12 +41,12 @@ function math.cap(x, a, b)
 	return math.min(math.max(x, a), b)
 end
 
--- Returns sign of x
+--- Returns sign of x
 function math.sign(x)
 	return x < 0 and -1 or 1
 end
 
--- Returns sign of x (or 0 if x == 0)
+--- Returns sign of x (or 0 if x == 0)
 function math.signz(x)
 	return x < 0 and -1 or x > 0 and 1 or 0
 end

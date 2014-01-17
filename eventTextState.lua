@@ -32,7 +32,7 @@ function EventTextState.create(event)
 	end
 	self.y = -106
 	self.speed = 400
-	self.gravity = 400
+	self.gravity = 500
 	self.hits = 0
 
 	self.time = 0
@@ -47,8 +47,8 @@ function EventTextState:update(dt)
 	self.y = self.y + self.speed*dt
 	if self.y > 168 then
 		self.y = 168
-		if self.hits < 3 then
-			self.speed = self.speed * -0.25
+		if self.hits < 2 then
+			self.speed = self.speed * -0.20
 		else
 			self.speed = 0
 		end

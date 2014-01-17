@@ -2,10 +2,13 @@ EscapeState = {}
 EscapeState.__index = EscapeState
 setmetatable(EscapeState, State)
 
-EscapeState.STATE_GAME = 0
-EscapeState.STATE_OVER = 1
+EscapeState.STATE_GAME  = 0
+EscapeState.STATE_SHAKE = 1
+EscapeState.STATE_OVER  = 2
 
 EscapeState.TIME_SCALE = 3
+EscapeState.DURATION = 6
+EscapeState.WARNING_TIME = 2
 
 function EscapeState.create(parent, scores, rules)
 	local self = setmetatable(State.create(), EscapeState)
@@ -26,16 +29,22 @@ function EscapeState.create(parent, scores, rules)
 	self.cursorPos = 0
 	self.marker_pos = {}
 	self.escaped = nil
+	self.offsetx = 0
 
 	self.clicked = {false, false, false, false}
 	self.markers = {}
 
 	self.bg = ResMgr.getImage("escape_bg.png")
+	self.mouth_top = ResMgr.getImage("escape_mouth_top.png")
 	self.mouth_closed = ResMgr.getImage("escape_mouth_closed.png")
+	self.mouth_closed_lines = ResMgr.getImage("escape_mouth_closed_lines.png")
 	self.cursor = ResMgr.getImage("escape_cursor.png")
 	self.markers = ResMgr.getImage("escape_markers.png")
 	self.ducks = ResMgr.getImage("escape_ducks.png")
 	self.ghosts = ResMgr.getImage("escape_ghosts.png")
+
+	self.buttonAnim = Animation.create(ResMgr.getImage("small_button_anim.png"), 44, 38, 0, 0, 0.2, 2)
+	self.tearAnim = Animation.create(ResMgr.getImage("teardrop.png"), 9, 16, 0, 0, 0.3, 2)
 
 	self.duck_quads = {}
 	self.ghost_quads = {}
@@ -50,16 +59,19 @@ function EscapeState.create(parent, scores, rules)
 end
 
 function EscapeState:update(dt)
+	self.time = self.time + dt
+	self.buttonAnim:update(dt)
+	self.tearAnim:update(dt)
+
 	if self.state == EscapeState.STATE_GAME then
-		self.time = self.time + dt*EscapeState.TIME_SCALE
-		self.cursorPos = 1 - (math.cos(self.time) / 2 + 0.5)
+		self.cursorPos = 1 - (math.cos(self.time*EscapeState.TIME_SCALE) / 2 + 0.5)
 
 		local allDead = true
 		for i=1,4 do
 			if self.clicked[i] == false and self.inputs[i]:wasClicked() then
 				if self:isGreen() then
-					self.state = EscapeState.STATE_OVER
 					self.escaped = i
+					self.state = EscapeState.STATE_SHAKE
 					self.time = 0
 					break
 				else
@@ -71,19 +83,33 @@ function EscapeState:update(dt)
 				allDead = false
 			end
 		end
-		if allDead == true then
+
+		if self.time > EscapeState.DURATION then
 			self.state = EscapeState.STATE_OVER
 			self.time = 0
+		elseif self.time > EscapeState.DURATION-EscapeState.WARNING_TIME then
+			self.offsetx = math.sign(math.cos(self.time*30))*6
 		end
-	else
-		self.time = self.time + dt
+		if allDead == true then
+			self.state = EscapeState.STATE_SHAKE
+			self.time = 0
+		end
+
+	elseif self.state == EscapeState.STATE_SHAKE then
+		self.offsetx = math.sign(math.cos(self.time*30))*6
+		if self.time > 1 then
+			self.time = 0
+			self.state = EscapeState.STATE_OVER
+		end
+
+	elseif self.state == EscapeState.STATE_OVER then
 		if self.time >= 2 then
 			self.time = 2
 			local deltas = {0, 0, 0, 0}
 			if self.escaped then
 				deltas[self.escaped] = self.rules.escapeprize
-				pushState(EventScoreState.create(self, self.scores, deltas))
 			end
+			pushState(EventScoreState.create(self, self.scores, deltas))
 		end
 	end
 end
@@ -102,10 +128,29 @@ function EscapeState:draw()
 	if self.state == EscapeState.STATE_GAME then
 		for i=1,4 do
 			love.graphics.draw(self.ducks, self.duck_quads[i], 180+(i-1)*53, 298)
+			if self.clicked[i] and self.escaped ~= i then
+				self.tearAnim:draw(213+(i-1)*53, 329)
+			end
+		end
+		self.buttonAnim:draw(501, 202)
+		love.graphics.draw(self.mouth_top, 64+self.offsetx, 66)
+	
+	elseif self.state == EscapeState.STATE_SHAKE then
+		for i=1,4 do
+			love.graphics.draw(self.ducks, self.duck_quads[i], 180+(i-1)*53, 298)
+			if self.clicked[i] and self.escaped ~= i then
+				self.tearAnim:draw(213+(i-1)*53, 329)
+			end
+		end
+		love.graphics.draw(self.mouth_top, 64+self.offsetx, 66)
+	
+	elseif self.state == EscapeState.STATE_OVER then
+		if self.time < 0.2 then
+			love.graphics.draw(self.mouth_closed_lines, 63, 54)
+		else
+			love.graphics.draw(self.mouth_closed, 63, 54)
 		end
 
-	elseif self.state == EscapeState.STATE_OVER then
-		love.graphics.draw(self.mouth_closed, 63, 54)
 		for i=1,4 do
 			if self.escaped == i then
 				love.graphics.draw(self.ducks, self.duck_quads[i], 206+(i-1)*53-self.time*250, 340-self.time*250, -6*self.time, 1+self.time, 1+self.time, 26, 42)
