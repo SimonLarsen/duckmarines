@@ -84,6 +84,13 @@ function IngameState.create(parent, mapname, rules)
 end
 
 function IngameState:update(dt)
+	if love.keyboard.isDown("s") then
+		dt = dt/4
+	end
+	if love.keyboard.isDown("f") then
+		dt = dt*4
+	end
+
 	-- Advance time
 	self.timeLeft = self.timeLeft - dt
 	self.time = self.time + dt
@@ -216,7 +223,10 @@ function IngameState:update(dt)
 
 				table.remove(self.entities, i)
 			-- Check if entity hit hole
-			elseif tile == 2 then
+			elseif tile == Map.TILE_HOLE then
+				local x = math.floor(self.entities[i].x / 48)*48
+				local y = math.floor(self.entities[i].y / 48)*48
+				table.insert(self.particles, DuckFallParticle.create(x, y, self.entities[i]:getType()))
 				table.remove(self.entities, i)
 			end
 		end

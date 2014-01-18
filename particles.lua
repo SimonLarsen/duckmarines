@@ -118,3 +118,38 @@ end
 function SubBulgeParticle:getLayer()
 	return Particle.LAYER_BACK
 end
+
+-- DUCK FALL PARTICLE
+DuckFallParticle = {}
+DuckFallParticle.__index = DuckFallParticle
+setmetatable(DuckFallParticle, Particle)
+
+function DuckFallParticle.create(x, y, type)
+	local self = setmetatable(Particle.create(), DuckFallParticle)
+
+	self.x, self.y = x,y
+	if type == Entity.TYPE_DUCK then
+		self.anim = Animation.create(ResMgr.getImage("duckfall.png"), 48, 48, 0, 0, 0.075, 3, function() self.alive = false end)
+	elseif type == Entity.TYPE_ENEMY then
+		self.anim = Animation.create(ResMgr.getImage("predatorfall.png"), 48, 48, 0, 0, 0.075, 3, function() self.alive = false end)
+	elseif type == Entity.TYPE_PINKDUCK then
+		self.anim = Animation.create(ResMgr.getImage("pinkduckfall.png"), 48, 48, 0, 0, 0.075, 3, function() self.alive = false end)
+	elseif type == Entity.TYPE_GOLDDUCK then
+		self.anim = Animation.create(ResMgr.getImage("goldduckfall.png"), 48, 48, 0, 0, 0.075, 3, function() self.alive = false end)
+	end
+	self.anim:setMode("once")
+
+	return self
+end
+
+function DuckFallParticle:update(dt)
+	self.anim:update(dt)
+end
+
+function DuckFallParticle:draw()
+	self.anim:draw(self.x, self.y)
+end
+
+function DuckFallParticle:getLayer()
+	return Particle.LAYER_BACK
+end

@@ -25,6 +25,7 @@ function GameOverState.create(parent, scores, stats)
 	self.stats = stats
 
 	self.state = GameOverState.STATE_BARS
+	self.crownScale = 2
 
 	self.menu = self:addComponent(Menu.create(408-220, 26, 180, 32, 20, self))
 	self.menu:addButton("REMATCH", "rematch", 125, 26)
@@ -47,6 +48,12 @@ function GameOverState.create(parent, scores, stats)
 
 	self.imgCrown = ResMgr.getImage("crown.png")
 
+	self.crownCoroutine = coroutine.create(function()
+		while self.crownScale > 1 do
+			self.crownScale = self.crownScale - 3*coroutine.yield()
+		end
+	end)
+
 	return self
 end
 
@@ -55,6 +62,9 @@ function GameOverState:update(dt)
 		if self.counts[i] < self.scores[i] then
 			local inc = math.max(8, (self.scores[i] - self.counts[i]))*dt
 			self.counts[i] = self.counts[i] + inc
+		end
+		if self.counts[i] >= self.maxscore then
+			coroutine.resume(self.co, dt)
 		end
 	end
 end
@@ -71,7 +81,7 @@ function GameOverState:draw()
 				local length = math.floor(self.counts[i]/self.maxscore*GameOverState.LENGTH)
 				love.graphics.draw(self.bars[i], 116, 7+i*87, 0, length, 1)
 				if self.counts[i] >= self.maxscore then
-					love.graphics.draw(self.imgCrown, 128+length, 29+i*87)
+					love.graphics.draw(self.imgCrown, 164+length, 49+i*87, 0, self.crownScale, self.crownScale, 36, 37)
 				end
 			end
 		end
