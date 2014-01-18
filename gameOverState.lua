@@ -64,7 +64,7 @@ function GameOverState:update(dt)
 			self.counts[i] = self.counts[i] + inc
 		end
 		if self.counts[i] >= self.maxscore then
-			coroutine.resume(self.co, dt)
+			coroutine.resume(self.crownCoroutine, dt)
 		end
 	end
 end
