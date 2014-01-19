@@ -25,12 +25,14 @@ function GameOverState.create(parent, scores, stats)
 	self.stats = stats
 
 	self.state = GameOverState.STATE_BARS
+	self.drawCrown = false
 	self.crownScale = 2
 
 	self.menu = self:addComponent(Menu.create(408-220, 26, 180, 32, 20, self))
 	self.menu:addButton("REMATCH", "rematch", 125, 26)
 	self.menu:addButton("EXIT", "exit", 316, 26)
 	self.showButton = self.menu:addButton("SHOW GRAPH", "show", 507, 26)
+	self.imgCrown = ResMgr.getImage("crown.png")
 
 	self.counts = {}
 	self.bars = {}
@@ -46,13 +48,14 @@ function GameOverState.create(parent, scores, stats)
 	end
 	self.maxstat = math.max(self.maxstat, self.maxscore)
 
-	self.imgCrown = ResMgr.getImage("crown.png")
-
-	self.crownCoroutine = coroutine.create(function()
-		while self.crownScale > 1 do
-			self.crownScale = self.crownScale - 3*coroutine.yield()
+	self:startCoroutine(coroutine.create(function()
+		while self.drawCrown == false do
+			coroutine.yield()
 		end
-	end)
+		while self.crownScale > 1 do
+			self.crownScale = math.max(1, self.crownScale - 3*coroutine.yield())
+		end
+	end))
 
 	return self
 end
@@ -60,11 +63,11 @@ end
 function GameOverState:update(dt)
 	for i=1,4 do
 		if self.counts[i] < self.scores[i] then
-			local inc = math.max(8, (self.scores[i] - self.counts[i]))*dt
+			local inc = math.max(12, (self.scores[i] - self.counts[i]))*dt
 			self.counts[i] = self.counts[i] + inc
 		end
 		if self.counts[i] >= self.maxscore then
-			coroutine.resume(self.crownCoroutine, dt)
+			self.drawCrown = true
 		end
 	end
 end

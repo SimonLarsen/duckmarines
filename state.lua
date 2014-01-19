@@ -12,6 +12,7 @@ function State.create()
 	self.inputs = {}
 	self.cursors = {}
 	self.components = {}
+	self.coroutines = {}
 
 	return self
 end
@@ -39,6 +40,13 @@ function State:baseUpdate(dt)
 		end
 	end
 
+	-- Update coroutines
+	for i=#self.coroutines, 1, -1 do
+		if coroutine.resume(self.coroutines[i], dt) == false then
+			table.remove(self.coroutines, i)
+		end
+	end
+
 	-- Update state
 	self:update(dt)
 
@@ -57,6 +65,10 @@ function State:baseDraw()
 		v:draw()
 	end
 	self:drawAfter()
+end
+
+function State:startCoroutine(co)
+	table.insert(self.coroutines, co)
 end
 
 function State:keypressed(...)

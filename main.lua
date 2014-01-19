@@ -4,7 +4,6 @@ require("resmgr")
 require("map")
 require("input")
 require("configuration")
-require("coroutines")
 
 require("component")
 require("label")
@@ -89,7 +88,6 @@ function love.update(dt)
 	if dt > 1/30 then
 		dt = 1/30
 	end
-	Coroutines.update(dt)
 	stateStack:peek():baseUpdate(dt)
 end
 
