@@ -27,6 +27,9 @@ function LevelSelectionState.create(parent)
 	self.menu:addButton("ADVANCED SETTINGS", "advanced")
 	self.menu:addButton("BACK", "back")
 
+	-- Start music
+	playMusic("groovecallus")
+
 	return self
 end
 

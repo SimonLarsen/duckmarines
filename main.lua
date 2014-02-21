@@ -52,8 +52,8 @@ require("particles")
 WIDTH = 700
 HEIGHT = 442
 
-SCALEX = 1
-SCALEY = 1
+local SCALEX = 1
+local SCALEY = 1
 
 local stateStack
 local config

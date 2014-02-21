@@ -80,6 +80,9 @@ function IngameState.create(parent, mapname, rules)
 	self.marker[3] = ResMgr.getImage("marker3.png")
 	self.marker[4] = ResMgr.getImage("marker4.png")
 
+	-- Start ingame music
+	playIngameMusic()
+
 	return self
 end
 
