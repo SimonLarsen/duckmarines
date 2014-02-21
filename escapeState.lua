@@ -116,7 +116,7 @@ end
 
 function EscapeState:draw()
 	love.graphics.draw(self.bg, 42, 33)
-	love.graphics.setScissor(63, 54, 573, 333)
+	setScissor(63, 54, 573, 333)
 	love.graphics.draw(self.cursor, 548, self:getCursorY()-5)
 
 	for i=1,4 do
@@ -163,7 +163,7 @@ function EscapeState:draw()
 			end
 		end
 	end
-	love.graphics.setScissor()
+	setScissor()
 end
 
 function EscapeState:isTransparent()

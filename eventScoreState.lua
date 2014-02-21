@@ -60,7 +60,7 @@ function EventScoreState:update(dt)
 end
 
 function EventScoreState:draw()
-	love.graphics.setScissor(63, 54, 573, 333)
+	setScissor(63, 54, 573, 333)
 
 	love.graphics.draw(self.sliderleft, 63-287+self.slidex, 54)
 	love.graphics.draw(self.sliderright, 636-self.slidex, 54)
@@ -86,7 +86,7 @@ function EventScoreState:draw()
 		end
 	end
 
-	love.graphics.setScissor()
+	setScissor()
 end
 
 function EventScoreState:isTransparent()

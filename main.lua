@@ -51,18 +51,14 @@ require("particles")
 
 WIDTH = 700
 HEIGHT = 442
-SCALE = 1
+
+SCALEX = 1
+SCALEY = 1
 
 local stateStack
 local config
 
 function love.load()
-	-- Setup screen
-	love.window.setMode(WIDTH*SCALE, HEIGHT*SCALE, {fullscreen=false, vsync=true})
-	love.graphics.setDefaultFilter("nearest", "nearest")
-	love.graphics.setLineStyle("rough")
-	math.randomseed(os.time())
-
 	-- Setup user data
 	if love.filesystem.exists("usermaps") == false then
 		love.filesystem.createDirectory("usermaps")
@@ -72,6 +68,12 @@ function love.load()
 	if config == nil then
 		config = Config.create()
 	end
+
+	-- Setup screen
+	setScreenMode()
+	love.graphics.setDefaultFilter("nearest", "nearest")
+	love.graphics.setLineStyle("rough")
+	math.randomseed(os.time())
 
 	-- Preload assets
 	ResMgr.loadFonts()
@@ -92,7 +94,8 @@ function love.update(dt)
 end
 
 function love.draw()
-	love.graphics.scale(SCALE, SCALE)
+	love.graphics.scale(SCALEX, SCALEY)
+
 	local bottom = 1
 	while stateStack:peek(bottom):isTransparent() == true do
 		bottom = bottom + 1
@@ -131,5 +134,20 @@ function popState()
 end
 
 function setScreenMode()
-	love.window.setMode(WIDTH, HEIGHT, {fullscreen=config.fullscreen, vsync=config.vsync})
+	if config.fullscreen == true then
+		local swidth, sheight = love.window.getDesktopDimensions()
+		SCALEX = swidth/WIDTH
+		SCALEY = sheight/HEIGHT
+		love.window.setMode(0, 0, {fullscreen=true, vsync=config.vsync})
+	else
+		love.window.setMode(WIDTH, HEIGHT, {fullscreen=false, vsync=config.vsync})
+	end
+end
+
+function setScissor(x, y, width, height)
+	if x then
+		love.graphics.setScissor(x*SCALEX, y*SCALEY, width*SCALEX, height*SCALEY)
+	else
+		love.graphics.setScissor()
+	end
 end
