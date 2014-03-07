@@ -26,10 +26,11 @@ function MainMenuState.create(config)
 
 	self.bg = ResMgr.getImage("mainmenu_bg.png")
 
-	-- Start music
-	playMusic("groovecallus")
-
 	return self
+end
+
+function MainMenuState:enter()
+	playMusic("groovecallus")
 end
 
 function MainMenuState:draw()

@@ -34,9 +34,11 @@ function OptionsState:buttonPressed(id)
 		self.config.vsync = not self.config.vsync
 		setScreenMode()
 	elseif id == "musicvolume" then
-		self.config.music_volume = self.config.music_volume % 5 + 1
+		self.config.music_volume = (self.config.music_volume+1) % 6
+		updateVolume()
 	elseif id == "soundvolume" then
-		self.config.sound_volume = self.config.sound_volume % 5 + 1
+		self.config.sound_volume = (self.config.sound_volume+1) % 6
+		updateVolume()
 	elseif id == "back" then
 		popState()
 	end

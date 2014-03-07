@@ -37,14 +37,18 @@ function playMusic(name)
 		if currentSongSource then
 			currentSongSource:stop()
 		end
-		local source = love.audio.newSource("res/music/"..name..".ogg")
+		local source = love.audio.newSource("res/music/"..name..".ogg", "stream")
 		source:setLooping(true)
-		source:setVolume(config.music_volume)
+		source:setVolume(config.music_volume/5)
 		source:play()
 
 		currentSong = name
 		currentSongSource = source
 	end
+end
+
+function updateVolume()
+	currentSongSource:setVolume(config.music_volume/5)
 end
 
 function playIngameMusic()

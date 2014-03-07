@@ -14,6 +14,7 @@ end
 --  @param e Element to push
 function Stack:push(e)
 	table.insert(self.stack, 1, e)
+	e:enter()
 end
 
 --- Pops top element off stack.
@@ -21,6 +22,7 @@ end
 function Stack:pop()
 	local top = self.stack[1]
 	table.remove(self.stack, 1)
+	self.stack[1]:enter()
 	return top
 end
 

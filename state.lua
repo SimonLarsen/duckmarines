@@ -17,6 +17,7 @@ function State.create()
 	return self
 end
 
+function State:enter() end
 function State:update(dt) end
 function State:draw() end
 function State:drawAfter() end
