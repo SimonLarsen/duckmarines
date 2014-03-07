@@ -42,8 +42,8 @@ function Slider:draw()
 	love.graphics.rectangle("fill", self.left, self.y, self.innerWidth, 32)
 
 	love.graphics.setColor(255, 194, 49)
-	love.graphics.line(self.left, self.y, self.right, self.y)
-	love.graphics.line(self.left, self.y+31, self.right, self.y+31)
+	love.graphics.line(self.left, self.y+1, self.right, self.y+1)
+	love.graphics.line(self.left, self.y+32, self.right, self.y+32)
 
 	love.graphics.setColor(20, 20, 20)
 	local slideWidth = (self.selection-1) / (self.count-1) * self.innerWidth

@@ -43,18 +43,6 @@ function IngameState.create(parent, mapname, rules)
 		self.cursors[v.player]:setOffset(121,8)
 	end
 
-	-- Create inputs and bots
-	self.inputs = {}
-	for i=1,4 do
-		if parent.inputs[i]:getType() == Input.TYPE_NONE then
-			self.inputs[i] = Bot.create(self.map, self.cursors[i], i, self.entities, self.arrows)
-		else
-			self.inputs[i] = parent.inputs[i]
-			self.inputs[i].lock = true
-		end
-		self.cursors[i]:addInput(self.inputs[i])
-	end
-
 	-- Set variables and counters
 	self.timeLeft = self.rules.roundtime
 	self.time = 0
