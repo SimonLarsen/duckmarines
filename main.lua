@@ -1,4 +1,5 @@
 require("Tserial")
+require("slam")
 require("util")
 require("resmgr")
 require("map")
@@ -56,7 +57,7 @@ local SCALEX = 1
 local SCALEY = 1
 
 local stateStack
-local config
+config = nil
 
 function love.load()
 	-- Setup user data

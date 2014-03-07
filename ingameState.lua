@@ -43,6 +43,13 @@ function IngameState.create(parent, mapname, rules)
 		self.cursors[v.player]:setOffset(121,8)
 	end
 
+	for i=1,4 do
+		self.inputs[i] = parent.inputs[i]
+		self.inputs[i].lock = true
+		self.cursors[i]:addInput(self.inputs[i])
+	end
+	self.inputs = parent.inputs
+
 	-- Set variables and counters
 	self.timeLeft = self.rules.roundtime
 	self.time = 0
@@ -161,6 +168,9 @@ function IngameState:update(dt)
 
 	-- Check player actions
 	for i=1,4 do
+		if self.inputs[i] == nil then
+			print("Input: " .. i .. " is nil?!")
+		end
 		local ac = self.inputs[i]:getAction()
 		if ac then
 			local cx = math.floor(self.cursors[i].x / 48)

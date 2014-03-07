@@ -39,6 +39,7 @@ function playMusic(name)
 		end
 		local source = love.audio.newSource("res/music/"..name..".ogg")
 		source:setLooping(true)
+		source:setVolume(config.music_volume)
 		source:play()
 
 		currentSong = name
