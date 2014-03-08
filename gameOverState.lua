@@ -84,7 +84,7 @@ function GameOverState:draw()
 				local length = math.floor(self.counts[i]/self.maxscore*GameOverState.LENGTH)
 				love.graphics.draw(self.bars[i], 116, 7+i*87, 0, length, 1)
 				if self.counts[i] >= self.maxscore then
-					love.graphics.draw(self.imgCrown, 164+length, 49+i*87, 0, self.crownScale, self.crownScale, 36, 37)
+					love.graphics.draw(self.imgCrown, 174+length, 49+i*87, 0, 2*self.crownScale, 2*self.crownScale, 30, 30)
 				end
 			end
 		end
