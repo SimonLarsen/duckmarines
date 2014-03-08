@@ -7,7 +7,7 @@ Slider.timeFormatter = function(v)
 end
 
 Slider.onOffFormatter = function(v)
-	return v and "on" or "off"
+	return v and "ON" or "OFF"
 end
 
 Slider.percentFormatter = function(v)

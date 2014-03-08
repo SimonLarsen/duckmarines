@@ -229,6 +229,20 @@ function IngameState:update(dt)
 				local y = math.floor(self.entities[i].y / 48)*48
 				table.insert(self.particles, DuckFallParticle.create(x, y, self.entities[i]:getType()))
 				table.remove(self.entities, i)
+
+			-- Check collision with ducks if predator
+			elseif self.rules.predatorseat and self.entities[i]:getType() == Entity.TYPE_ENEMY then
+				for j=#self.entities, 1, -1 do
+					local jType = self.entities[j]:getType()
+					if jType == Entity.TYPE_DUCK or jType == Entity.TYPE_GOLDDUCK or jType == Entity.TYPE_PINKDUCK then
+						local dist = (self.entities[i].x-self.entities[j].x)^2 + (self.entities[i].y-self.entities[j].y)^2
+						if dist < 128 then
+							table.insert(self.particles, DucksplosionParticle.create(self.entities[j].x, self.entities[j].y, self.entities[j]:getType()))
+							table.remove(self.entities, j)
+							break
+						end
+					end
+				end
 			end
 		end
 	end
@@ -439,6 +453,10 @@ function IngameState:keypressed(k)
 		local spawns = self.map:getSpawnPoints()
 		local e = spawns[1]
 		table.insert(self.entities, GoldDuck.create(e.x*48+24, e.y*48+24, e.dir))
+	elseif k == "f3" then
+		local spawns = self.map:getSpawnPoints()
+		local e = spawns[1]
+		table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
 	else
 		State.keypressed(self, k)
 	end

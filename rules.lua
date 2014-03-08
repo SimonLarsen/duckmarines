@@ -29,6 +29,8 @@ function Rules:setDefaults()
 	self.maxarrows = 4
 	-- Time arrows stay before they disappear
 	self.arrowtime = 10
+	-- Predators eat ducks
+	self.predatorseat = true
 
 	-- Duck rush multiplier
 	self.rushfrequency = 1000

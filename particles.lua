@@ -153,3 +153,36 @@ end
 function DuckFallParticle:getLayer()
 	return Particle.LAYER_BACK
 end
+
+-- DUCKSPLOSIONPARTICLE
+DucksplosionParticle = {}
+DucksplosionParticle.__index = DucksplosionParticle
+setmetatable(DucksplosionParticle, Particle)
+
+function DucksplosionParticle.create(x, y, type)
+	local self = setmetatable(Particle.create(), DucksplosionParticle)
+
+	self.x, self.y = x, y
+	if type == Entity.TYPE_DUCK then
+		self.anim = Animation.create(ResMgr.getImage("ducksplosion.png"), 44, 39, 22, 18, 0.06, 13, function() self.alive = false end)
+	elseif type == Entity.TYPE_PINKDUCK then
+		self.anim = Animation.create(ResMgr.getImage("ducksplosion_pink.png"), 44, 39, 22, 18, 0.06, 13, function() self.alive = false end)
+	elseif type == Entity.TYPE_GOLDDUCK then
+		self.anim = Animation.create(ResMgr.getImage("ducksplosion_gold.png"), 44, 39, 22, 18, 0.06, 13, function() self.alive = false end)
+	end
+	self.anim:setMode("once")
+
+	return self
+end
+
+function DucksplosionParticle:update(dt)
+	self.anim:update(dt)
+end
+
+function DucksplosionParticle:draw()
+	self.anim:draw(self.x, self.y)
+end
+
+function DucksplosionParticle:getLayer()
+	return Particle.LAYER_FRONT
+end

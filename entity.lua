@@ -1,4 +1,4 @@
-Entity = { MOVE_SPEED = 150, FLY_SPEED = 300 }
+Entity = { MOVE_SPEED = 125, FLY_SPEED = 300 }
 Entity.__index = Entity
 
 Entity.TYPE_NONE = 0
@@ -18,6 +18,7 @@ function Entity.create(x, y, dir)
 	self.moved = 48
 	self.tile = 0
 	self.state = Entity.STATE_WALKING
+	self.alive = true
 
 	return self
 end
