@@ -48,6 +48,7 @@ end
 
 function DuckDashState:draw()
 	love.graphics.draw(self.bg, 42, 33)
+	setScissor(63, 54, 573, 333)
 
 	for i=1,4 do
 		love.graphics.draw(self.dolls[i], 133-(i-1)*20+self.positions[i], 258+(i-1)*20+math.sin(self.positions[i]/10)*10)
@@ -56,6 +57,7 @@ function DuckDashState:draw()
 
 	local frame = math.floor(self.frame)
 	love.graphics.draw(self.anim, self.anim_quads[frame], 296, 81)
+	setScissor()
 end
 
 function DuckDashState:isTransparent()
