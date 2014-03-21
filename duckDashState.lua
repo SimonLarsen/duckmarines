@@ -11,6 +11,7 @@ function DuckDashState.create(parent, scores, rules)
 	self.scores = scores
 	self.rules = rules
 
+	self.time = 0
 	self.positions = {}
 	self.fronts = {}
 	self.dolls = {}
@@ -21,17 +22,17 @@ function DuckDashState.create(parent, scores, rules)
 	end
 
 	self.bg = ResMgr.getImage("duckdash_bg.png")
+	self.frame = ResMgr.getImage("minigame_frame.png")
 	self.anim = ResMgr.getImage("buttonmash_anim.png")
 	self.anim_quads = {}
 	self.anim_quads[0] = love.graphics.newQuad(0, 0, 140, 103, 280, 103)
 	self.anim_quads[1] = love.graphics.newQuad(140, 0, 140, 103, 280, 103)
-	self.frame = 0
 
 	return self
 end
 
 function DuckDashState:update(dt)
-	self.frame = (self.frame + dt*8) % 2
+	self.time = self.time + dt
 
 	for i=1,4 do
 		if self.inputs[i]:wasClicked() then
@@ -47,7 +48,8 @@ function DuckDashState:update(dt)
 end
 
 function DuckDashState:draw()
-	love.graphics.draw(self.bg, 42, 33)
+	love.graphics.draw(self.bg, 63, 54)
+	love.graphics.draw(self.frame, 42, 33)
 	setScissor(63, 54, 573, 333)
 
 	for i=1,4 do
@@ -55,7 +57,7 @@ function DuckDashState:draw()
 		love.graphics.draw(self.fronts[i], 63, 312+(i-1)*20)
 	end
 
-	local frame = math.floor(self.frame)
+	local frame = math.floor((self.time*8) % 2)
 	love.graphics.draw(self.anim, self.anim_quads[frame], 296, 81)
 	setScissor()
 end

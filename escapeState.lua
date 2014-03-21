@@ -35,6 +35,7 @@ function EscapeState.create(parent, scores, rules)
 	self.markers = {}
 
 	self.bg = ResMgr.getImage("escape_bg.png")
+	self.frame = ResMgr.getImage("minigame_frame.png")
 	self.mouth_top = ResMgr.getImage("escape_mouth_top.png")
 	self.mouth_closed = ResMgr.getImage("escape_mouth_closed.png")
 	self.mouth_closed_lines = ResMgr.getImage("escape_mouth_closed_lines.png")
@@ -115,7 +116,8 @@ function EscapeState:update(dt)
 end
 
 function EscapeState:draw()
-	love.graphics.draw(self.bg, 42, 33)
+	love.graphics.draw(self.bg, 63, 54)
+	love.graphics.draw(self.frame, 42, 33)
 	setScissor(63, 54, 573, 333)
 	love.graphics.draw(self.cursor, 548, self:getCursorY()-5)
 
