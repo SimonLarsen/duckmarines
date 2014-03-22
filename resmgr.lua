@@ -6,10 +6,7 @@ local fonts = {}
 
 local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:+-?!()|x%"
 
-local currentSong = ""
 local currentSongSource = nil
-
-local ingameSongs = { "factorylife", "fractalbusride", "solarsurfing", "trinitronsunset" }
 
 function ResMgr.getImage(_path)
 	local path = "res/images/" .. _path
@@ -33,24 +30,23 @@ function ResMgr.getFont(name)
 end
 
 function playMusic(name)
-	if name ~= currentSong then
-		if currentSongSource then
-			currentSongSource:stop()
-		end
-		local source = love.audio.newSource("res/music/"..name..".ogg", "stream")
-		source:setLooping(true)
-		source:setVolume(config.music_volume/5)
-		source:play()
+	stopMusic()
+	local source = love.audio.newSource("res/music/"..name..".ogg", "stream")
+	source:setLooping(true)
+	source:setVolume(config.music_volume/5)
+	source:play()
 
-		currentSong = name
-		currentSongSource = source
+	currentSongSource = source
+	return source
+end
+
+function stopMusic()
+	if currentSongSource then
+		currentSongSource:stop()
+		currentSongSource = nil
 	end
 end
 
 function updateVolume()
 	currentSongSource:setVolume(config.music_volume/5)
-end
-
-function playIngameMusic()
-	playMusic(table.random(ingameSongs))
 end

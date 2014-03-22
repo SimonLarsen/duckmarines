@@ -18,6 +18,7 @@ function State.create()
 end
 
 function State:enter() end
+function State:leave() end 
 function State:update(dt) end
 function State:draw() end
 function State:drawAfter() end

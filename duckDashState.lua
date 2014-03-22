@@ -31,6 +31,10 @@ function DuckDashState.create(parent, scores, rules)
 	return self
 end
 
+function DuckDashState:enter()
+	MusicMgr.playMinigame()
+end
+
 function DuckDashState:update(dt)
 	self.time = self.time + dt
 

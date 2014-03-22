@@ -22,6 +22,10 @@ function OptionsState.create(parent, config)
 	return self
 end
 
+function OptionsState:enter()
+	MusicMgr.playMenu()
+end
+
 function OptionsState:draw()
 	love.graphics.draw(self.bg, 0, 0)
 end

@@ -31,7 +31,7 @@ function LevelSelectionState.create(parent)
 end
 
 function LevelSelectionState:enter()
-	playMusic("groovecallus")
+	MusicMgr.playMenu()
 end
 
 function LevelSelectionState:draw()

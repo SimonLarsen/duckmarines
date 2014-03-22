@@ -37,6 +37,12 @@ function DuckBeatState.create(parent, scores, rules)
 	return self
 end
 
+function DuckBeatState:enter()
+	MusicMgr.playMinigame()
+end
+
+function DuckBeatState:leave() stopMusic() end
+
 function DuckBeatState:createBeats()
 	for i=1,6 do
 		for id=1,4 do

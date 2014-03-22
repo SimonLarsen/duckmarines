@@ -59,6 +59,10 @@ function EscapeState.create(parent, scores, rules)
 	return self
 end
 
+function EscapeState:enter()
+	MusicMgr.playMinigame()
+end
+
 function EscapeState:update(dt)
 	self.time = self.time + dt
 	self.buttonAnim:update(dt)

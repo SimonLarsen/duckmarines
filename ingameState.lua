@@ -76,10 +76,11 @@ function IngameState.create(parent, mapname, rules)
 	self.marker[3] = ResMgr.getImage("marker3.png")
 	self.marker[4] = ResMgr.getImage("marker4.png")
 
-	-- Start ingame music
-	playIngameMusic()
-
 	return self
+end
+
+function IngameState:enter()
+	MusicMgr.playIngame()
 end
 
 function IngameState:update(dt)
@@ -392,7 +393,7 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
-	self.event = IngameState.EVENT_DUCKBEAT
+	self.event = IngameState.EVENT_ESCAPE
 	self.eventTime = self.rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then

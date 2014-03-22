@@ -30,7 +30,7 @@ function MainMenuState.create(config)
 end
 
 function MainMenuState:enter()
-	playMusic("groovecallus")
+	MusicMgr.playMenu()
 end
 
 function MainMenuState:draw()
