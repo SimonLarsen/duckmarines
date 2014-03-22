@@ -15,7 +15,8 @@ local eventName = {
 	"SLOW DOWN",
 
 	"DUCK DASH",
-	"ESCAPE"
+	"ESCAPE",
+	"DUCK BEAT"
 }
 
 function EventTextState.create(event)
@@ -34,6 +35,7 @@ function EventTextState.create(event)
 		self.imgBox = ResMgr.getImage("minigame_box.png")
 		self.offset = 35
 	end
+	self.font = ResMgr.getFont("joystix40")
 
 	self.y = -106
 	self.speed = 400
@@ -72,7 +74,7 @@ function EventTextState:draw()
 
 	love.graphics.draw(self.imgBox, 0, self.y)
 
-	love.graphics.setFont(ResMgr.getFont("joystix40"))
+	love.graphics.setFont(self.font)
 	love.graphics.setColor(0, 0, 0, 128)
 	love.graphics.print(self.text, self.offset, self.y+30+4)
 	love.graphics.setColor(255, 255, 255, 255)

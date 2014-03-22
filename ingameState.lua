@@ -14,8 +14,9 @@ IngameState.EVENT_SLOWDOWN	= 8
 
 IngameState.EVENT_DUCKDASH  = 9
 IngameState.EVENT_ESCAPE    = 10
+IngameState.EVENT_DUCKBEAT  = 11
 
-IngameState.EVENT_COUNT 	= 10
+IngameState.EVENT_COUNT 	= 11
 
 IngameState.NSTATS = 10
 
@@ -168,9 +169,6 @@ function IngameState:update(dt)
 
 	-- Check player actions
 	for i=1,4 do
-		if self.inputs[i] == nil then
-			print("Input: " .. i .. " is nil?!")
-		end
 		local ac = self.inputs[i]:getAction()
 		if ac then
 			local cx = math.floor(self.cursors[i].x / 48)
@@ -328,8 +326,6 @@ end
 function IngameState:drawHUD()
 	love.graphics.draw(self.imgSidebar, 0, 0)
 
-	love.graphics.setFont(ResMgr.getFont("joystix30"))
-
 	love.graphics.setFont(ResMgr.getFont("bold"))
 
 	love.graphics.push()
@@ -396,6 +392,7 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
+	self.event = IngameState.EVENT_DUCKBEAT
 	self.eventTime = self.rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then
@@ -436,6 +433,10 @@ function IngameState:triggerEvent(player)
 	
 	elseif self.event == IngameState.EVENT_ESCAPE then
 		pushState(EscapeState.create(self, self.score, self.rules))
+		pushState(CountdownState.create(4, 0))
+	
+	elseif self.event == IngameState.EVENT_DUCKBEAT then
+		pushState(DuckBeatState.create(self, self.score, self.rules))
 		pushState(CountdownState.create(4, 0))
 	end
 
