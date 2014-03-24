@@ -143,6 +143,8 @@ function setScreenMode()
 		SCALEY = sheight/HEIGHT
 		love.window.setMode(0, 0, {fullscreen=true, vsync=config.vsync})
 	else
+		SCALEX = 1
+		SCALEY = 1
 		love.window.setMode(WIDTH, HEIGHT, {fullscreen=false, vsync=config.vsync})
 	end
 end
