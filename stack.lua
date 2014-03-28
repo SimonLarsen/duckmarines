@@ -1,7 +1,8 @@
 --[[
 Generic stack implementation
 ]]
-Stack = {}
+
+local Stack = {}
 Stack.__index = Stack
 
 function Stack.create()
@@ -32,3 +33,5 @@ end
 function Stack:peek(no)
 	return self.stack[no or 1]
 end
+
+return Stack

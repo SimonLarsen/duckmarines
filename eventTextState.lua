@@ -1,7 +1,10 @@
-EventTextState = {}
+local State = require("state")
+
+local EventTextState = {}
 EventTextState.__index = EventTextState
 setmetatable(EventTextState, State)
 
+EventTextState.EVENT_SLOWDOWN	= 8
 EventTextState.EVENT_TIMEUP = 32
 
 local eventName = {
@@ -26,7 +29,7 @@ function EventTextState.create(event)
 		self.text = "TIME UP"
 		self.imgBox = ResMgr.getImage("timeup_box.png")
 		self.offset = 160
-	elseif event <= IngameState.EVENT_SLOWDOWN then
+	elseif event <= EventTextState.EVENT_SLOWDOWN then
 		self.text = eventName[event]
 		self.imgBox = ResMgr.getImage("event_box.png")
 		self.offset = 35
@@ -84,3 +87,5 @@ end
 function EventTextState:isTransparent()
 	return true
 end
+
+return EventTextState

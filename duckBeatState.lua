@@ -1,4 +1,7 @@
-DuckBeatState = {}
+local State = require("state")
+local EventScoreState = require("eventScoreState")
+
+local DuckBeatState = {}
 DuckBeatState.__index = DuckBeatState
 setmetatable(DuckBeatState, State)
 
@@ -9,7 +12,7 @@ DuckBeatState.ID_YELLOW   = 3
 DuckBeatState.ID_PURPLE   = 4
 DuckBeatState.ID_PREDATOR = 5
 
--- Note: Song i 150 BPM
+-- Note: Song is 150 BPM
 
 function DuckBeatState.create(parent, scores, rules)
 	local self = setmetatable(State.create(), DuckBeatState)
@@ -131,3 +134,5 @@ end
 function DuckBeatState:isTransparent()
 	return true
 end
+
+return DuckBeatState

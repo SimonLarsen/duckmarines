@@ -1,3 +1,6 @@
+local Animation = require("anim")
+local Entity = require("entity")
+
 Particle = {}
 Particle.__index = Particle
 

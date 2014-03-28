@@ -1,4 +1,5 @@
-MusicMgr = {}
+local MusicMgr = {}
+MusicMgr.__index = MusicMgr
 MusicMgr.STATE_NONE     = 0
 MusicMgr.STATE_MENU     = 1
 MusicMgr.STATE_INGAME   = 2
@@ -24,3 +25,5 @@ function MusicMgr.playMinigame()
 	playMusic("radiationwoman")
 	musicState = MusicMgr.STATE_MINIGAME
 end
+
+return MusicMgr

@@ -1,4 +1,10 @@
-LoadLevelState = {}
+local State = require("state")
+local SelectionList = require("selectionList")
+local TextInput = require("textInput")
+local Menu = require("menu")
+local ConfirmBoxState = require("confirmBoxState")
+
+local LoadLevelState = {}
 LoadLevelState.__index = LoadLevelState
 setmetatable(LoadLevelState, State)
 
@@ -78,3 +84,5 @@ function LoadLevelState:getFilename()
 end
 
 function LoadLevelState:isTransparent() return true end
+
+return LoadLevelState

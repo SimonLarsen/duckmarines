@@ -1,4 +1,4 @@
-ResMgr = {}
+local ResMgr = {}
 ResMgr.__index = ResMgr
 
 local images = {}
@@ -50,3 +50,5 @@ end
 function updateVolume()
 	currentSongSource:setVolume(config.music_volume/5)
 end
+
+return ResMgr

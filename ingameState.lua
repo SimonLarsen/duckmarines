@@ -1,4 +1,22 @@
-IngameState = {}
+local State = require("state")
+local Map = require("map")
+local Cursor = require("cursor")
+local Arrow = require("arrow")
+local Entity = require("entity")
+local Duck = require("duck")
+local PinkDuck = require("pinkduck")
+local GoldDuck = require("goldduck")
+local Enemy = require("enemy")
+local GameOverState = require("gameOverState")
+local EventTextState = require("eventTextState")
+local DuckDashState = require("duckDashState")
+local EscapeState = require("escapeState")
+local DuckBeatState = require("duckBeatState")
+local CountdownState = require("countdownState")
+local SwitchAnimState = require("switchAnimState")
+require("particles")
+
+local IngameState = {}
 IngameState.__index = IngameState
 setmetatable(IngameState, State)
 
@@ -462,3 +480,5 @@ function IngameState:keypressed(k)
 		State.keypressed(self, k)
 	end
 end
+
+return IngameState

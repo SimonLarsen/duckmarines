@@ -1,4 +1,4 @@
-Entity = { MOVE_SPEED = 125, FLY_SPEED = 300 }
+local Entity = { MOVE_SPEED = 125, FLY_SPEED = 300 }
 Entity.__index = Entity
 
 Entity.TYPE_NONE = 0
@@ -143,3 +143,5 @@ function Entity:setFlying(x, y)
 	self.desty = y
 	self.tile = 0
 end
+
+return Entity

@@ -1,4 +1,4 @@
-Sprite = {}
+local Sprite = {}
 Sprite.__index = Sprite
 
 function Sprite.create(image, quad, ox, oy)
@@ -21,3 +21,5 @@ end
 function Sprite:setOffset(ox, oy)
 	self.ox, self.oy = ox, oy
 end
+
+return Sprite

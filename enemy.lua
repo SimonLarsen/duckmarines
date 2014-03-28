@@ -1,4 +1,7 @@
-Enemy = { MOVE_SPEED = 150 }
+local Entity = require("entity")
+local Animation = require("anim")
+
+local Enemy = { MOVE_SPEED = 150 }
 Enemy.__index = Enemy
 setmetatable(Enemy, Entity)
 
@@ -22,3 +25,5 @@ end
 function Enemy:getType()
 	return Entity.TYPE_ENEMY
 end
+
+return Enemy

@@ -2,7 +2,10 @@
 Object holding current game rules.
 Set from game menu before starting game.
 ]]
-Rules = {}
+
+local IngameState = require("ingameState")
+
+local Rules = {}
 Rules.__index = Rules
 
 function Rules.create()
@@ -53,3 +56,5 @@ function Rules:setDefaults()
 	self.duckdashprize = 50
 	self.escapeprize = 50
 end
+
+return Rules

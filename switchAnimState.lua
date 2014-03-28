@@ -1,4 +1,7 @@
-SwitchAnimState = {}
+local State = require("state")
+local Animation = require("anim")
+
+local SwitchAnimState = {}
 SwitchAnimState.__index = SwitchAnimState
 setmetatable(SwitchAnimState, State)
 
@@ -62,3 +65,5 @@ end
 function SwitchAnimState:isTransparent()
 	return true
 end
+
+return SwitchAnimState

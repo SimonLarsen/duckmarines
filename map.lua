@@ -1,4 +1,6 @@
-Map = {}
+require("Tserial")
+
+local Map = {}
 Map.__index = Map
 
 Map.TILE_EMPTY			= 0
@@ -250,3 +252,5 @@ end
 function Map:getBackBatch()
 	return self.backBatch
 end
+
+return Map

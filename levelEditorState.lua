@@ -1,4 +1,12 @@
-LevelEditorState = {}
+local State = require("state")
+local Map = require("map")
+local Cursor = require("cursor")
+local Menu = require("menu")
+local LoadLevelState = require("loadLevelState")
+local SaveLevelState = require("saveLevelState")
+local ConfirmBoxState = require("confirmBoxState")
+
+local LevelEditorState = {}
 LevelEditorState.__index = LevelEditorState
 setmetatable(LevelEditorState, State)
 
@@ -219,3 +227,5 @@ function LevelEditorState:buttonPressed(id, source)
 		end
 	end
 end
+
+return LevelEditorState

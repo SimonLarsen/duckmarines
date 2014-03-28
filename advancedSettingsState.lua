@@ -1,4 +1,9 @@
-AdvancedSettingsState = {}
+local State = require("state")
+local Label = require("label")
+local Menu = require("menu")
+local Slider = require("slider")
+
+local AdvancedSettingsState = {}
 AdvancedSettingsState.__index = AdvancedSettingsState
 setmetatable(AdvancedSettingsState, State)
 
@@ -85,3 +90,5 @@ end
 function AdvancedSettingsState:valueChanged(id, source)
 	
 end
+
+return AdvancedSettingsState

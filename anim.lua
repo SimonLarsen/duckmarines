@@ -3,7 +3,7 @@ Small animation library HEAVILY based on Bartbes' AnAL.
 See https://github.com/bartbes/love-misc-libs/tree/master/AnAL
 ]]
 
-Animation = {}
+local Animation = {}
 Animation.__index = Animation
 
 --- Creates a new animation
@@ -136,3 +136,5 @@ function Animation:setMode(mode)
 		self.mode = 3
 	end
 end
+
+return Animation

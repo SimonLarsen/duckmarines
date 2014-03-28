@@ -1,4 +1,6 @@
-Label = {}
+local Component = require("component")
+
+local Label = {}
 Label.__index = Label
 setmetatable(Label, Component)
 
@@ -17,3 +19,5 @@ function Label:draw()
 	love.graphics.setFont(ResMgr.getFont("menu"))
 	love.graphics.printf(self.text, self.x, self.y, self.limit, self.align)
 end
+
+return Label

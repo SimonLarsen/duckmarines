@@ -1,4 +1,6 @@
-TextInput = {}
+local Component = require("component")
+
+local TextInput = {}
 TextInput.__index = TextInput
 setmetatable(TextInput, Component)
 
@@ -70,3 +72,5 @@ function TextInput:textinput(text)
 		return true
 	end
 end
+
+return TextInput

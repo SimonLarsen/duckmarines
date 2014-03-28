@@ -1,4 +1,7 @@
-GoldDuck = {}
+local Entity = require("entity")
+local Animation = require("anim")
+
+local GoldDuck = {}
 GoldDuck.__index = GoldDuck
 setmetatable(GoldDuck, Entity)
 
@@ -22,3 +25,5 @@ end
 function GoldDuck:getType()
 	return Entity.TYPE_GOLDDUCK
 end
+
+return GoldDuck

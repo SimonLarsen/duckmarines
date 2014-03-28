@@ -1,4 +1,6 @@
-Menu = {}
+local Component = require("component")
+
+local Menu = {}
 Menu.__index = Menu
 setmetatable(Menu, Component)
 
@@ -104,3 +106,5 @@ function Menu:click(x, y)
 		end
 	end
 end
+
+return Menu

@@ -1,4 +1,10 @@
-SaveLevelState = {}
+local State = require("state")
+local SelectionList = require("selectionList")
+local TextInput = require("textInput")
+local Menu = require("menu")
+local ConfirmBoxState = require("confirmBoxState")
+
+local SaveLevelState = {}
 SaveLevelState.__index = SaveLevelState
 setmetatable(SaveLevelState, State)
 
@@ -84,3 +90,5 @@ function SaveLevelState:getFilename()
 end
 
 function SaveLevelState:isTransparent() return true end
+
+return SaveLevelState

@@ -1,4 +1,4 @@
-Config = {}
+local Config = {}
 Config.__index = Config
 
 function Config.create()
@@ -31,3 +31,5 @@ function Config.load()
 		return nil
 	end
 end
+
+return Config

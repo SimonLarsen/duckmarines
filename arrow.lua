@@ -1,4 +1,5 @@
-Arrow = {}
+local Sprite = require("sprite")
+local Arrow = {}
 Arrow.__index = Arrow
 
 function Arrow.create(x,y,dir,player)
@@ -18,3 +19,5 @@ end
 function Arrow:draw()
 	self.sprite:draw(self.x*48, self.y*48)
 end
+
+return Arrow

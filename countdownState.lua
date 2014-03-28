@@ -1,4 +1,6 @@
-CountdownState = {}
+local State = require("state")
+
+local CountdownState = {}
 CountdownState.__index = CountdownState
 setmetatable(CountdownState, State)
 
@@ -45,3 +47,5 @@ end
 function CountdownState:isTransparent()
 	return true
 end
+
+return CountdownState

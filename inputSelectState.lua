@@ -1,4 +1,10 @@
-InputSelectState = {}
+local State = require("state")
+local Label = require("label")
+local Menu = require("menu")
+local Cursor = require("cursor")
+local LevelSelectionState = require("levelSelectionState")
+
+local InputSelectState = {}
 InputSelectState.__index = InputSelectState
 setmetatable(InputSelectState, State)
 
@@ -142,3 +148,5 @@ function InputSelectState:buttonPressed(id, source)
 		popState()
 	end
 end
+
+return InputSelectState

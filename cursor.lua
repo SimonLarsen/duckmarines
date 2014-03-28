@@ -1,4 +1,6 @@
-Cursor = {}
+local Sprite = require("sprite")
+
+local Cursor = {}
 Cursor.__index = Cursor
 
 function Cursor.create(x,y,player)
@@ -49,3 +51,5 @@ function Cursor:setOffset(x,y)
 	self.offsetx = x
 	self.offsety = y
 end
+
+return Cursor

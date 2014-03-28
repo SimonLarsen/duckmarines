@@ -1,4 +1,7 @@
-PinkDuck = {}
+local Entity = require("entity")
+local Animation = require("anim")
+
+local PinkDuck = {}
 PinkDuck.__index = PinkDuck
 setmetatable(PinkDuck, Entity)
 
@@ -22,3 +25,5 @@ end
 function PinkDuck:getType()
 	return Entity.TYPE_PINKDUCK
 end
+
+return PinkDuck

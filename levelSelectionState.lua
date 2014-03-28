@@ -1,4 +1,12 @@
-LevelSelectionState = {}
+local State = require("state")
+local Label = require("label")
+local Map = require("map")
+local Menu = require("menu")
+local SelectionList = require("selectionList")
+local CountdownState = require("countdownState")
+local AdvancedSettingsState = require("advancedSettingsState")
+
+local LevelSelectionState = {}
 LevelSelectionState.__index = LevelSelectionState
 setmetatable(LevelSelectionState, State)
 
@@ -129,3 +137,5 @@ function LevelSelectionState:selectionChanged(text, source)
 		end
 	end
 end
+
+return LevelSelectionState

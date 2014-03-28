@@ -1,4 +1,6 @@
-SelectionList = {}
+local Component = require("component")
+
+local SelectionList = {}
 SelectionList.__index = SelectionList
 setmetatable(SelectionList, Component)
 
@@ -117,3 +119,5 @@ end
 function SelectionList:getSelection()
 	return self.items[self.selection]
 end
+
+return SelectionList

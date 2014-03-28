@@ -3,7 +3,10 @@ Game state object.
 Contains callbacks for updating and drawing game State
 and exposes Input objects to main program.
 ]]
-State = { }
+require("input")
+local Cursor = require("cursor")
+
+local State = {}
 State.__index = State
 
 function State.create()
@@ -105,3 +108,5 @@ function State:joystickpressed(...)
 		v:joystickpressed(...)
 	end
 end
+
+return State

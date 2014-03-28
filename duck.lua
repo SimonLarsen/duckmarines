@@ -1,4 +1,7 @@
-Duck = {}
+local Entity = require("entity")
+local Animation = require("anim")
+
+local Duck = {}
 Duck.__index = Duck
 setmetatable(Duck, Entity)
 
@@ -22,3 +25,5 @@ end
 function Duck:getType()
 	return Entity.TYPE_DUCK
 end
+
+return Duck

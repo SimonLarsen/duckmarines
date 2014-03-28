@@ -1,4 +1,6 @@
-Slider = {}
+local Component = require("component")
+
+local Slider = {}
 Slider.__index = Slider
 setmetatable(Slider, Component)
 
@@ -99,3 +101,5 @@ function Slider:setValue(value)
 		end
 	end
 end
+
+return Slider

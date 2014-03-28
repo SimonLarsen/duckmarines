@@ -1,4 +1,6 @@
-EventScoreState = {}
+local State = require("state")
+
+local EventScoreState = {}
 EventScoreState.__index = EventScoreState
 setmetatable(EventScoreState, State)
 
@@ -92,3 +94,5 @@ end
 function EventScoreState:isTransparent()
 	return true
 end
+
+return EventScoreState

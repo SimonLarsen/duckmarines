@@ -1,4 +1,7 @@
-DuckDashState = {}
+local State = require("state")
+local EventScoreState = require("eventScoreState")
+
+local DuckDashState = {}
 DuckDashState.__index = DuckDashState
 setmetatable(DuckDashState, State)
 
@@ -69,3 +72,5 @@ end
 function DuckDashState:isTransparent()
 	return true
 end
+
+return DuckDashState

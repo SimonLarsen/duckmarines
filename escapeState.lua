@@ -1,4 +1,8 @@
-EscapeState = {}
+local State = require("state")
+local EventScoreState = require("eventScoreState")
+local Animation = require("anim")
+
+local EscapeState = {}
 EscapeState.__index = EscapeState
 setmetatable(EscapeState, State)
 
@@ -184,3 +188,5 @@ function EscapeState:isGreen()
 	local cursorY = self:getCursorY()
 	return cursorY >= self.greenTop and cursorY <= self.greenBottom
 end
+
+return EscapeState

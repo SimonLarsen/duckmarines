@@ -1,4 +1,7 @@
-ConfirmBoxState = {}
+local State = require("state")
+local Menu = require("menu")
+
+local ConfirmBoxState = {}
 ConfirmBoxState.__index = ConfirmBoxState
 setmetatable(ConfirmBoxState, State)
 
@@ -48,3 +51,5 @@ function ConfirmBoxState:buttonPressed(id, source)
 end
 
 function ConfirmBoxState:isTransparent() return true end
+
+return ConfirmBoxState

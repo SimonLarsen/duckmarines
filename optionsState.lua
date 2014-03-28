@@ -1,4 +1,7 @@
-OptionsState = {}
+local State = require("state")
+local Menu = require("menu")
+
+local OptionsState = {}
 OptionsState.__index = OptionsState
 setmetatable(OptionsState, State)
 
@@ -55,3 +58,5 @@ function OptionsState:updateButtons()
 	self.musicButton.text = "MUSIC VOLUME: " .. string.rep("I", self.config.music_volume) .. string.rep("x", 5 - self.config.music_volume)
 	self.soundButton.text = "SOUND VOLUME: " .. string.rep("I", self.config.sound_volume) .. string.rep("x", 5 - self.config.sound_volume)
 end
+
+return OptionsState

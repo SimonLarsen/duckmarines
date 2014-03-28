@@ -1,4 +1,11 @@
-MainMenuState = {}
+local State = require("state")
+local Menu = require("menu")
+local Cursor = require("cursor")
+local InputSelectState = require("inputSelectState")
+local OptionsState = require("optionsState")
+local LevelEditorState = require("levelEditorState")
+
+local MainMenuState = {}
 MainMenuState.__index = MainMenuState
 setmetatable(MainMenuState, State)
 
@@ -48,3 +55,5 @@ function MainMenuState:buttonPressed(id, source)
 		love.event.quit()
 	end
 end
+
+return MainMenuState

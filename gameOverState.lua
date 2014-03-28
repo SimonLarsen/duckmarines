@@ -1,4 +1,12 @@
-GameOverState = {}
+require("input")
+local State = require("state")
+local CountdownState = require("countdownState")
+local Menu = require("menu")
+local Cursor = require("cursor")
+local LevelSelectionState = require("levelSelectionState")
+local CountdownState = require("countdownState")
+
+local GameOverState = {}
 GameOverState.__index = GameOverState
 setmetatable(GameOverState, State)
 
@@ -140,3 +148,5 @@ function GameOverState:buttonPressed(id, source)
 end
 
 function GameOverState:isTransparent() return true end
+
+return GameOverState
