@@ -229,8 +229,7 @@ function JoystickInput:joystickpressed(joystick, button)
 end
 
 function JoystickInput:isDown()
-	-- Subtract one from button id due to bug i LÖVE 0.9.0
-	return self.joystick:isDown(self.button1-1)
+	return self.joystick:isDown(self.button1)
 end
 
 function JoystickInput:inDeadZone(axis1, axis2)
