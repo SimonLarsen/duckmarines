@@ -12,6 +12,9 @@ DuckBeatState.ID_YELLOW   = 3
 DuckBeatState.ID_PURPLE   = 4
 DuckBeatState.ID_PREDATOR = 5
 
+DuckBeatState.FLASH_RED   = 1
+DuckBeatState.FLASH_GREEN = 2
+
 -- Note: Song is 150 BPM
 
 function DuckBeatState.create(parent, scores, rules)
@@ -24,6 +27,7 @@ function DuckBeatState.create(parent, scores, rules)
 	self.beats = {}
 	self.nextBeat = 0
 	self.points = {0, 0, 0, 0}
+	self.flash = {{time=0,color=1},{time=0,color=1},{time=0,color=1},{time=0,color=1}}
 	self.pulse = 0.4
 
 	self.bg = ResMgr.getImage("duckbeat_bg.png")
@@ -69,16 +73,20 @@ end
 
 function DuckBeatState:update(dt)
 	-- Advance beats
-	self.pulse = self.pulse + dt
-	if self.pulse >= 0.4 then
-		self.pulse = self.pulse % 0.4
-	end
-
 	for i = #self.beats,1,-1 do
 		self.beats[i].y = self.beats[i].y + dt*210
 		if self.beats[i].y > 340 then
 			table.remove(self.beats, i)
 		end
+	end
+
+	-- Update flash and pulse
+	self.pulse = self.pulse + dt
+	if self.pulse >= 0.4 then
+		self.pulse = self.pulse % 0.4
+	end
+	for i=1,4 do
+		self.flash[i].time = math.max(0, self.flash[i].time-6*dt)
 	end
 
 	-- Check if game is over
@@ -96,8 +104,12 @@ function DuckBeatState:update(dt)
 					if v.col == i then
 						if v.id == i then
 							self.points[i] = self.points[i] + 5
+							self.flash[i].time = 1
+							self.flash[i].color = DuckBeatState.FLASH_GREEN
 						else
 							self.points[i] = self.points[i] - 20
+							self.flash[i].time = 1
+							self.flash[i].color = DuckBeatState.FLASH_RED
 						end
 						v.id = DuckBeatState.ID_NONE
 						found = true
@@ -106,6 +118,8 @@ function DuckBeatState:update(dt)
 			end
 			if found == false then
 				self.points[i] = self.points[i] - 20
+				self.flash[i].time = 1
+				self.flash[i].color = DuckBeatState.FLASH_RED
 			end
 		end
 	end
@@ -118,15 +132,33 @@ function DuckBeatState:draw()
 	love.graphics.push()
 	love.graphics.translate(63, 54)
 
-	local alpha = math.min(1/self.pulse, 32)
+	-- Pulse background to beat
+	local alpha = 255 - 637.5*self.pulse
 	love.graphics.setColor(255,255,255,alpha)
-	love.graphics.rectangle("fill", 175, 0, 225, 333)
+	love.graphics.rectangle("fill", 173, 0, 2, 333)
+	love.graphics.rectangle("fill", 400, 0, 2, 333)
 	love.graphics.setColor(255,255,255,255)
 
+	-- Draw beats
 	for i,v in ipairs(self.beats) do
 		love.graphics.draw(self.imgBeat[v.id], 182+(v.col-1)*54, v.y)
 	end
 
+	-- Flash column on success/fail
+	for i=1,4 do
+		if self.flash[i].time > 0 then
+			local alpha = self.flash[i].time * 128
+			if self.flash[i].color == DuckBeatState.FLASH_RED then
+				love.graphics.setColor(186, 18, 18, alpha)
+			else
+				love.graphics.setColor(84, 177, 33, alpha)
+			end
+			love.graphics.rectangle("fill", 181+(i-1)*54, 0, 51, 333)
+			love.graphics.setColor(255,255,255,255)
+		end
+	end
+
+	-- Draw marker
 	love.graphics.draw(self.marker, 168, 275)
 
 	love.graphics.scale(4, 4)
