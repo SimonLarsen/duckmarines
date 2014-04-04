@@ -24,8 +24,10 @@ function DuckBeatState.create(parent, scores, rules)
 	self.beats = {}
 	self.nextBeat = 0
 	self.points = {0, 0, 0, 0}
+	self.pulse = 0.4
 
 	self.bg = ResMgr.getImage("duckbeat_bg.png")
+	self.marker = ResMgr.getImage("duckbeat_marker.png")
 	self.frame = ResMgr.getImage("minigame_frame.png")
 
 	self.imgBeat = {}
@@ -49,14 +51,15 @@ function DuckBeatState:leave() stopMusic() end
 
 function DuckBeatState:createBeats()
 	for i=1,4 do
-		local seq = math.seq(1,20,1)
-		for j=1,10 do
+		local seq = math.seq(1,48,1)
+		for j=1,20 do
 			local k = math.random(1, #seq)
+			local y = 280 - 42*(seq[k]+8)
 			local e
-			if j <= 2 then
-				e = { id = DuckBeatState.ID_PREDATOR, col = i, y = -42*seq[k] }
+			if j <= 5 then
+				e = { id = DuckBeatState.ID_PREDATOR, col = i, y = y }
 			else
-				e = { id = i, col = i, y = -42*seq[k] }
+				e = { id = i, col = i, y = y }
 			end
 			table.remove(seq, k)
 			table.insert(self.beats, e)
@@ -66,8 +69,13 @@ end
 
 function DuckBeatState:update(dt)
 	-- Advance beats
+	self.pulse = self.pulse + dt
+	if self.pulse >= 0.4 then
+		self.pulse = self.pulse % 0.4
+	end
+
 	for i = #self.beats,1,-1 do
-		self.beats[i].y = self.beats[i].y + dt*105
+		self.beats[i].y = self.beats[i].y + dt*210
 		if self.beats[i].y > 340 then
 			table.remove(self.beats, i)
 		end
@@ -84,7 +92,7 @@ function DuckBeatState:update(dt)
 		if self.inputs[i]:wasClicked() then
 			found = false
 			for j,v in ipairs(self.beats) do
-				if v.y >= 270 and v.y <= 290 then -- 280 +- epsilon
+				if v.y >= 260 and v.y <= 300 then -- 280 +- epsilon
 					if v.col == i then
 						if v.id == i then
 							self.points[i] = self.points[i] + 5
@@ -110,9 +118,16 @@ function DuckBeatState:draw()
 	love.graphics.push()
 	love.graphics.translate(63, 54)
 
+	local alpha = math.min(1/self.pulse, 32)
+	love.graphics.setColor(255,255,255,alpha)
+	love.graphics.rectangle("fill", 175, 0, 225, 333)
+	love.graphics.setColor(255,255,255,255)
+
 	for i,v in ipairs(self.beats) do
 		love.graphics.draw(self.imgBeat[v.id], 182+(v.col-1)*54, v.y)
 	end
+
+	love.graphics.draw(self.marker, 168, 275)
 
 	love.graphics.scale(4, 4)
 	love.graphics.setFont(ResMgr.getFont("bold"))
