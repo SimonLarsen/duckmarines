@@ -1,4 +1,11 @@
-PauseGameState = {}
+local State = require("state")
+local LevelSelectionState = require("levelSelectionState")
+local Cursor = require("cursor")
+local Menu = require("menu")
+local CountdownState = require("countdownState")
+local Label = require("label")
+
+local PauseGameState = {}
 PauseGameState.__index = PauseGameState
 setmetatable(PauseGameState, State)
 
@@ -56,3 +63,5 @@ end
 function PauseGameState:isTransparent()
 	return true
 end
+
+return PauseGameState

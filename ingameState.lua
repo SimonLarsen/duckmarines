@@ -14,6 +14,7 @@ local EscapeState = require("escapeState")
 local DuckBeatState = require("duckBeatState")
 local CountdownState = require("countdownState")
 local SwitchAnimState = require("switchAnimState")
+local PauseGameState = require("pauseGameState")
 require("particles")
 
 local IngameState = {}
