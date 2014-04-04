@@ -217,15 +217,9 @@ function IngameState:update(dt)
 				local player = tile-9
 				if eType == Entity.TYPE_DUCK then
 					self.score[player] = self.score[player] + 1
-					local x = math.floor(self.entities[i].x / 48)*48-2
-					local y = math.floor(self.entities[i].y / 48)*48+1
-					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 
 				elseif eType == Entity.TYPE_GOLDDUCK then
 					self.score[player] = self.score[player] + self.rules.goldbonus
-					local x = math.floor(self.entities[i].x / 48)*48-2
-					local y = math.floor(self.entities[i].y / 48)*48+1
-					table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 					table.insert(self.particles, BonusTextParticle.create(
 						self.entities[i].x, self.entities[i].y-12, "+"..self.rules.goldbonus))
 
@@ -240,7 +234,11 @@ function IngameState:update(dt)
 						"-"..math.ceil(self.score[player]*0.3333)))
 				end
 
+				local x = math.floor(self.entities[i].x / 48)*48-3
+				local y = math.floor(self.entities[i].y / 48)*48+1
+				table.insert(self.particles, SubBulgeParticle.create(x, y, player))
 				table.remove(self.entities, i)
+
 			-- Check if entity hit hole
 			elseif tile == Map.TILE_HOLE then
 				local x = math.floor(self.entities[i].x / 48)*48
@@ -412,7 +410,6 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
-	self.event = IngameState.EVENT_DUCKBEAT
 	self.eventTime = self.rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then

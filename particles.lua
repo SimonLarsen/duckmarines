@@ -101,21 +101,22 @@ function SubBulgeParticle.create(x, y, player)
 	local self = setmetatable(Particle.create(), SubBulgeParticle)
 
 	self.x, self.y = x, y
-	self.time = 0.1
-	self.img = ResMgr.getImage("bulge"..player..".png")
+	self.time = 0.5
+	self.anim = Animation.create(ResMgr.getImage("bulge"..player..".png"), 54, 46, 0, 0, 1/12, 6)
 
 	return self
 end
 
 function SubBulgeParticle:update(dt)
 	self.time = self.time - dt
+	self.anim:update(dt)
 	if self.time <= 0 then
 		self.alive = false
 	end
 end
 
 function SubBulgeParticle:draw()
-	love.graphics.draw(self.img, self.x, self.y)
+	self.anim:draw(self.x, self.y, 0, 1, 1)
 end
 
 function SubBulgeParticle:getLayer()
