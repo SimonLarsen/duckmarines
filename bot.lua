@@ -37,16 +37,18 @@ function Bot:update(dt, map, entities, arrows)
 		if e:getType() == Entity.TYPE_ENEMY then
 			local v = table.random(subs)
 			if v.player ~= self.player then
-				self:findPath(cx, cy, v.x, v.y, e.dir, map, arrows)
-				self.cooldown = Bot.COOLDOWN
+				self.path = self:findPath(cx, cy, v.x, v.y, e.dir, map, arrows)
 			end
 		else
 			for i,v in ipairs(subs) do
 				if v.player == self.player then
-					self:findPath(cx, cy, v.x, v.y, e.dir, map, arrows)
-					self.cooldown = Bot.COOLDOWN
+					self.path = self:findPath(cx, cy, v.x, v.y, e.dir, map, arrows)
 				end
 			end
+		end
+
+		if #self.path > 0 then
+			self.cooldown = Bot.COOLDOWN
 		end
 	end
 end
@@ -172,16 +174,18 @@ function Bot:findPath(x1, y1, x2, y2, dir, map, arrows)
 	end
 
 	-- Backtrace from destination
-	self.path = {}
+	local path = {}
 	local u = self.graph[x2][y2]
 	while u do
 		if u.prev then
 			if u.prev.hasArrow == false and u.dir ~= u.prev.dir then
-				table.insert(self.path, 1, {x=u.prev.x, y=u.prev.y, dir=u.dir})
+				table.insert(path, 1, {x=u.prev.x, y=u.prev.y, dir=u.dir})
 			end
 		end
 		u = u.prev
 	end
+
+	return path
 end
 
 function Bot:relax(u, v)
