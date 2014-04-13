@@ -2,6 +2,7 @@ local State = require("state")
 local SelectionList = require("selectionList")
 local TextInput = require("textInput")
 local Menu = require("menu")
+local Map = require("map")
 local ConfirmBoxState = require("confirmBoxState")
 
 local LoadLevelState = {}

@@ -12,6 +12,11 @@ Map.TILE_SPAWNER_RIGHT 	= 5
 Map.TILE_SPAWNER_DOWN	= 6
 Map.TILE_SPAWNER_LEFT	= 7
 
+Map.TILE_SUBMARINE_RED    = 10
+Map.TILE_SUBMARINE_BLUE   = 11
+Map.TILE_SUBMARINE_ORANGE = 12
+Map.TILE_SUBMARINE_PURPLE = 13
+
 function Map.create(name)
 	local self = setmetatable({}, Map)
 

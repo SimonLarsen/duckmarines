@@ -1,191 +1,222 @@
-Bot = {}
-Bot.__index = Bot
-setmetatable(Bot, Input)
+local Map = require("map")
 
-Bot.SPEED 			= 300
-Bot.DIST_THRESHOLD 	= 18
-Bot.STATE_NONE 		= 0
-Bot.STATE_MOVING	= 1
-Bot.STATE_ACTION	= 2
+local Entity = require("entity")
 
-Bot.DANGER_THRESHOLD = (4*48)^2
+local Bot = {}
+Bot.__index = Bot 
 
-function Bot.create(map, cursor, id, entities, arrows)
-	local self = setmetatable(Input.create(), Bot)
+Bot.INFINITY = 99999999
+Bot.SPEED = 300
+Bot.DIST_THRESHOLD = 24
+Bot.COOLDOWN = 1
 
-	self.map = map
+function Bot.create(map,player,cursor)
+	local self = setmetatable({}, Bot)
+
+	self.player = player
 	self.cursor = cursor
-	self.id = id
-	self.entities = entities
-	self.arrows = arrows
+	self.cooldown = 0
 
-	self.state = Bot.STATE_NONE
-
-	self.targetx = 0
-	self.targety = 0
+	self.path = {}
+	self:buildGraph(map)
 
 	return self
 end
 
-function Bot:getMovement(dt, lock)
-	-- If no current target, try to find one
-	if self.state == Bot.STATE_NONE then
-		self:calculateMove()
-	end
+function Bot:update(dt, map, entities, arrows)
+	self.cooldown = self.cooldown - dt
 
-	-- Move towards target if any
-	if self.state == Bot.STATE_MOVING then
-		-- Check if target cell is still free
-		local cx = math.floor(self.targetx / 48)
-		local cy = math.floor(self.targety / 48)
-		if self:canPlaceArrow(cx, cy) == false then
-			self.state = Bot.STATE_NONE
-		end
+	if #self.path == 0 and self.cooldown <= 0 then
+		local e = table.random(entities)
+		if e == nil then return end
 
-		-- Check if target has been reached,
-		-- move towards target if not
-		local dx = self.targetx - self.cursor.x
-		local dy = self.targety - self.cursor.y
-		local sqdist = dx^2 + dy^2
-		if sqdist > Bot.DIST_THRESHOLD^2 then
-			local dist = math.sqrt(sqdist)
-			dx = dx / dist * dt * Bot.SPEED
-			dy = dy / dist * dt * Bot.SPEED
-			return dx, dy, false
+		local cx = math.floor(e.x / 48)
+		local cy = math.floor(e.y / 48)
+		local subs = map:getSubmarines()
+
+		if e:getType() == Entity.TYPE_ENEMY then
+			local v = table.random(subs)
+			if v.player ~= self.player then
+				self:findPath(cx, cy, v.x, v.y, e.dir, map, arrows)
+				self.cooldown = Bot.COOLDOWN
+			end
 		else
-			self.state = Bot.STATE_ACTION
-		end
-	end
-
-	return 0, 0, false
-end
-
-function Bot:getAction()
-	if self.state == Bot.STATE_ACTION then
-		local ac = self.action
-		self.action = nil
-		self.state = Bot.STATE_NONE
-		return ac
-	else
-		return nil
-	end
-end
-
-function Bot:calculateMove()
-	local sub
-	for i,v in ipairs(self.map:getSubmarines()) do
-		if v.player == self.id then sub = v end
-	end
-	local subx = sub.x*48+24
-	local suby = sub.y*48+24
-
-	-- Check if a predator is steering towards submarine
-	local minDist = 1000000
-	local closest = nil
-	for v in offset_iter(self.entities) do
-		if v:getType() == Entity.TYPE_ENEMY then
-			if self:walkingTowards(v, subx, suby) then
-				local dist = (subx-v.x)^2 + (suby-v.y)^2
-				if dist < minDist then
-					minDist = dist
-					closest = v
-					break
+			for i,v in ipairs(subs) do
+				if v.player == self.player then
+					self:findPath(cx, cy, v.x, v.y, e.dir, map, arrows)
+					self.cooldown = Bot.COOLDOWN
 				end
 			end
 		end
 	end
-	-- Cut off predator if any danger
-	if closest ~= nil then
-		local dir = closest:getDir()
-		local xdir, ydir = dirToVec(dir)
-		local cx = math.floor(closest.x / 48)
-		local cy = math.floor(closest.y / 48)
+end
 
-		local ix, iy = sub.x, sub.y
-		while ix ~= cx or iy ~= cy do
-			local free, tile, arrow = self:canPlaceArrow(ix, iy)
-			if free then
-				self.targetx = ix*48+24
-				self.targety = iy*48+24
-				self.action = (closest:getDir() + 2) % 4
-				self.state = Bot.STATE_MOVING
-				return
-			elseif arrow and arrow.dir ~= dir then
-				break
+function Bot:getMovement(dt, cursor)
+	if self.path[1] then
+		local p = self.path[1]
+		local dx = p.x*48+24 - cursor.x
+		local dy = p.y*48+24 - cursor.y
+		local len = math.sqrt(dx^2 + dy^2)
+		dx = dx/len * dt * Bot.SPEED
+		dy = dy/len * dt * Bot.SPEED
+		return dx, dy
+	end
+	return nil
+end
+
+function Bot:getAction(cursor)
+	local p = self.path[1]
+
+	if p == nil then return nil end
+
+	local dx = p.x*48+24 - cursor.x
+	local dy = p.y*48+24 - cursor.y
+	local sqdist = dx^2 + dy^2
+	if sqdist < Bot.DIST_THRESHOLD then
+		table.remove(self.path, 1)
+		return p.dir
+	end
+	return nil
+end
+
+function Bot:buildGraph(map)
+	-- Build graph table
+	self.graph = {}
+	for ix=0,11 do
+		self.graph[ix] = {}
+		for iy=0,8 do
+			self.graph[ix][iy] = {x=ix, y=iy}
+		end
+	end
+	-- Add neighbors
+	for ix=0,11 do
+		for iy=0,8 do
+			local node = self.graph[ix][iy]
+			node.neighbors = {}
+			if ix > 0 and map:westWall(ix,iy) == false then
+				table.insert(node.neighbors, self.graph[ix-1][iy])
 			end
-			ix = ix - xdir
-			iy = iy - ydir
+			if ix < 11 and map:eastWall(ix,iy) == false then
+				table.insert(node.neighbors, self.graph[ix+1][iy])
+			end
+			if iy > 0 and map:northWall(ix,iy) == false then
+				table.insert(node.neighbors, self.graph[ix][iy-1])
+			end
+			if iy < 8 and map:southWall(ix,iy) == false then
+				table.insert(node.neighbors, self.graph[ix][iy+1])
+			end
+		end
+	end
+end
+
+function Bot:clearGraph(map, arrows)
+	for ix=0,11 do
+		for iy=0,8 do
+			self.graph[ix][iy].dist = Bot.INFINITY
+			self.graph[ix][iy].prev = nil
+			self.graph[ix][iy].hasArrow = false
+			self.graph[ix][iy].isSink = false
+
+			local tile = map:getTile(ix, iy)
+			if tile == Map.TILE_HOLE or (tile >= Map.TILE_SUBMARINE_RED and tile <= Map.TILE_SUBMARINE_PURPLE) then
+				self.graph[ix][iy].isSink = true
+			end
+		end
+	end
+
+	for i,u in ipairs(arrows) do
+		for j,v in ipairs(u) do
+			self.graph[v.x][v.y].hasArrow = true
+			self.graph[v.x][v.y].dir = v.dir
+		end
+	end
+end
+
+function Bot:findPath(x1, y1, x2, y2, dir, map, arrows)
+	self:clearGraph(map, arrows)
+
+	local Q = {}
+	for ix=0,11 do
+		for iy=0,8 do
+			table.insert(Q, self.graph[ix][iy])
 		end
 	end
 	
-	-- If no threats found,
-	-- look for ducks that that can be guided towards sub
-	-- with a single arrow
-	local target = nil
-	for v in offset_iter(self.entities) do
-		if v:getType() ~= Entity.TYPE_ENEMY then
-			if self:walkingTowardsInOneAxis(v, subx, suby) then
-				target = v
-				break
+	-- Initialize root
+	self.graph[x1][y1].dist = 0
+	self.graph[x1][y1].dir = dir
+
+	while #Q > 0 do
+		-- Find min dist node
+		local u = Q[1]
+		local minindex = 1
+		for i,v in ipairs(Q) do
+			if v.dist < u.dist then
+				u = v
+				minindex = i
+			end
+		end
+		table.remove(Q, minindex)
+
+		if u.dist == Bot.INFINITY then
+			break
+		end
+		
+		if u.isSink == false then
+			for i,v in ipairs(u.neighbors) do
+				if u.hasArrow == false or self:getDir(u, v) == u.dir then
+					self:relax(u, v)
+				end
 			end
 		end
 	end
 
-	-- If a duck is found, place arrow
-	if target ~= nil then
-		local xdir, ydir = dirToVec(target:getDir())
-		if xdir == 0 then
-			self.targetx = target.x
-			self.targety = suby
+	-- Backtrace from destination
+	self.path = {}
+	local u = self.graph[x2][y2]
+	while u do
+		if u.prev then
+			if u.prev.hasArrow == false and u.dir ~= u.prev.dir then
+				table.insert(self.path, 1, {x=u.prev.x, y=u.prev.y, dir=u.dir})
+			end
+		end
+		u = u.prev
+	end
+end
+
+function Bot:relax(u, v)
+	local alt = u.dist + self:getCost(u, v, u.dir)
+	if alt < v.dist then
+		v.dist = alt
+		v.prev = u
+		v.dir = self:getDir(u, v)
+	end
+end
+
+function Bot:getCost(u, v, dir)
+	if dir == self:getDir(u, v) then
+		return 1
+	else
+		return 100
+	end
+end
+
+function Bot:getDir(u, v)
+	if u.x == v.x then
+		if v.y < u.y then
+			return 0
 		else
-			self.targetx = subx
-			self.targety = target.y
-		end
-
-		local cx = math.floor(self.targetx / 48)
-		local cy = math.floor(self.targety / 48)
-		if self:canPlaceArrow(cx, cy) then
-			self.action = vecToDir(subx-self.targetx, suby-self.targety)
-			self.state = Bot.STATE_MOVING
+			return 2
 		end
 	end
-end
-
-function Bot:walkingTowards(entity, x, y)
-	local xdir, ydir = dirToVec(entity:getDir())
-	return (entity.y == y and math.sign(x - entity.x) == xdir)
-	or     (entity.x == x and math.sign(y - entity.y) == ydir)
-end
-
-function Bot:walkingTowardsInOneAxis(entity, x, y)
-	local xdir1, ydir1 = dirToVec(entity:getDir())
-	local xdir2 = math.signz(x - entity.x)
-	local ydir2 = math.signz(y - entity.y)
-
-	return (xdir1 == xdir2 or xdir1*xdir2 == 0)
-	and    (ydir1 == ydir2 or ydir1*ydir2 == 0)
-end
-
---- Checks if an arrow can be placed at (x,y)
---  @return True if placement is possible, false otherwise
-function Bot:canPlaceArrow(x, y)
-	-- Check if tile is empty
-	local tile = self.map:getTile(x, y)
-	if tile ~= 0 then
-		return false, tile, nil
-	end
-	-- Check if another arrow is already placed there
-	for i=1,4 do
-		for j,v in ipairs(self.arrows[i]) do
-			if v.x == x and v.y == y then
-				return false, tile, v
-			end
+	if u.y == v.y then
+		if v.x < u.x then
+			return 3
+		else
+			return 1
 		end
 	end
-
-	return true, tile, nil
+	return -1
 end
 
-function Bot:getType()
-	return Input.TYPE_BOT
-end
+return Bot

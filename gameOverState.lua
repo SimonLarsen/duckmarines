@@ -71,7 +71,7 @@ end
 function GameOverState:update(dt)
 	for i=1,4 do
 		if self.counts[i] < self.scores[i] then
-			local inc = math.max(12, (self.scores[i] - self.counts[i]))*dt
+			local inc = math.max(20, (self.scores[i] - self.counts[i]))*dt
 			self.counts[i] = self.counts[i] + inc
 		end
 		if self.counts[i] >= self.maxscore then

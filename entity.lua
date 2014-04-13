@@ -10,6 +10,11 @@ Entity.TYPE_PINKDUCK = 4
 Entity.STATE_WALKING = 0
 Entity.STATE_FLYING  = 1
 
+Entity.DIR_UP    = 0
+Entity.DIR_RIGHT = 1
+Entity.DIR_DOWN  = 2
+Entity.DIR_LEFT  = 3
+
 function Entity.create(x, y, dir)
 	local self = setmetatable({}, Entity)
 
@@ -30,13 +35,13 @@ function Entity:update(dt, map, arrows)
 	if self.state == Entity.STATE_WALKING then
 		-- Move
 		local toMove = self.MOVE_SPEED*dt
-		if self.dir == 0 then -- up
+		if self.dir == Entity.DIR_UP then
 			self.y = self.y - toMove
-		elseif self.dir == 1 then -- right
+		elseif self.dir == Entity.DIR_RIGHT then
 			self.x = self.x + toMove
-		elseif self.dir == 2 then -- down
+		elseif self.dir == Entity.DIR_DOWN then
 			self.y = self.y + toMove
-		elseif self.dir == 3 then -- left
+		elseif self.dir == Entity.DIR_LEFT then
 			self.x = self.x - toMove
 		end
 
@@ -86,33 +91,33 @@ end
 function Entity:collideWalls(map)
 	local cx = math.floor(self.x / 48)
 	local cy = math.floor(self.y / 48)
-	if self.dir == 0 and map:northWall(cx, cy) then
+	if self.dir == Entity.DIR_UP and map:northWall(cx, cy) then
 		if not map:eastWall(cx, cy) then
-			self.dir = 1
+			self.dir = Entity.DIR_RIGHT
 			self.moved = 0
 		else
-			self.dir = 3
+			self.dir = Entity.DIR_LEFT
 		end
-	elseif self.dir == 1 and map:eastWall(cx, cy) then
+	elseif self.dir == Entity.DIR_RIGHT and map:eastWall(cx, cy) then
 		if not map:southWall(cx, cy) then
-			self.dir = 2
+			self.dir = Entity.DIR_DOWN
 			self.moved = 0
 		else
-			self.dir = 0
+			self.dir = Entity.DIR_UP
 		end
-	elseif self.dir == 2 and map:southWall(cx, cy) then
+	elseif self.dir == Entity.DIR_DOWN and map:southWall(cx, cy) then
 		if not map:westWall(cx, cy) then
-			self.dir = 3
+			self.dir = Entity.DIR_LEFT
 			self.moved = 0
 		else
-			self.dir = 1
+			self.dir = Entity.DIR_RIGHT
 		end
-	elseif self.dir == 3 and map:westWall(cx, cy) then
+	elseif self.dir == Entity.DIR_LEFT and map:westWall(cx, cy) then
 		if not map:northWall(cx, cy) then
-			self.dir = 0
+			self.dir = Entity.DIR_UP
 			self.moved = 0
 		else
-			self.dir = 2
+			self.dir = Entity.DIR_DOWN
 		end
 	else
 		self.moved = 0

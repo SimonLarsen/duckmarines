@@ -5,6 +5,7 @@ local Menu = require("menu")
 local LoadLevelState = require("loadLevelState")
 local SaveLevelState = require("saveLevelState")
 local ConfirmBoxState = require("confirmBoxState")
+local MessageBoxState = require("messageBoxState")
 
 local LevelEditorState = {}
 LevelEditorState.__index = LevelEditorState

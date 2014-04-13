@@ -1,4 +1,7 @@
-MessageBoxState = {}
+local State = require("state")
+local Menu = require("menu")
+
+local MessageBoxState = {}
 MessageBoxState.__index = MessageBoxState
 setmetatable(MessageBoxState, State)
 
@@ -40,3 +43,5 @@ function MessageBoxState:buttonPressed(id, source)
 end
 
 function MessageBoxState:isTransparent() return true end
+
+return MessageBoxState

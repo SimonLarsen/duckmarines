@@ -7,6 +7,7 @@ local Duck = require("duck")
 local PinkDuck = require("pinkduck")
 local GoldDuck = require("goldduck")
 local Enemy = require("enemy")
+local Bot = require("bot")
 local GameOverState = require("gameOverState")
 local EventTextState = require("eventTextState")
 local DuckDashState = require("duckDashState")
@@ -63,12 +64,20 @@ function IngameState.create(parent, mapname, rules)
 		self.cursors[v.player]:setOffset(121,8)
 	end
 
+	-- Initialize inputs
+	self.inputs = parent.inputs
 	for i=1,4 do
-		self.inputs[i] = parent.inputs[i]
 		self.inputs[i].lock = true
 		self.cursors[i]:addInput(self.inputs[i])
 	end
-	self.inputs = parent.inputs
+
+	-- Create bots
+	self.bots = {}
+	for i=1,4 do
+		if self.inputs[i]:getType() == Input.TYPE_NONE then
+			self.bots[i] = Bot.create(self.map, i, self.cursors[i])
+		end
+	end
 
 	-- Set variables and counters
 	self.timeLeft = self.rules.roundtime
@@ -183,6 +192,23 @@ function IngameState:update(dt)
 				if v.time >= self.rules.arrowtime then
 					table.remove(self.arrows[i], j)
 				end
+			end
+		end
+	end
+
+	-- Update bots
+	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:update(dt, self.map, self.entities, self.arrows)
+			local mx, my = self.bots[i]:getMovement(dt, self.cursors[i])
+			if mx then
+				self.cursors[i]:move(mx, my)
+			end
+			local ac = self.bots[i]:getAction(self.cursors[i])
+			if ac then
+				local cx = math.floor(self.cursors[i].x / 48)
+				local cy = math.floor(self.cursors[i].y / 48)
+				self:placeArrow(cx, cy, ac, i)
 			end
 		end
 	end
