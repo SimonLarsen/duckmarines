@@ -182,13 +182,20 @@ function JoystickInput.create(joystick, lock)
 		_, self.rightXAxis = joystick:getGamepadMapping("rightx")
 		_, self.rightYAxis = joystick:getGamepadMapping("righty")
 
-		_, self.button1 = joystick:getGamepadMapping("a")
+		_, self.buttony = joystick:getGamepadMapping("y")
+		_, self.buttonb = joystick:getGamepadMapping("b")
+		_, self.buttona = joystick:getGamepadMapping("a")
+		_, self.buttonx = joystick:getGamepadMapping("x")
 	else
 		self.leftXAxis = 1
 		self.leftYAxis = 2
 		self.rightXAxis = 3
 		self.rightYAxis = 4
-		self.button1 = 1
+
+		self.buttony = 1
+		self.buttonb = 2
+		self.buttona = 3
+		self.buttonx = 4
 	end
 
 	self.down = false
@@ -208,14 +215,12 @@ function JoystickInput:getMovement(dt)
 
 	if rightx and righty and not self:inDeadZone(rightx, righty) then
 		self.action = vecToDir(rightx, righty)
+	end
 
-	elseif leftx and lefty and not self:inDeadZone(leftx, lefty) then
+	if leftx and lefty and not self:inDeadZone(leftx, lefty) then
 		if not self:isDown() or not self.lock then
 			dx = leftx * self.SPEED * dt
 			dy = lefty * self.SPEED * dt
-		end
-		if self:isDown() then
-			self.action = vecToDir(leftx, lefty)
 		end
 	end
 
@@ -223,13 +228,22 @@ function JoystickInput:getMovement(dt)
 end
 
 function JoystickInput:joystickpressed(joystick, button)
-	if joystick:getID() == self.joystick:getID() and button == self.button1 then
+	if joystick:getID() == self.joystick:getID() then
 		self.clicked = true
+		if button == self.buttony then
+			self.action = 0
+		elseif button == self.buttonb then
+			self.action = 1
+		elseif button == self.buttona then
+			self.action = 2
+		elseif button == self.buttonx then
+			self.action = 3
+		end
 	end
 end
 
 function JoystickInput:isDown()
-	return self.joystick:isDown(self.button1)
+	return self.joystick:isDown(self.buttony, self.buttonb, self.buttona, self.buttonx)
 end
 
 function JoystickInput:inDeadZone(axis1, axis2)
