@@ -15,6 +15,7 @@ function MainMenuState.create(config)
 	self.config = config
 
 	table.insert(self.inputs, KeyboardInput.create())
+	table.insert(self.inputs, MouseInput.create())
 	for i,v in ipairs(love.joystick.getJoysticks()) do
 		table.insert(self.inputs, JoystickInput.create(v))
 	end
