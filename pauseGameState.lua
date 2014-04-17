@@ -64,4 +64,12 @@ function PauseGameState:isTransparent()
 	return true
 end
 
+function PauseGameState:keypressed(k)
+	if k == "escape" then
+		popState()
+	else
+		State.keypressed(self, k)
+	end
+end
+
 return PauseGameState
