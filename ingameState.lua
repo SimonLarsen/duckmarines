@@ -362,12 +362,6 @@ function IngameState:draw()
 		end
 	end
 
-	for i=1,4 do
-		if self.bots[i] then
-			self.bots[i]:drawPath()
-		end
-	end
-
 	-- Draw hud
 	love.graphics.pop()
 	self:drawHUD()
