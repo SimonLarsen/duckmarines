@@ -48,6 +48,7 @@ function SelectionList:draw()
 
 	-- Draw sides
 	love.graphics.setColor(255, 194, 49)
+	love.graphics.setLineWidth(1)
 	love.graphics.line(self.x+1, self.y+14, self.x+1, self.y+self.height-14)
 	love.graphics.line(self.x+self.width, self.y, self.x+self.width, self.y+self.height)
 	love.graphics.setColor(255, 255, 255)

@@ -83,8 +83,8 @@ end
 
 --- Converts boolean value to upper case string
 function boolToStr(val)
-	if val then return "TRUE"
-	else return "FALSE" end
+	if val then return "ON"
+	else return "OFF" end
 end
 
 --- Sorts an array using bubble sort

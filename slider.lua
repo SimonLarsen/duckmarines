@@ -44,6 +44,7 @@ function Slider:draw()
 	love.graphics.rectangle("fill", self.left, self.y, self.innerWidth, 32)
 
 	love.graphics.setColor(255, 194, 49)
+	love.graphics.setLineWidth(1)
 	love.graphics.line(self.left, self.y+1, self.right, self.y+1)
 	love.graphics.line(self.left, self.y+32, self.right, self.y+32)
 

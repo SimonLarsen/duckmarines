@@ -8,25 +8,30 @@ Bot.__index = Bot
 Bot.INFINITY = 99999999
 Bot.SPEED = 300
 Bot.DIST_THRESHOLD = 24
-Bot.COOLDOWN = 1
+Bot.MOVE_DELAY = 2
+Bot.CHECK_DELAY = 0.05
 
 function Bot.create(map,player,cursor)
 	local self = setmetatable({}, Bot)
 
 	self.player = player
 	self.cursor = cursor
-	self.cooldown = 0
+	self.movecooldown = 0
+	self.checkcooldown = 0
 
 	self.path = {}
+	self.allpath = {}
 	self:buildGraph(map)
 
 	return self
 end
 
 function Bot:update(dt, map, entities, arrows)
-	self.cooldown = self.cooldown - dt
+	self.movecooldown = self.movecooldown - dt
+	self.checkcooldown = self.checkcooldown - dt
 
-	if #self.path == 0 and self.cooldown <= 0 then
+	if #self.path == 0 and self.movecooldown <= 0 and self.checkcooldown <= 0 then
+		self.checkcooldown = Bot.CHECK_DELAY
 		local e = table.random(entities)
 		if e == nil then return end
 
@@ -48,7 +53,7 @@ function Bot:update(dt, map, entities, arrows)
 		end
 
 		if #self.path > 0 then
-			self.cooldown = Bot.COOLDOWN
+			self.movecooldown = Bot.MOVE_DELAY
 		end
 	end
 end
@@ -126,10 +131,10 @@ function Bot:clearGraph(map, arrows)
 		end
 	end
 
-	for i,u in ipairs(arrows) do
-		for j,v in ipairs(u) do
+	for i=1,4 do
+		for j,v in ipairs(arrows[i]) do
 			self.graph[v.x][v.y].hasArrow = true
-			self.graph[v.x][v.y].dir = v.dir
+			self.graph[v.x][v.y].arrowdir = v.dir
 		end
 	end
 end
@@ -166,7 +171,9 @@ function Bot:findPath(x1, y1, x2, y2, dir, map, arrows)
 		
 		if u.isSink == false then
 			for i,v in ipairs(u.neighbors) do
-				if u.hasArrow == false or self:getDir(u, v) == u.dir then
+				if u.hasArrow == false then
+					self:relax(u, v)
+				elseif u.hasArrow == true and self:getDir(u, v) == u.arrowdir then
 					self:relax(u, v)
 				end
 			end
@@ -175,13 +182,20 @@ function Bot:findPath(x1, y1, x2, y2, dir, map, arrows)
 
 	-- Backtrace from destination
 	local path = {}
+	self.allpath = {}
 	local u = self.graph[x2][y2]
+
+	if u.dist == Bot.INFINITY then
+		return {}
+	end
+
 	while u do
 		if u.prev then
 			if u.prev.hasArrow == false and u.dir ~= u.prev.dir then
 				table.insert(path, 1, {x=u.prev.x, y=u.prev.y, dir=u.dir})
 			end
 		end
+		table.insert(self.allpath, 1, {x=u.x, y=u.y})
 		u = u.prev
 	end
 
@@ -221,6 +235,19 @@ function Bot:getDir(u, v)
 		end
 	end
 	return -1
+end
+
+function Bot:drawPath()
+	local colors = {
+		{191,49,63}, {56,54,136}, {255,130,46}, {119,56,130}
+	}
+	love.graphics.setColor(unpack(colors[self.player]))
+	for i=1, #self.allpath-1 do
+		local p1 = self.allpath[i]
+		local p2 = self.allpath[i+1]
+		love.graphics.line(p1.x*48+24, p1.y*48+24, p2.x*48+24, p2.y*48+24)
+	end
+	love.graphics.setColor(255,255,255,255)
 end
 
 return Bot
