@@ -36,6 +36,14 @@ function PauseGameState.create(parent)
 	return self
 end
 
+function PauseGameState:update()
+	for i=1,4 do
+		if self.inputs[i]:wasMenuPressed() then
+			popState()
+		end
+	end
+end
+
 function PauseGameState:draw()
 	love.graphics.setColor(0, 0, 0, 128)
 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
@@ -65,11 +73,7 @@ function PauseGameState:isTransparent()
 end
 
 function PauseGameState:keypressed(k)
-	if k == "escape" then
-		popState()
-	else
-		State.keypressed(self, k)
-	end
+	State.keypressed(self, k)
 end
 
 return PauseGameState
