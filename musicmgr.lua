@@ -11,11 +11,11 @@ local minigameSong = "radiationwoman.ogg"
 local ingameSongs = {}
 
 function MusicMgr.loadSongs()
-    for i, song in ipairs(love.filesystem.getDirectoryItems("res/music/")) do
-        if song ~= menuSong and song ~= minigameSong then
-            table.insert(ingameSongs, song)
-        end
-    end
+	for i, song in ipairs(love.filesystem.getDirectoryItems("res/music/")) do
+		if song ~= menuSong and song ~= minigameSong then
+			table.insert(ingameSongs, song)
+		end
+	end
 end
 
 function MusicMgr.playMenu()
