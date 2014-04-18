@@ -17,11 +17,11 @@ function LevelSelectionState.create(parent)
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
 	self.rules = Rules.create()
-    
-    self.score = {}
-    for i=1,4 do
-        self.score[i] = 0
-    end
+
+	self.score = {}
+	for i=1,4 do
+		self.score[i] = 0
+	end
 
 	self.bg = ResMgr.getImage("bg_stars.png")
 
@@ -41,20 +41,20 @@ function LevelSelectionState:enter()
 end
 
 function LevelSelectionState:draw()
-    love.graphics.draw(self.bg, 0, 0)
+	love.graphics.draw(self.bg, 0, 0)
 end
 
 function LevelSelectionState:buttonPressed(id, source)
 	if id == "duckdash" then
 		pushState(DuckDashState.create(self, self.score, self.rules))
-        pushState(CountdownState.create(4, 0))
+		pushState(CountdownState.create(4, 0))
 	elseif id == "escape" then
 		pushState(EscapeState.create(self, self.score, self.rules))
-        pushState(CountdownState.create(4, 0))
+		pushState(CountdownState.create(4, 0))
 	elseif id == "duckbeat" then
 		pushState(DuckBeatState.create(self, self.score, self.rules))
 	elseif id == "back" then
-	    popState()
+		popState()
 	end
 end
 
