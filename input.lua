@@ -25,6 +25,10 @@ function Input:wasClicked()
 	return self.clicked
 end
 
+function Input:wasMenuPressed()
+	return self.menuPressed
+end
+
 function Input:isDown()
 	return false
 end
@@ -32,6 +36,7 @@ end
 function Input:clear()
 	self.action = nil
 	self.clicked = false
+	self.menuPressed = false
 end
 
 function Input:keypressed(k) end
@@ -92,6 +97,8 @@ end
 function KeyboardInput:keypressed(k)
 	if k == " " then
 		self.clicked = true
+	elseif k == "escape" then
+		self.menuPressed = true
 	elseif love.keyboard.isDown(" ") then
 		if k == "up" then
 			self.action = 0
@@ -186,6 +193,7 @@ function JoystickInput.create(joystick, lock)
 		_, self.buttonb = joystick:getGamepadMapping("b")
 		_, self.buttona = joystick:getGamepadMapping("a")
 		_, self.buttonx = joystick:getGamepadMapping("x")
+		_, self.buttonstart = joystick:getGamepadMapping("start")
 	else
 		self.leftXAxis = 1
 		self.leftYAxis = 2
@@ -196,6 +204,7 @@ function JoystickInput.create(joystick, lock)
 		self.buttonb = 2
 		self.buttona = 3
 		self.buttonx = 4
+		self.buttonstart = 5
 	end
 
 	self.down = false
@@ -230,6 +239,9 @@ end
 function JoystickInput:joystickpressed(joystick, button)
 	if joystick:getID() == self.joystick:getID() then
 		self.clicked = true
+		if button == self.buttonstart then
+			self.menuPressed = true
+		end
 		if button == self.buttony then
 			self.action = 0
 		elseif button == self.buttonb then

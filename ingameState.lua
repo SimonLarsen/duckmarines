@@ -118,6 +118,13 @@ function IngameState:update(dt)
 	if love.keyboard.isDown("f") then
 		dt = dt*4
 	end
+	
+	-- Check if player paused the game
+	for i=1,4 do
+		if self.inputs[i]:wasMenuPressed() then
+			pushState(PauseGameState.create(self))
+		end
+	end
 
 	-- Advance time
 	self.timeLeft = self.timeLeft - dt
@@ -486,9 +493,7 @@ function IngameState:triggerEvent(player)
 end
 
 function IngameState:keypressed(k)
-	if k == "escape" then
-		pushState(PauseGameState.create(self))
-	elseif k == "f1" then
+	if k == "f1" then
 		local spawns = self.map:getSpawnPoints()
 		local e = spawns[1]
 		table.insert(self.entities, PinkDuck.create(e.x*48+24, e.y*48+24, e.dir))
