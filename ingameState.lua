@@ -112,6 +112,7 @@ function IngameState:enter()
 end
 
 function IngameState:update(dt)
+	-- Only for debugging. TODO: Remove
 	if love.keyboard.isDown("s") then
 		dt = dt/4
 	end

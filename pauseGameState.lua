@@ -72,8 +72,4 @@ function PauseGameState:isTransparent()
 	return true
 end
 
-function PauseGameState:keypressed(k)
-	State.keypressed(self, k)
-end
-
 return PauseGameState
