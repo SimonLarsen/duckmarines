@@ -31,7 +31,7 @@ end
 
 function playMusic(name)
 	stopMusic()
-	local source = love.audio.newSource("res/music/"..name..".ogg", "stream")
+	local source = love.audio.newSource("res/music/"..name, "stream")
 	source:setLooping(true)
 	source:setVolume(config.music_volume/5)
 	source:play()
