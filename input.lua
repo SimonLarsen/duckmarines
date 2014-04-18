@@ -95,7 +95,7 @@ function KeyboardInput:getMovement(dt)
 end
 
 function KeyboardInput:keypressed(k)
-	if k == " " then
+	if k == " " or k == "return" then
 		self.clicked = true
 	elseif k == "escape" then
 		self.menuPressed = true
@@ -238,7 +238,9 @@ end
 
 function JoystickInput:joystickpressed(joystick, button)
 	if joystick:getID() == self.joystick:getID() then
-		self.clicked = true
+		if button == self.buttona then
+			self.clicked = true
+		end
 		if button == self.buttonstart then
 			self.menuPressed = true
 		end
