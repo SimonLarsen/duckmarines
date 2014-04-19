@@ -57,4 +57,8 @@ function Rules:setDefaults()
 	self.escapeprize = 50
 end
 
+function Rules:load()
+
+end
+
 return Rules

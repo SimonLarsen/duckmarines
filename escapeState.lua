@@ -14,12 +14,11 @@ EscapeState.TIME_SCALE = 3
 EscapeState.DURATION = 6
 EscapeState.WARNING_TIME = 2
 
-function EscapeState.create(parent, scores, rules)
+function EscapeState.create(parent, scores)
 	local self = setmetatable(State.create(), EscapeState)
 
 	self.inputs = parent.inputs
 	self.scores = scores
-	self.rules = rules
 	self.state = EscapeState.STATE_GAME
 
 	self.barTop = 33+56
@@ -116,7 +115,7 @@ function EscapeState:update(dt)
 			self.time = 2
 			local deltas = {0, 0, 0, 0}
 			if self.escaped then
-				deltas[self.escaped] = self.rules.escapeprize
+				deltas[self.escaped] = rules.escapeprize
 			end
 			pushState(EventScoreState.create(self, self.scores, deltas))
 		end

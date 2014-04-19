@@ -18,17 +18,14 @@ function Config:save()
 	love.filesystem.write("config.lua", strdata)
 end
 
-function Config.load()
+function Config:load()
 	if love.filesystem.exists("config.lua") then
-		local self = Config.create()
 		local strdata = love.filesystem.read("config.lua")
 		local data = TSerial.unpack(strdata)
 
 		for i,v in pairs(data) do
 			self[i] = v
 		end
-	else
-		return nil
 	end
 end
 

@@ -9,10 +9,8 @@ local MainMenuState = {}
 MainMenuState.__index = MainMenuState
 setmetatable(MainMenuState, State)
 
-function MainMenuState.create(config)
+function MainMenuState.create()
 	local self = setmetatable(State.create(), MainMenuState)
-
-	self.config = config
 
 	table.insert(self.inputs, KeyboardInput.create())
 	table.insert(self.inputs, MouseInput.create())
@@ -51,7 +49,7 @@ function MainMenuState:buttonPressed(id, source)
 	elseif id == "editor" then
 		pushState(LevelEditorState.create(self))
 	elseif id == "options" then
-		pushState(OptionsState.create(self, self.config))
+		pushState(OptionsState.create(self))
 	elseif id == "quit" then
 		love.event.quit()
 	end

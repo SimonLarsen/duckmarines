@@ -7,12 +7,11 @@ local AdvancedSettingsState = {}
 AdvancedSettingsState.__index = AdvancedSettingsState
 setmetatable(AdvancedSettingsState, State)
 
-function AdvancedSettingsState.create(parent, rules)
+function AdvancedSettingsState.create(parent)
 	local self = setmetatable(State.create(), AdvancedSettingsState)
 
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
-	self.rules = rules
 
 	self:addComponent(Label.create("ADVANCED SETTINGS", 0, 25, WIDTH, "center"))
 
@@ -57,7 +56,7 @@ end
 
 function AdvancedSettingsState:buttonPressed(id, source)
 	if id == "defaults" then
-		self.rules:setDefaults()
+		rules:setDefaults()
 		self:updateSliders()
 	elseif id == "back" then
 		self:confirmSettings()
@@ -66,25 +65,25 @@ function AdvancedSettingsState:buttonPressed(id, source)
 end
 
 function AdvancedSettingsState:confirmSettings()
-	self.rules.roundtime = self.roundtimeSlider:getValue()
-	self.rules.frequency = self.frequencySlider:getValue()
-	self.rules.enemyperc = self.enemypercSlider:getValue()
-	self.rules.goldperc = self.goldpercSlider:getValue()
-	self.rules.pinkperc = self.pinkpercSlider:getValue()
-	self.rules.maxarrows = self.maxarrowsSlider:getValue()
-	self.rules.arrowtime = self.arrowtimeSlider:getValue()
-	self.rules.predatorseat = self.predatorseatSlider:getValue()
+	rules.roundtime = self.roundtimeSlider:getValue()
+	rules.frequency = self.frequencySlider:getValue()
+	rules.enemyperc = self.enemypercSlider:getValue()
+	rules.goldperc = self.goldpercSlider:getValue()
+	rules.pinkperc = self.pinkpercSlider:getValue()
+	rules.maxarrows = self.maxarrowsSlider:getValue()
+	rules.arrowtime = self.arrowtimeSlider:getValue()
+	rules.predatorseat = self.predatorseatSlider:getValue()
 end
 
 function AdvancedSettingsState:updateSliders()
-	self.roundtimeSlider:setValue(self.rules.roundtime)
-	self.frequencySlider:setValue(self.rules.frequency)
-	self.enemypercSlider:setValue(self.rules.enemyperc)
-	self.goldpercSlider:setValue(self.rules.goldperc)
-	self.pinkpercSlider:setValue(self.rules.pinkperc)
-	self.maxarrowsSlider:setValue(self.rules.maxarrows)
-	self.arrowtimeSlider:setValue(self.rules.arrowtime)
-	self.predatorseatSlider:setValue(self.rules.predatorseat)
+	self.roundtimeSlider:setValue(rules.roundtime)
+	self.frequencySlider:setValue(rules.frequency)
+	self.enemypercSlider:setValue(rules.enemyperc)
+	self.goldpercSlider:setValue(rules.goldperc)
+	self.pinkpercSlider:setValue(rules.pinkperc)
+	self.maxarrowsSlider:setValue(rules.maxarrows)
+	self.arrowtimeSlider:setValue(rules.arrowtime)
+	self.predatorseatSlider:setValue(rules.predatorseat)
 end
 
 function AdvancedSettingsState:valueChanged(id, source)

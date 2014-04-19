@@ -31,7 +31,6 @@ function PauseGameState.create(parent)
 	end
 
 	self.mapname = parent.mapname
-	self.rules = parent.rules
 
 	return self
 end
@@ -56,7 +55,7 @@ function PauseGameState:buttonPressed(id, source)
 	elseif id == "restart" then
 		popState()
 		popState()
-		pushState(IngameState.create(self, self.mapname, self.rules))
+		pushState(IngameState.create(self, self.mapname))
 		pushState(CountdownState.create())
 	elseif id == "selectlevel" then
 		popState()

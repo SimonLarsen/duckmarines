@@ -15,7 +15,6 @@ function LevelSelectionState.create(parent)
 
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
-	self.rules = Rules.create()
 
 	self.bg = ResMgr.getImage("bg_stars.png")
 	self.imgBlueprint = ResMgr.getImage("blueprint.png")
@@ -61,10 +60,10 @@ end
 
 function LevelSelectionState:buttonPressed(id, source)
 	if id == "advanced" then
-		pushState(AdvancedSettingsState.create(self, self.rules))
+		pushState(AdvancedSettingsState.create(self))
 	elseif id == "start" then
 		popState()
-		pushState(IngameState.create(self, self:getFilename(), self.rules))
+		pushState(IngameState.create(self, self:getFilename()))
 		pushState(CountdownState.create())
 	elseif id == "back" then
 		popState()

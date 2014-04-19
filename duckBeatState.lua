@@ -17,12 +17,11 @@ DuckBeatState.FLASH_GREEN = 2
 
 -- Note: Song is 150 BPM
 
-function DuckBeatState.create(parent, scores, rules)
+function DuckBeatState.create(parent, scores)
 	local self = setmetatable(State.create(), DuckBeatState)
 
 	self.inputs = parent.inputs
 	self.scores = scores
-	self.rules = rules
 
 	self.beats = {}
 	self.nextBeat = 0

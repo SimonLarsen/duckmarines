@@ -28,7 +28,6 @@ function GameOverState.create(parent, scores, stats)
 	end
 
 	self.mapname = parent.mapname
-	self.rules = parent.rules
 	self.scores = scores
 	self.stats = stats
 
@@ -130,7 +129,7 @@ function GameOverState:buttonPressed(id, source)
 	if id == "rematch" then
 		popState()
 		popState()
-		pushState(IngameState.create(self, self.mapname, self.rules))
+		pushState(IngameState.create(self, self.mapname))
 		pushState(CountdownState.create())
 	elseif id == "exit" then
 		popState()
