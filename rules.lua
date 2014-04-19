@@ -1,8 +1,3 @@
---[[
-Object holding current game rules.
-Set from game menu before starting game.
-]]
-
 local IngameState = require("ingameState")
 
 local Rules = {}
@@ -57,8 +52,20 @@ function Rules:setDefaults()
 	self.escapeprize = 50
 end
 
-function Rules:load()
+function Rules:save()
+	local strdata = TSerial.pack(self)
+	love.filesystem.write("rules", strdata)
+end
 
+function Rules:load()
+	if love.filesystem.exists("rules") then
+		local strdata = love.filesystem.read("rules")
+		local data = TSerial.unpack(strdata)
+
+		for i,v in pairs(data) do
+			self[i] = v
+		end
+	end
 end
 
 return Rules

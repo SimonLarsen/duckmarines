@@ -15,12 +15,12 @@ end
 
 function Config:save()
 	local strdata = TSerial.pack(self)
-	love.filesystem.write("config.lua", strdata)
+	love.filesystem.write("config", strdata)
 end
 
 function Config:load()
-	if love.filesystem.exists("config.lua") then
-		local strdata = love.filesystem.read("config.lua")
+	if love.filesystem.exists("config") then
+		local strdata = love.filesystem.read("config")
 		local data = TSerial.unpack(strdata)
 
 		for i,v in pairs(data) do

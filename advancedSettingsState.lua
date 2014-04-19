@@ -90,4 +90,8 @@ function AdvancedSettingsState:valueChanged(id, source)
 	
 end
 
+function AdvancedSettingsState:leave()
+	rules:save()
+end
+
 return AdvancedSettingsState
