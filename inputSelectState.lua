@@ -113,7 +113,7 @@ function InputSelectState:addInput(input)
 			self.cursors[i] = Cursor.create(-25+i*150, 165, i)
 			self.cursors[i]:addInput(input)
 			self.leaveButtons[i].enabled = true
-			playSound("quack")
+			playSound("click")
 			return
 		end
 	end
