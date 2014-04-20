@@ -42,6 +42,7 @@ function DuckDashState:update(dt)
 
 	for i=1,4 do
 		if self.inputs[i]:wasClicked() then
+			playSound("squeek")
 			self.positions[i] = self.positions[i] + DuckDashState.INCREMENT
 		end
 		if self.positions[i] >= 380 then

@@ -56,9 +56,11 @@ end
 
 function AdvancedSettingsState:buttonPressed(id, source)
 	if id == "defaults" then
+		playSound("click")
 		rules:setDefaults()
 		self:updateSliders()
 	elseif id == "back" then
+		playSound("quack")
 		self:confirmSettings()
 		popState()
 	end

@@ -106,6 +106,7 @@ function DuckBeatState:update(dt)
 							self.flash[i].time = 1
 							self.flash[i].color = DuckBeatState.FLASH_GREEN
 						else
+							playSound("fail")
 							self.points[i] = self.points[i] - 20
 							self.flash[i].time = 1
 							self.flash[i].color = DuckBeatState.FLASH_RED
@@ -116,6 +117,7 @@ function DuckBeatState:update(dt)
 				end
 			end
 			if found == false then
+				playSound("fail")
 				self.points[i] = self.points[i] - 20
 				self.flash[i].time = 1
 				self.flash[i].color = DuckBeatState.FLASH_RED

@@ -252,15 +252,18 @@ function IngameState:update(dt)
 					self.score[player] = self.score[player] + 1
 
 				elseif eType == Entity.TYPE_GOLDDUCK then
+					playSound("goldduck")
 					self.score[player] = self.score[player] + rules.goldbonus
 					table.insert(self.particles, BonusTextParticle.create(
 						self.entities[i].x, self.entities[i].y-12, "+"..rules.goldbonus))
 
 				elseif eType == Entity.TYPE_PINKDUCK then
+					playSound("goldduck")
 					self.score[player] = self.score[player] + rules.pinkbonus
 					self:triggerEvent(player)
 
 				elseif eType == Entity.TYPE_ENEMY then
+					playSound("fail")
 					self.score[player] = math.floor(self.score[player]*0.6667)
 					table.insert(self.particles, BonusTextParticle.create(
 						self.entities[i].x, self.entities[i].y-12,
@@ -443,6 +446,7 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
+	self.event = IngameState.EVENT_ESCAPE
 	self.eventTime = rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then

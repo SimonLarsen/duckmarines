@@ -39,6 +39,10 @@ function EventScoreState.create(parent, scores, deltas)
 	return self
 end
 
+function EventScoreState:enter()
+	playSound("slide")
+end
+
 function EventScoreState:update(dt)
 	if self.state == EventScoreState.STATE_TRANSITION then
 		self.slidespeed = self.slidespeed + self.slideacc*dt
@@ -48,12 +52,19 @@ function EventScoreState:update(dt)
 			self.slidex = 287
 			self.slidespeed = self.slidespeed * -0.2
 			self.hits = self.hits+1
-			if self.hits == 3 then
+			if self.hits == 1 then
+				playSound("slam")
+			elseif self.hits == 3 then
 				self.state = EventScoreState.STATE_POPIN
 			end
 		end
 	elseif self.state == EventScoreState.STATE_POPIN then
 		self.time = self.time + dt
+		for i=0,3 do
+			if self.time > i*0.2+0.2 and self.time-dt <= i*0.2+0.2 then
+				playSound("slam")
+			end
+		end
 		if self.time > 2 then
 			popState()
 			popState()

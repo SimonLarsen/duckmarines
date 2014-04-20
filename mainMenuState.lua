@@ -45,10 +45,13 @@ end
 
 function MainMenuState:buttonPressed(id, source)
 	if id == "start" then
+		playSound("quack")
 		pushState(InputSelectState.create(self))
 	elseif id == "editor" then
+		playSound("quack")
 		pushState(LevelEditorState.create(self))
 	elseif id == "options" then
+		playSound("quack")
 		pushState(OptionsState.create(self))
 	elseif id == "quit" then
 		love.event.quit()

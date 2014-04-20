@@ -4,6 +4,7 @@ Rules = require("rules")
 IngameState = require("ingameState")
 require("input")
 require("util")
+require("slam")
 
 local Config = require("configuration")
 local Rules = require("rules")
@@ -71,6 +72,9 @@ function love.draw()
 end
 
 function love.keypressed(k)
+	if k == "q" then
+		playSound("fail")
+	end
 	stateStack:peek():keypressed(k)
 end
 

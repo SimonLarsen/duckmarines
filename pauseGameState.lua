@@ -51,17 +51,21 @@ end
 
 function PauseGameState:buttonPressed(id, source)
 	if id == "continue" then
+		playSound("quack")
 		popState()
 	elseif id == "restart" then
+		playSound("quack")
 		popState()
 		popState()
 		pushState(IngameState.create(self, self.mapname))
 		pushState(CountdownState.create())
 	elseif id == "selectlevel" then
+		playSound("quack")
 		popState()
 		popState()
 		pushState(LevelSelectionState.create(self))
 	elseif id == "quit" then
+		playSound("quack")
 		popState()
 		popState()
 	end

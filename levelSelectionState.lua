@@ -60,12 +60,15 @@ end
 
 function LevelSelectionState:buttonPressed(id, source)
 	if id == "advanced" then
+		playSound("quack")
 		pushState(AdvancedSettingsState.create(self))
 	elseif id == "start" then
+		playSound("quack")
 		popState()
 		pushState(IngameState.create(self, self:getFilename()))
 		pushState(CountdownState.create())
 	elseif id == "back" then
+		playSound("quack")
 		popState()
 	end
 end
@@ -93,6 +96,7 @@ function LevelSelectionState:updateMapList()
 end
 
 function LevelSelectionState:selectionChanged(text, source)
+	playSound("click")
 	self.batch:clear()
 	local quadSub = love.graphics.newQuad(0, 23, 23, 22, 78, 63)
 	local quadPit = love.graphics.newQuad(0, 0, 23, 23, 78, 63)

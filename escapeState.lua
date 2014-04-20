@@ -78,11 +78,13 @@ function EscapeState:update(dt)
 		for i=1,4 do
 			if self.clicked[i] == false and self.inputs[i]:wasClicked() then
 				if self:isGreen() then
+					playSound("squeek")
 					self.escaped = i
 					self.state = EscapeState.STATE_SHAKE
 					self.time = 0
 					break
 				else
+					playSound("fail")
 					self.clicked[i] = true
 					self.marker_pos[i] = self:getCursorY()
 				end
@@ -94,6 +96,7 @@ function EscapeState:update(dt)
 
 		if self.time > EscapeState.DURATION then
 			self.state = EscapeState.STATE_OVER
+			playSound("slam")
 			self.time = 0
 		elseif self.time > EscapeState.DURATION-EscapeState.WARNING_TIME then
 			self.offsetx = math.sign(math.cos(self.time*30))*6
@@ -108,6 +111,10 @@ function EscapeState:update(dt)
 		if self.time > 1 then
 			self.time = 0
 			self.state = EscapeState.STATE_OVER
+			playSound("slam")
+			if self.escaped then
+				playSound("escape")
+			end
 		end
 
 	elseif self.state == EscapeState.STATE_OVER then

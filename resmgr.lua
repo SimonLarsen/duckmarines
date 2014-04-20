@@ -3,17 +3,18 @@ ResMgr.__index = ResMgr
 
 local images = {}
 local fonts = {}
+local sounds = {}
 
 local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:+-?!()|x%"
 
 local currentSongSource = nil
 
-function ResMgr.getImage(_path)
-	local path = "res/images/" .. _path
+function ResMgr.getImage(name)
+	local path = "res/images/" .. name
 	if images[path] == nil then
 		images[path] = love.graphics.newImage(path)
 		images[path]:setWrap("repeat", "repeat")
-		print("Loaded image: " .. _path)
+		print("Loaded image: " .. name)
 	end
 	return images[path]
 end
@@ -29,6 +30,21 @@ function ResMgr.getFont(name)
 	return fonts[name]
 end
 
+function ResMgr.getSound(name)
+	local path = "res/sounds/" .. name .. ".wav"
+	if sounds[path] == nil then
+		sounds[path] = love.audio.newSource(path, "static")
+		sounds[path]:addTags("sfx")
+		print("Loaded sound: " .. name)
+	end
+	return sounds[path]
+end
+
+function playSound(name)
+	local sound = ResMgr.getSound(name)
+	love.audio.play(sound)
+end
+
 function playMusic(name)
 	stopMusic()
 	local source = love.audio.newSource("res/music/"..name..".ogg", "stream")
@@ -37,7 +53,6 @@ function playMusic(name)
 	source:play()
 
 	currentSongSource = source
-	return source
 end
 
 function stopMusic()
@@ -49,6 +64,7 @@ end
 
 function updateVolume()
 	currentSongSource:setVolume(config.music_volume/5)
+	love.audio.tags.sfx.setVolume(config.sound_volume/5)
 end
 
 return ResMgr

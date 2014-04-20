@@ -34,18 +34,23 @@ end
 
 function OptionsState:buttonPressed(id)
 	if id == "fullscreen" then
+		playSound("click")
 		config.fullscreen = not config.fullscreen
 		setScreenMode()
 	elseif id == "vsync" then
+		playSound("click")
 		config.vsync = not config.vsync
 		setScreenMode()
 	elseif id == "musicvolume" then
+		playSound("click")
 		config.music_volume = (config.music_volume+1) % 6
 		updateVolume()
 	elseif id == "soundvolume" then
 		config.sound_volume = (config.sound_volume+1) % 6
 		updateVolume()
+		playSound("click")
 	elseif id == "back" then
+		playSound("quack")
 		popState()
 	end
 	self:updateButtons()
