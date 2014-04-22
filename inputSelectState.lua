@@ -113,6 +113,7 @@ function InputSelectState:addInput(input)
 			self.cursors[i] = Cursor.create(-25+i*150, 165, i)
 			self.cursors[i]:addInput(input)
 			self.leaveButtons[i].enabled = true
+			playSound("click")
 			return
 		end
 	end
@@ -120,23 +121,28 @@ end
 
 function InputSelectState:buttonPressed(id, source)
 	if id == "leave1" then
+		playSound("click")
 		self.inputs[1] = nil
 		self.cursors[1] = nil
 		self.leaveButtons[1].enabled = false
 	elseif id == "leave2" then
+		playSound("click")
 		self.inputs[2] = nil
 		self.cursors[2] = nil
 		self.leaveButtons[2].enabled = false
 	elseif id == "leave3" then
+		playSound("click")
 		self.inputs[3] = nil
 		self.cursors[3] = nil
 		self.leaveButtons[3].enabled = false
 	elseif id == "leave4" then
+		playSound("click")
 		self.inputs[4] = nil
 		self.cursors[4] = nil
 		self.leaveButtons[4].enabled = false
 
 	elseif id == "continue" then
+		playSound("quack")
 		for i=1,4 do
 			if self.inputs[i] == nil then
 				self.inputs[i] = NullInput.create()
@@ -145,6 +151,7 @@ function InputSelectState:buttonPressed(id, source)
 		popState()
 		pushState(LevelSelectionState.create(self))
 	elseif id == "back" then
+		playSound("quack")
 		popState()
 	end
 end

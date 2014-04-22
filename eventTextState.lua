@@ -58,6 +58,7 @@ function EventTextState:update(dt)
 	if self.y > 168 then
 		self.y = 168
 		if self.hits < 2 then
+			playSound("slam")
 			self.speed = self.speed * -0.20
 		else
 			self.speed = 0

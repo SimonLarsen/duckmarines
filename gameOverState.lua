@@ -28,7 +28,6 @@ function GameOverState.create(parent, scores, stats)
 	end
 
 	self.mapname = parent.mapname
-	self.rules = parent.rules
 	self.scores = scores
 	self.stats = stats
 
@@ -66,6 +65,10 @@ function GameOverState.create(parent, scores, stats)
 	end))
 
 	return self
+end
+
+function GameOverState:enter()
+	MusicMgr.playGameOver()
 end
 
 function GameOverState:update(dt)
@@ -128,15 +131,18 @@ end
 
 function GameOverState:buttonPressed(id, source)
 	if id == "rematch" then
+		playSound("quack")
 		popState()
 		popState()
-		pushState(IngameState.create(self, self.mapname, self.rules))
+		pushState(IngameState.create(self, self.mapname))
 		pushState(CountdownState.create())
 	elseif id == "exit" then
+		playSound("quack")
 		popState()
 		popState()
 		pushState(LevelSelectionState.create(self))
 	elseif id == "show" then
+		playSound("click")
 		if self.state == GameOverState.STATE_BARS then
 			self.state = GameOverState.STATE_GRAPH
 			self.showButton.text = "SHOW BARS"

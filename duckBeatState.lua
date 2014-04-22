@@ -17,12 +17,11 @@ DuckBeatState.FLASH_GREEN = 2
 
 -- Note: Song is 150 BPM
 
-function DuckBeatState.create(parent, scores, rules)
+function DuckBeatState.create(parent, scores)
 	local self = setmetatable(State.create(), DuckBeatState)
 
 	self.inputs = parent.inputs
 	self.scores = scores
-	self.rules = rules
 
 	self.beats = {}
 	self.nextBeat = 0
@@ -107,6 +106,7 @@ function DuckBeatState:update(dt)
 							self.flash[i].time = 1
 							self.flash[i].color = DuckBeatState.FLASH_GREEN
 						else
+							playSound("fail")
 							self.points[i] = self.points[i] - 20
 							self.flash[i].time = 1
 							self.flash[i].color = DuckBeatState.FLASH_RED
@@ -117,6 +117,7 @@ function DuckBeatState:update(dt)
 				end
 			end
 			if found == false then
+				playSound("fail")
 				self.points[i] = self.points[i] - 20
 				self.flash[i].time = 1
 				self.flash[i].color = DuckBeatState.FLASH_RED

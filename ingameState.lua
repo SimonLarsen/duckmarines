@@ -40,11 +40,10 @@ IngameState.EVENT_COUNT 	= 11
 
 IngameState.NSTATS = 10
 
-function IngameState.create(parent, mapname, rules)
+function IngameState.create(parent, mapname)
 	local self = setmetatable(State.create(), IngameState)
 
 	self.mapname = mapname
-	self.rules = rules
 
 	-- Load map
 	self.map = Map.create(mapname)
@@ -80,7 +79,7 @@ function IngameState.create(parent, mapname, rules)
 	end
 
 	-- Set variables and counters
-	self.timeLeft = self.rules.roundtime
+	self.timeLeft = rules.roundtime
 	self.time = 0
 
 	self.event = IngameState.EVENT_NONE
@@ -112,11 +111,19 @@ function IngameState:enter()
 end
 
 function IngameState:update(dt)
+	-- Only for debugging. TODO: Remove
 	if love.keyboard.isDown("s") then
 		dt = dt/4
 	end
 	if love.keyboard.isDown("f") then
 		dt = dt*4
+	end
+	
+	-- Check if player paused the game
+	for i=1,4 do
+		if self.inputs[i]:wasMenuPressed() then
+			pushState(PauseGameState.create(self))
+		end
 	end
 
 	-- Advance time
@@ -145,9 +152,9 @@ function IngameState:update(dt)
 	if self.nextEntity <= 0 then
 		local freq
 		if self.event == IngameState.EVENT_RUSH then
-			freq = self.rules.rushfrequency
+			freq = rules.rushfrequency
 		else
-			freq = self.rules.frequency
+			freq = rules.frequency
 		end
 		self.nextEntity = 1/(freq + math.randnorm()*0.8*freq)*60
 
@@ -162,13 +169,13 @@ function IngameState:update(dt)
 			-- Spawn random entity according to rules' percentages
 			local choice = math.random(0, 99)
 			-- enemy
-			if choice < self.rules.enemyperc then
+			if choice < rules.enemyperc then
 				table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
 			-- golden duck
-			elseif choice < self.rules.enemyperc + self.rules.goldperc then
+			elseif choice < rules.enemyperc + rules.goldperc then
 				table.insert(self.entities, GoldDuck.create(e.x*48+24, e.y*48+24, e.dir))
 			-- pink duck
-			elseif choice < self.rules.enemyperc + self.rules.goldperc + self.rules.pinkperc then
+			elseif choice < rules.enemyperc + rules.goldperc + rules.pinkperc then
 				table.insert(self.entities, PinkDuck.create(e.x*48+24, e.y*48+24, e.dir))
 			-- normal duck
 			else
@@ -189,7 +196,7 @@ function IngameState:update(dt)
 			for j=#self.arrows[i], 1, -1 do
 				local v = self.arrows[i][j]
 				v.time = v.time + dt
-				if v.time >= self.rules.arrowtime then
+				if v.time >= rules.arrowtime then
 					table.remove(self.arrows[i], j)
 				end
 			end
@@ -245,15 +252,18 @@ function IngameState:update(dt)
 					self.score[player] = self.score[player] + 1
 
 				elseif eType == Entity.TYPE_GOLDDUCK then
-					self.score[player] = self.score[player] + self.rules.goldbonus
+					playSound("goldduck")
+					self.score[player] = self.score[player] + rules.goldbonus
 					table.insert(self.particles, BonusTextParticle.create(
-						self.entities[i].x, self.entities[i].y-12, "+"..self.rules.goldbonus))
+						self.entities[i].x, self.entities[i].y-12, "+"..rules.goldbonus))
 
 				elseif eType == Entity.TYPE_PINKDUCK then
-					self.score[player] = self.score[player] + self.rules.pinkbonus
+					playSound("goldduck")
+					self.score[player] = self.score[player] + rules.pinkbonus
 					self:triggerEvent(player)
 
 				elseif eType == Entity.TYPE_ENEMY then
+					playSound("fail")
 					self.score[player] = math.floor(self.score[player]*0.6667)
 					table.insert(self.particles, BonusTextParticle.create(
 						self.entities[i].x, self.entities[i].y-12,
@@ -273,7 +283,7 @@ function IngameState:update(dt)
 				table.remove(self.entities, i)
 
 			-- Check collision with ducks if predator
-			elseif self.rules.predatorseat and self.entities[i]:getType() == Entity.TYPE_ENEMY then
+			elseif rules.predatorseat and self.entities[i]:getType() == Entity.TYPE_ENEMY then
 				for j=#self.entities, 1, -1 do
 					local jType = self.entities[j]:getType()
 					if jType == Entity.TYPE_DUCK or jType == Entity.TYPE_GOLDDUCK or jType == Entity.TYPE_PINKDUCK then
@@ -307,7 +317,7 @@ function IngameState:update(dt)
 	end
 
 	-- Update stats
-	if self.time >= self.nextStat*(self.rules.roundtime/IngameState.NSTATS) then
+	if self.time >= self.nextStat*(rules.roundtime/IngameState.NSTATS) then
 		self.stats[self.nextStat] = {}
 		for i = 1,4 do
 			self.stats[self.nextStat][i] = self.score[i]
@@ -327,7 +337,7 @@ function IngameState:draw()
 	for i=1,4 do
 		for j,v in ipairs(self.arrows[i]) do
 			-- Make arrows blink the last seconds
-			if self.rules.arrowtime - v.time > 1 or v.time % 0.2 > 0.1 then
+			if rules.arrowtime - v.time > 1 or v.time % 0.2 > 0.1 then
 				v:draw()
 			end
 		end
@@ -409,7 +419,7 @@ function IngameState:placeArrow(x, y, dir, player)
 		return
 	end
 
-	if #self.arrows[player] >= self.rules.maxarrows then
+	if #self.arrows[player] >= rules.maxarrows then
 		table.remove(self.arrows[player], 1)
 	end
 	table.insert(self.arrows[player], Arrow.create(x, y, dir, player))
@@ -436,7 +446,7 @@ end
 
 function IngameState:triggerEvent(player)
 	self.event = math.random(1, IngameState.EVENT_COUNT)
-	self.eventTime = self.rules.eventTime[self.event] or 0
+	self.eventTime = rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then
 		local oldsubs = self.map:getSubmarines()
@@ -471,24 +481,22 @@ function IngameState:triggerEvent(player)
 		end
 	
 	elseif self.event == IngameState.EVENT_DUCKDASH then
-		pushState(DuckDashState.create(self, self.score, self.rules))
+		pushState(DuckDashState.create(self, self.score, rules))
 		pushState(CountdownState.create(4, 0))
 	
 	elseif self.event == IngameState.EVENT_ESCAPE then
-		pushState(EscapeState.create(self, self.score, self.rules))
+		pushState(EscapeState.create(self, self.score, rules))
 		pushState(CountdownState.create(4, 0))
 	
 	elseif self.event == IngameState.EVENT_DUCKBEAT then
-		pushState(DuckBeatState.create(self, self.score, self.rules))
+		pushState(DuckBeatState.create(self, self.score, rules))
 	end
 
 	pushState(EventTextState.create(self.event))
 end
 
 function IngameState:keypressed(k)
-	if k == "escape" then
-		pushState(PauseGameState.create(self))
-	elseif k == "f1" then
+	if k == "f1" then
 		local spawns = self.map:getSpawnPoints()
 		local e = spawns[1]
 		table.insert(self.entities, PinkDuck.create(e.x*48+24, e.y*48+24, e.dir))

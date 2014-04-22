@@ -8,7 +8,6 @@ setmetatable(OptionsState, State)
 function OptionsState.create(parent, config)
 	local self = setmetatable(State.create(), OptionsState)
 
-	self.config = config
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
 
@@ -35,28 +34,37 @@ end
 
 function OptionsState:buttonPressed(id)
 	if id == "fullscreen" then
-		self.config.fullscreen = not self.config.fullscreen
+		playSound("click")
+		config.fullscreen = not config.fullscreen
 		setScreenMode()
 	elseif id == "vsync" then
-		self.config.vsync = not self.config.vsync
+		playSound("click")
+		config.vsync = not config.vsync
 		setScreenMode()
 	elseif id == "musicvolume" then
-		self.config.music_volume = (self.config.music_volume+1) % 6
+		playSound("click")
+		config.music_volume = (config.music_volume+1) % 6
 		updateVolume()
 	elseif id == "soundvolume" then
-		self.config.sound_volume = (self.config.sound_volume+1) % 6
+		config.sound_volume = (config.sound_volume+1) % 6
 		updateVolume()
+		playSound("click")
 	elseif id == "back" then
+		playSound("quack")
 		popState()
 	end
 	self:updateButtons()
 end
 
 function OptionsState:updateButtons()
-	self.fullscreenButton.text = "FULLSCREEN: " .. boolToStr(self.config.fullscreen)
-	self.vsyncButton.text = "VSYNC: " .. boolToStr(self.config.vsync)
-	self.musicButton.text = "MUSIC VOLUME: " .. string.rep("I", self.config.music_volume) .. string.rep("x", 5 - self.config.music_volume)
-	self.soundButton.text = "SOUND VOLUME: " .. string.rep("I", self.config.sound_volume) .. string.rep("x", 5 - self.config.sound_volume)
+	self.fullscreenButton.text = "FULLSCREEN: " .. boolToStr(config.fullscreen)
+	self.vsyncButton.text = "VSYNC: " .. boolToStr(config.vsync)
+	self.musicButton.text = "MUSIC VOLUME: " .. string.rep("I", config.music_volume) .. string.rep("x", 5 - config.music_volume)
+	self.soundButton.text = "SOUND VOLUME: " .. string.rep("I", config.sound_volume) .. string.rep("x", 5 - config.sound_volume)
+end
+
+function OptionsState:leave()
+	config:save()
 end
 
 return OptionsState

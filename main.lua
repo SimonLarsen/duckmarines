@@ -4,8 +4,10 @@ Rules = require("rules")
 IngameState = require("ingameState")
 require("input")
 require("util")
+require("slam")
 
 local Config = require("configuration")
+local Rules = require("rules")
 local Stack = require("stack")
 local MainMenuState = require("mainMenuState")
 
@@ -17,17 +19,21 @@ local SCALEY = 1
 
 local stateStack
 config = nil
+rules = nil
 
 function love.load()
 	-- Setup user data
 	if love.filesystem.exists("usermaps") == false then
 		love.filesystem.createDirectory("usermaps")
 	end
+
 	-- Read configuration
-	config = Config.load()
-	if config == nil then
-		config = Config.create()
-	end
+	config = Config.create()
+	config:load()
+
+	-- Load rules
+	rules = Rules.create()
+	rules:load()
 
 	-- Setup screen
 	setScreenMode()
@@ -44,7 +50,7 @@ function love.load()
 
 	-- Setup gamestate stack
 	stateStack = Stack.create()
-	pushState(MainMenuState.create(config))
+	pushState(MainMenuState.create())
 end
 
 function love.update(dt)
@@ -67,6 +73,9 @@ function love.draw()
 end
 
 function love.keypressed(k)
+	if k == "q" then
+		playSound("fail")
+	end
 	stateStack:peek():keypressed(k)
 end
 
