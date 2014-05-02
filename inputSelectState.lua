@@ -17,7 +17,7 @@ function InputSelectState.create(parent)
 	self.leaveButtons = {}
 	for i=1,4 do
 		self.leaveButtons[i] = self.menu:addButton("LEAVE", "leave"..i, -90+i*150, 258, 130, 32)
-		self.leaveButtons[i].enabled = false
+		self.leaveButtons[i].visible = false
 	end
 	self.menu:addButton("CONTINUE", "continue")
 	self.menu:addButton("BACK", "back")
@@ -112,7 +112,7 @@ function InputSelectState:addInput(input)
 			self.inputs[i] = input
 			self.cursors[i] = Cursor.create(-25+i*150, 165, i)
 			self.cursors[i]:addInput(input)
-			self.leaveButtons[i].enabled = true
+			self.leaveButtons[i].visible = true
 			playSound("click")
 			return
 		end
@@ -124,22 +124,22 @@ function InputSelectState:buttonPressed(id, source)
 		playSound("click")
 		self.inputs[1] = nil
 		self.cursors[1] = nil
-		self.leaveButtons[1].enabled = false
+		self.leaveButtons[1].visible = false
 	elseif id == "leave2" then
 		playSound("click")
 		self.inputs[2] = nil
 		self.cursors[2] = nil
-		self.leaveButtons[2].enabled = false
+		self.leaveButtons[2].visible = false
 	elseif id == "leave3" then
 		playSound("click")
 		self.inputs[3] = nil
 		self.cursors[3] = nil
-		self.leaveButtons[3].enabled = false
+		self.leaveButtons[3].visible = false
 	elseif id == "leave4" then
 		playSound("click")
 		self.inputs[4] = nil
 		self.cursors[4] = nil
-		self.leaveButtons[4].enabled = false
+		self.leaveButtons[4].visible = false
 
 	elseif id == "continue" then
 		playSound("quack")
