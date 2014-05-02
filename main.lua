@@ -43,6 +43,7 @@ function love.load()
 
 	-- Preload assets
 	ResMgr.loadFonts()
+	MusicMgr.loadSongs()
 
 	-- Setup mouse
 	love.mouse.setVisible(false)
