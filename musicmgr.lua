@@ -7,18 +7,17 @@ MusicMgr.STATE_MINIGAME = 3
 MusicMgr.STATE_GAMEOVER = 4
 
 local musicState = MusicMgr.STATE_NONE
-local menuSong = "groovecallus"
-local minigameSong = "radiationwoman"
-local gameOverSong = "interlude"
+local menuSong = "groovecallus.ogg"
+local minigameSong = "radiationwoman.ogg"
+local gameOverSong = "interlude.ogg"
 local ingameSongs = {}
 
 function MusicMgr.loadSongs()
 	for i, song in ipairs(love.filesystem.getDirectoryItems("res/music/")) do
-		if string.sub(song, -4, -1) == ".ogg" then
-			song = string.sub(song, 1, -5)
-			if song ~= menuSong and song ~= minigameSong and song ~= gameOverSong then
-				table.insert(ingameSongs, song)
-			end
+		local ending = song:sub(-4):lower()
+		if (ending == ".ogg" or ending == ".mp3")
+		and song ~= menuSong and song ~= minigameSong and song ~= gameOverSong then
+			table.insert(ingameSongs, song)
 		end
 	end
 end
