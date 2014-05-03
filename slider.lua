@@ -36,23 +36,17 @@ function Slider.create(x, y, width, values, value, listener, formatter)
 	self.leftButton = love.graphics.newQuad(0, 0, 21, 32, 42, 32)
 	self.rightButton = love.graphics.newQuad(21, 0, 21, 32, 42, 32)
 
+	self.barEmpty = ResMgr.getImage("slider_bar_empty.png")
+	self.barFull = ResMgr.getImage("slider_bar_full.png")
+
 	return self
 end
 
 function Slider:draw()
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.rectangle("fill", self.left, self.y, self.innerWidth, 32)
-
-	love.graphics.setColor(255, 194, 49)
-	love.graphics.setLineWidth(1)
-	love.graphics.line(self.left, self.y+1, self.right, self.y+1)
-	love.graphics.line(self.left, self.y+32, self.right, self.y+32)
-
-	love.graphics.setColor(20, 20, 20)
+	love.graphics.draw(self.barEmpty, self.left, self.y, 0, self.innerWidth, 1)
 	local slideWidth = (self.selection-1) / (self.count-1) * self.innerWidth
-	love.graphics.rectangle("fill", self.left, self.y+1, slideWidth, 30)
-
-	love.graphics.setColor(255, 255, 255)
+	love.graphics.draw(self.barFull, self.left, self.y, 0, slideWidth, 1)
+	
 	love.graphics.draw(self.buttons, self.leftButton, self.x, self.y)
 	love.graphics.draw(self.buttons, self.rightButton, self.x+self.width-21, self.y)
 
