@@ -11,6 +11,7 @@ function DuckDashState.create(parent, scores)
 	local self = setmetatable(State.create(), DuckDashState)
 
 	self.inputs = parent.inputs
+	self.bots = parent.bots
 	self.scores = scores
 
 	self.time = 0
@@ -35,12 +36,24 @@ end
 
 function DuckDashState:enter()
 	MusicMgr.playMinigame()
+	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:duckDashEnter()
+		end
+	end
 end
 
 function DuckDashState:update(dt)
 	self.time = self.time + dt
 
 	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:duckDashUpdate(dt)
+			if self.bots[i]:wasClicked() then
+				self.inputs[i].clicked = true
+			end
+			self.bots[i]:clear()
+		end
 		if self.inputs[i]:wasClicked() then
 			playSound("squeek")
 			self.positions[i] = self.positions[i] + DuckDashState.INCREMENT

@@ -19,6 +19,7 @@ function Bot.create(map,player,cursor,level)
 	self.level = level
 	self.movecooldown = 0
 	self.checkcooldown = 0
+	self.clicked = false
 
 	self.path = {}
 	self.allpath = {}
@@ -85,6 +86,14 @@ function Bot:getAction(cursor)
 		return p.dir
 	end
 	return nil
+end
+
+function Bot:wasClicked()
+	return self.clicked
+end
+
+function Bot:clear()
+	self.clicked = false
 end
 
 function Bot:buildGraph(map)
@@ -249,6 +258,21 @@ function Bot:drawPath()
 		love.graphics.line(p1.x*48+24, p1.y*48+24, p2.x*48+24, p2.y*48+24)
 	end
 	love.graphics.setColor(255,255,255,255)
+end
+
+-- Duck Dash
+Bot.DUCKDASH_DELAY = {0.22, 0.16, 0.10}
+function Bot:duckDashEnter()
+	self.nextDash = 0
+end
+
+function Bot:duckDashUpdate(dt)
+	self.nextDash = self.nextDash - dt
+	if self.nextDash <= 0 then
+		self.clicked = true
+		local base = Bot.DUCKDASH_DELAY[self.level]
+		self.nextDash = base + base*math.norm()
+	end
 end
 
 return Bot

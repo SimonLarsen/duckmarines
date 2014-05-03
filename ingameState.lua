@@ -218,6 +218,7 @@ function IngameState:update(dt)
 				local cy = math.floor(self.cursors[i].y / 48)
 				self:placeArrow(cx, cy, ac, i)
 			end
+			self.bots[i]:clear()
 		end
 	end
 

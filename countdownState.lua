@@ -7,7 +7,7 @@ setmetatable(CountdownState, State)
 function CountdownState.create(speed,start)
 	local self = setmetatable(State.create(), CountdownState)
 
-	self.speed = speed or 1
+	self.speed = speed or 2
 	self.time = start or 0
 
 	self.img = ResMgr.getImage("321go.png")
