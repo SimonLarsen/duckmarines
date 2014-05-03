@@ -8,14 +8,15 @@ Bot.__index = Bot
 Bot.INFINITY = 99999999
 Bot.SPEED = 300
 Bot.DIST_THRESHOLD = 24
-Bot.MOVE_DELAY = 2
+Bot.MOVE_DELAY = {4, 2, 0}
 Bot.CHECK_DELAY = 0.05
 
-function Bot.create(map,player,cursor)
+function Bot.create(map,player,cursor,level)
 	local self = setmetatable({}, Bot)
 
 	self.player = player
 	self.cursor = cursor
+	self.level = level
 	self.movecooldown = 0
 	self.checkcooldown = 0
 
@@ -53,7 +54,7 @@ function Bot:update(dt, map, entities, arrows)
 		end
 
 		if #self.path > 0 then
-			self.movecooldown = Bot.MOVE_DELAY
+			self.movecooldown = Bot.MOVE_DELAY[self.level]
 		end
 	end
 end

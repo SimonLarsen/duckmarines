@@ -38,7 +38,9 @@ function State:baseUpdate(dt)
 		for j,w in pairs(v:getInputs()) do
 			if w:wasClicked() then
 				for k,c in pairs(self:getComponents()) do
-					c:click(v.x, v.y)
+					if c:click(v.x, v.y) then
+						break
+					end
 				end
 			end
 			v:move(w:getMovement(dt, false))

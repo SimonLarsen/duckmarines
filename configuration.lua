@@ -9,6 +9,10 @@ function Config.create()
 	self.scale = 1
 	self.music_volume = 4
 	self.sound_volume = 4
+	self.ai1level = 2
+	self.ai2level = 2
+	self.ai3level = 2
+	self.ai4level = 2
 
 	return self
 end

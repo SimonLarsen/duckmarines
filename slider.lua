@@ -98,9 +98,10 @@ function Slider:setValue(value)
 	for i,v in pairs(self.values) do
 		if v == value then
 			self.selection = i
-			break
+			return true
 		end
 	end
+	return false
 end
 
 return Slider

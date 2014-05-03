@@ -107,9 +107,10 @@ function Menu:click(x, y)
 		and x >= v.x and x <= v.x + v.width
 		and y >= v.y and y <= v.y + v.height then
 			self.listener:buttonPressed(v.id, self)
-			return
+			return true
 		end
 	end
+	return false
 end
 
 return Menu

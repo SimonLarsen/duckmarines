@@ -1,6 +1,7 @@
 local State = require("state")
 local Label = require("label")
 local Menu = require("menu")
+local AILevelSelection = require("aiLevelSelection")
 local Cursor = require("cursor")
 local LevelSelectionState = require("levelSelectionState")
 
@@ -15,9 +16,12 @@ function InputSelectState.create(parent)
 
 	self.menu = self:addComponent(Menu.create((WIDTH-200)/2, 320, 200, 32, 24, self))
 	self.leaveButtons = {}
+	self.aiLevelSelections = {}
 	for i=1,4 do
 		self.leaveButtons[i] = self.menu:addButton("LEAVE", "leave"..i, -90+i*150, 258, 130, 32)
 		self.leaveButtons[i].visible = false
+		local level = config["ai"..i.."level"]
+		self.aiLevelSelections[i] = self:addComponent(AILevelSelection.create(-90+i*150, 258, level))
 	end
 	self.menu:addButton("CONTINUE", "continue")
 	self.menu:addButton("BACK", "back")
@@ -113,6 +117,7 @@ function InputSelectState:addInput(input)
 			self.cursors[i] = Cursor.create(-25+i*150, 165, i)
 			self.cursors[i]:addInput(input)
 			self.leaveButtons[i].visible = true
+			self.aiLevelSelections[i].visible = false
 			playSound("click")
 			return
 		end
@@ -125,21 +130,29 @@ function InputSelectState:buttonPressed(id, source)
 		self.inputs[1] = nil
 		self.cursors[1] = nil
 		self.leaveButtons[1].visible = false
+		self.aiLevelSelections[1].visible = true
+		return true
 	elseif id == "leave2" then
 		playSound("click")
 		self.inputs[2] = nil
 		self.cursors[2] = nil
 		self.leaveButtons[2].visible = false
+		self.aiLevelSelections[2].visible = true
+		return true
 	elseif id == "leave3" then
 		playSound("click")
 		self.inputs[3] = nil
 		self.cursors[3] = nil
 		self.leaveButtons[3].visible = false
+		self.aiLevelSelections[3].visible = true
+		return true
 	elseif id == "leave4" then
 		playSound("click")
 		self.inputs[4] = nil
 		self.cursors[4] = nil
 		self.leaveButtons[4].visible = false
+		self.aiLevelSelections[4].visible = true
+		return true
 
 	elseif id == "continue" then
 		playSound("quack")
@@ -147,13 +160,19 @@ function InputSelectState:buttonPressed(id, source)
 			if self.inputs[i] == nil then
 				self.inputs[i] = NullInput.create()
 			end
+			config["ai"..i.."level"] = self.aiLevelSelections[i]:getSelection()
 		end
+		config:save()
 		popState()
 		pushState(LevelSelectionState.create(self))
+		return true
 	elseif id == "back" then
 		playSound("quack")
+		config:save()
 		popState()
+		return true
 	end
+	return false
 end
 
 return InputSelectState

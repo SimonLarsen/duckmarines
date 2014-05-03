@@ -74,7 +74,8 @@ function IngameState.create(parent, mapname)
 	self.bots = {}
 	for i=1,4 do
 		if self.inputs[i]:getType() == Input.TYPE_NONE then
-			self.bots[i] = Bot.create(self.map, i, self.cursors[i])
+			local level = config["ai"..i.."level"]
+			self.bots[i] = Bot.create(self.map, i, self.cursors[i], level)
 		end
 	end
 
