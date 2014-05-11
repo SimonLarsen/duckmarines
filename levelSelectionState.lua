@@ -5,6 +5,7 @@ local Menu = require("menu")
 local SelectionList = require("selectionList")
 local CountdownState = require("countdownState")
 local AdvancedSettingsState = require("advancedSettingsState")
+local MinigameSelectionState = require("minigameSelectionState")
 
 local LevelSelectionState = {}
 LevelSelectionState.__index = LevelSelectionState
@@ -26,11 +27,12 @@ function LevelSelectionState.create(parent)
 
 	self:addComponent(Label.create("SELECT A LEVEL", 0, 25, WIDTH, "center"))
 
-	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 15, 21, self))
+	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 13, 21, self))
 	self:updateMapList()
 	self.list:setSelection(1)
 
 	self.menu = self:addComponent(Menu.create(WIDTH/2, 300, 298, 32, 10, self))
+	self.menu:addButton("MINIGAMES", "minigame", WIDTH/2-295, 384, 260, 32)
 	self.menu:addButton("START GAME", "start")
 	self.menu:addButton("ADVANCED SETTINGS", "advanced")
 	self.menu:addButton("BACK", "back")
@@ -62,6 +64,8 @@ end
 function LevelSelectionState:buttonPressed(id, source)
 	if id == "advanced" then
 		pushState(AdvancedSettingsState.create(self, self.rules))
+	elseif id == "minigame" then
+		pushState(MinigameSelectionState.create(self))
 	elseif id == "start" then
 		popState()
 		pushState(IngameState.create(self, self:getFilename(), self.rules))

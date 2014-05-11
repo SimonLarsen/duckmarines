@@ -1,18 +1,17 @@
 local State = require("state")
 local Label = require("label")
 local Menu = require("menu")
-local SelectionList = require("selectionList")
 local CountdownState = require("countdownState")
 local DuckBeatState = require("duckBeatState")
 local DuckDashState = require("duckDashState")
 local EscapeState = require("escapeState")
 
-local LevelSelectionState = {}
-LevelSelectionState.__index = LevelSelectionState
-setmetatable(LevelSelectionState, State)
+local MinigameSelectionState = {}
+MinigameSelectionState.__index = MinigameSelectionState
+setmetatable(MinigameSelectionState, State)
 
-function LevelSelectionState.create(parent)
-	local self = setmetatable(State.create(), LevelSelectionState)
+function MinigameSelectionState.create(parent)
+	local self = setmetatable(State.create(), MinigameSelectionState)
 
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
@@ -25,7 +24,7 @@ function LevelSelectionState.create(parent)
 
 	self.bg = ResMgr.getImage("bg_stars.png")
 
-	self:addComponent(Label.create("SELECT A LEVEL", 0, 25, WIDTH, "center"))
+	self:addComponent(Label.create("SELECT A MINIGAME", 0, 25, WIDTH, "center"))
 
 	self.menu = self:addComponent(Menu.create((WIDTH-200)/2, 190, 220, 32, 24, self))
 	self.menu:addButton("DUCK DASH", "duckdash")
@@ -36,15 +35,15 @@ function LevelSelectionState.create(parent)
 	return self
 end
 
-function LevelSelectionState:enter()
+function MinigameSelectionState:enter()
 	MusicMgr.playMenu()
 end
 
-function LevelSelectionState:draw()
+function MinigameSelectionState:draw()
 	love.graphics.draw(self.bg, 0, 0)
 end
 
-function LevelSelectionState:buttonPressed(id, source)
+function MinigameSelectionState:buttonPressed(id, source)
 	if id == "duckdash" then
 		pushState(DuckDashState.create(self, self.score, self.rules))
 		pushState(CountdownState.create(4, 0))
@@ -58,4 +57,4 @@ function LevelSelectionState:buttonPressed(id, source)
 	end
 end
 
-return LevelSelectionState
+return MinigameSelectionState
