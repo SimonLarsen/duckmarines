@@ -275,4 +275,23 @@ function Bot:duckDashUpdate(dt)
 	end
 end
 
+-- Escape
+Bot.ESCAPE_MAX_CYCLES = {4, 2, 0}
+Bot.ESCAPE_MAX_OFFSET = {0.1, 0.1, 0.05}
+function Bot:escapeEnter()
+	-- How many cycles to wait
+	local cycles = love.math.random(0, Bot.ESCAPE_MAX_CYCLES[self.level])
+	-- How imprecise the press is
+	local offset = math.norm() * Bot.ESCAPE_MAX_OFFSET[self.level]
+
+	self.escapeTime = math.pi/3*(0.5+cycles) + offset
+end
+
+function Bot:escapeUpdate(dt)
+	self.escapeTime = self.escapeTime - dt
+	if self.escapeTime <= 0 then
+		self.clicked = true
+	end
+end
+
 return Bot

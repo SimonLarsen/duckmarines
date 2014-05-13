@@ -18,6 +18,7 @@ function EscapeState.create(parent, scores)
 	local self = setmetatable(State.create(), EscapeState)
 
 	self.inputs = parent.inputs
+	self.bots = parent.bots
 	self.scores = scores
 	self.state = EscapeState.STATE_GAME
 
@@ -64,6 +65,11 @@ end
 
 function EscapeState:enter()
 	MusicMgr.playMinigame()
+	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:escapeEnter()
+		end
+	end
 end
 
 function EscapeState:update(dt)
@@ -76,6 +82,13 @@ function EscapeState:update(dt)
 
 		local allDead = true
 		for i=1,4 do
+			if self.bots[i] then
+				self.bots[i]:escapeUpdate(dt)
+				if self.bots[i]:wasClicked() then
+					self.inputs[i].clicked = true
+				end
+				self.bots[i]:clear()
+			end
 			if self.clicked[i] == false and self.inputs[i]:wasClicked() then
 				if self:isGreen() then
 					playSound("squeek")
