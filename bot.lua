@@ -8,16 +8,18 @@ Bot.__index = Bot
 Bot.INFINITY = 99999999
 Bot.SPEED = 300
 Bot.DIST_THRESHOLD = 24
-Bot.MOVE_DELAY = 2
+Bot.MOVE_DELAY = {4, 2, 0}
 Bot.CHECK_DELAY = 0.05
 
-function Bot.create(map,player,cursor)
+function Bot.create(map,player,cursor,level)
 	local self = setmetatable({}, Bot)
 
 	self.player = player
 	self.cursor = cursor
+	self.level = level
 	self.movecooldown = 0
 	self.checkcooldown = 0
+	self.clicked = false
 
 	self.path = {}
 	self.allpath = {}
@@ -53,7 +55,7 @@ function Bot:update(dt, map, entities, arrows)
 		end
 
 		if #self.path > 0 then
-			self.movecooldown = Bot.MOVE_DELAY
+			self.movecooldown = Bot.MOVE_DELAY[self.level]
 		end
 	end
 end
@@ -84,6 +86,14 @@ function Bot:getAction(cursor)
 		return p.dir
 	end
 	return nil
+end
+
+function Bot:wasClicked()
+	return self.clicked
+end
+
+function Bot:clear()
+	self.clicked = false
 end
 
 function Bot:buildGraph(map)
@@ -248,6 +258,40 @@ function Bot:drawPath()
 		love.graphics.line(p1.x*48+24, p1.y*48+24, p2.x*48+24, p2.y*48+24)
 	end
 	love.graphics.setColor(255,255,255,255)
+end
+
+-- Duck Dash
+Bot.DUCKDASH_DELAY = {0.22, 0.16, 0.10}
+function Bot:duckDashEnter()
+	self.nextDash = 0
+end
+
+function Bot:duckDashUpdate(dt)
+	self.nextDash = self.nextDash - dt
+	if self.nextDash <= 0 then
+		self.clicked = true
+		local base = Bot.DUCKDASH_DELAY[self.level]
+		self.nextDash = base + base*math.norm()
+	end
+end
+
+-- Escape
+Bot.ESCAPE_MAX_CYCLES = {4, 2, 0}
+Bot.ESCAPE_MAX_OFFSET = {0.1, 0.1, 0.05}
+function Bot:escapeEnter()
+	-- How many cycles to wait
+	local cycles = love.math.random(0, Bot.ESCAPE_MAX_CYCLES[self.level])
+	-- How imprecise the press is
+	local offset = math.norm() * Bot.ESCAPE_MAX_OFFSET[self.level]
+
+	self.escapeTime = math.pi/3*(0.5+cycles) + offset
+end
+
+function Bot:escapeUpdate(dt)
+	self.escapeTime = self.escapeTime - dt
+	if self.escapeTime <= 0 then
+		self.clicked = true
+	end
 end
 
 return Bot

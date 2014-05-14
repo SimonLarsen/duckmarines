@@ -81,7 +81,9 @@ function SelectionList:click(x, y)
 			self.scroll = math.min(self.scroll+1, #self.items-self.length+1)
 			self.scroll = math.max(1, self.scroll)
 		end
+		return true
 	end
+	return false
 end
 
 function SelectionList:setItems(items)

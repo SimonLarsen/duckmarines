@@ -14,12 +14,12 @@ EscapeState.TIME_SCALE = 3
 EscapeState.DURATION = 6
 EscapeState.WARNING_TIME = 2
 
-function EscapeState.create(parent, scores, rules)
+function EscapeState.create(parent, scores)
 	local self = setmetatable(State.create(), EscapeState)
 
 	self.inputs = parent.inputs
+	self.bots = parent.bots
 	self.scores = scores
-	self.rules = rules
 	self.state = EscapeState.STATE_GAME
 
 	self.barTop = 33+56
@@ -65,6 +65,11 @@ end
 
 function EscapeState:enter()
 	MusicMgr.playMinigame()
+	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:escapeEnter()
+		end
+	end
 end
 
 function EscapeState:update(dt)
@@ -77,13 +82,22 @@ function EscapeState:update(dt)
 
 		local allDead = true
 		for i=1,4 do
+			if self.bots[i] then
+				self.bots[i]:escapeUpdate(dt)
+				if self.bots[i]:wasClicked() then
+					self.inputs[i].clicked = true
+				end
+				self.bots[i]:clear()
+			end
 			if self.clicked[i] == false and self.inputs[i]:wasClicked() then
 				if self:isGreen() then
+					playSound("squeek")
 					self.escaped = i
 					self.state = EscapeState.STATE_SHAKE
 					self.time = 0
 					break
 				else
+					playSound("fail")
 					self.clicked[i] = true
 					self.marker_pos[i] = self:getCursorY()
 				end
@@ -95,6 +109,7 @@ function EscapeState:update(dt)
 
 		if self.time > EscapeState.DURATION then
 			self.state = EscapeState.STATE_OVER
+			playSound("slam")
 			self.time = 0
 		elseif self.time > EscapeState.DURATION-EscapeState.WARNING_TIME then
 			self.offsetx = math.sign(math.cos(self.time*30))*6
@@ -109,6 +124,10 @@ function EscapeState:update(dt)
 		if self.time > 1 then
 			self.time = 0
 			self.state = EscapeState.STATE_OVER
+			playSound("slam")
+			if self.escaped then
+				playSound("escape")
+			end
 		end
 
 	elseif self.state == EscapeState.STATE_OVER then
@@ -116,7 +135,7 @@ function EscapeState:update(dt)
 			self.time = 2
 			local deltas = {0, 0, 0, 0}
 			if self.escaped then
-				deltas[self.escaped] = self.rules.escapeprize
+				deltas[self.escaped] = rules.escapeprize
 			end
 			pushState(EventScoreState.create(self, self.scores, deltas))
 		end

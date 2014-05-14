@@ -16,7 +16,6 @@ function LevelSelectionState.create(parent)
 
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
-	self.rules = Rules.create()
 
 	self.bg = ResMgr.getImage("bg_stars.png")
 	self.imgBlueprint = ResMgr.getImage("blueprint.png")
@@ -63,14 +62,18 @@ end
 
 function LevelSelectionState:buttonPressed(id, source)
 	if id == "advanced" then
-		pushState(AdvancedSettingsState.create(self, self.rules))
+		playSound("quack")
+		pushState(AdvancedSettingsState.create(self))
 	elseif id == "minigame" then
+		playSound("quack")
 		pushState(MinigameSelectionState.create(self))
 	elseif id == "start" then
+		playSound("quack")
 		popState()
-		pushState(IngameState.create(self, self:getFilename(), self.rules))
+		pushState(IngameState.create(self, self:getFilename()))
 		pushState(CountdownState.create())
 	elseif id == "back" then
+		playSound("quack")
 		popState()
 	end
 end
@@ -98,6 +101,7 @@ function LevelSelectionState:updateMapList()
 end
 
 function LevelSelectionState:selectionChanged(text, source)
+	playSound("click")
 	self.batch:clear()
 	local quadSub = love.graphics.newQuad(0, 23, 23, 22, 78, 63)
 	local quadPit = love.graphics.newQuad(0, 0, 23, 23, 78, 63)

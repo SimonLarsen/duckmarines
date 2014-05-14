@@ -64,6 +64,10 @@ function math.seq(first, last, increment)
 	return t
 end
 
+function math.norm()
+	return math.random()-math.random()
+end
+
 --- Creates time string from number of seconds.
 --  s = 123.4 produces "2:03"
 function secsToString(s)

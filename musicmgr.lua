@@ -4,13 +4,27 @@ MusicMgr.STATE_NONE     = 0
 MusicMgr.STATE_MENU     = 1
 MusicMgr.STATE_INGAME   = 2
 MusicMgr.STATE_MINIGAME = 3
+MusicMgr.STATE_GAMEOVER = 4
 
 local musicState = MusicMgr.STATE_NONE
-local ingameSongs = { "factorylife", "fractalbusride", "solarsurfing", "trinitronsunset" }
+local menuSong = "groovecallus.ogg"
+local minigameSong = "radiationwoman.ogg"
+local gameOverSong = "interlude.ogg"
+local ingameSongs = {}
+
+function MusicMgr.loadSongs()
+	for i, song in ipairs(love.filesystem.getDirectoryItems("res/music/")) do
+		local ending = song:sub(-4):lower()
+		if (ending == ".ogg" or ending == ".mp3")
+		and song ~= menuSong and song ~= minigameSong and song ~= gameOverSong then
+			table.insert(ingameSongs, song)
+		end
+	end
+end
 
 function MusicMgr.playMenu()
 	if musicState == MusicMgr.STATE_MENU then return end
-	playMusic("groovecallus")
+	playMusic(menuSong)
 	musicState = MusicMgr.STATE_MENU
 end
 
@@ -22,8 +36,14 @@ end
 
 function MusicMgr.playMinigame()
 	if musicState == MusicMgr.STATE_MINIGAME then return end
-	playMusic("radiationwoman")
+	playMusic(minigameSong)
 	musicState = MusicMgr.STATE_MINIGAME
+end
+
+function MusicMgr.playGameOver()
+	if musicState == MusicMgr.STATE_GAMEOVER then return end
+	playMusic(gameOverSong)
+	musicState = MusicMgr.STATE_GAMEOVER
 end
 
 return MusicMgr
