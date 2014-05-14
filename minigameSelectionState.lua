@@ -16,6 +16,7 @@ function MinigameSelectionState.create(parent)
 	self.inputs = parent.inputs
 	self.cursors = parent.cursors
 	self.rules = Rules.create()
+	self.bots = parent.bots
 
 	self.score = {}
 	for i=1,4 do

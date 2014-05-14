@@ -11,7 +11,7 @@ Bot.DIST_THRESHOLD = 24
 Bot.MOVE_DELAY = {4, 2, 0}
 Bot.CHECK_DELAY = 0.05
 
-function Bot.create(map,player,cursor,level)
+function Bot.create(player,cursor,level)
 	local self = setmetatable({}, Bot)
 
 	self.player = player
@@ -23,7 +23,6 @@ function Bot.create(map,player,cursor,level)
 
 	self.path = {}
 	self.allpath = {}
-	self:buildGraph(map)
 
 	return self
 end

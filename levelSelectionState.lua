@@ -2,6 +2,7 @@ local State = require("state")
 local Label = require("label")
 local Map = require("map")
 local Menu = require("menu")
+local Bot = require("bot")
 local SelectionList = require("selectionList")
 local CountdownState = require("countdownState")
 local AdvancedSettingsState = require("advancedSettingsState")
@@ -35,6 +36,15 @@ function LevelSelectionState.create(parent)
 	self.menu:addButton("START GAME", "start")
 	self.menu:addButton("ADVANCED SETTINGS", "advanced")
 	self.menu:addButton("BACK", "back")
+
+	-- Create bots
+	self.bots = {}
+	for i=1,4 do
+		if self.inputs[i]:getType() == Input.TYPE_NONE then
+			local level = config["ai"..i.."level"]
+			self.bots[i] = Bot.create(i, self.cursors[i], level)
+		end
+	end
 
 	return self
 end
