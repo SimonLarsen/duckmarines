@@ -294,4 +294,36 @@ function Bot:escapeUpdate(dt)
 	end
 end
 
+-- Duck beat
+Bot.DUCKBEAT_PREDATOR_PROB = {0.05, 0.02, 0}
+Bot.DUCKBEAT_HIT_PROB = {0.8, 0.9, 0.97}
+Bot.DUCKBEAT_OFFSET = {24, 22, 20.01}
+function Bot:duckBeatEnter(beats)
+	self.beatClicks = {}
+	for i,v in ipairs(beats) do
+		if v.id == self.player
+		and love.math.random() < Bot.DUCKBEAT_HIT_PROB[self.level] then
+			local b = {}
+			b.time = math.abs(280 - v.y) + math.norm()*Bot.DUCKBEAT_OFFSET[self.level]
+			table.insert(self.beatClicks, b)
+		elseif v.id == 5 -- Predator
+		and love.math.random() < Bot.DUCKBEAT_PREDATOR_PROB[self.level] then
+			local b = {}
+			b.time = math.abs(280 - v.y) + math.norm()*Bot.DUCKBEAT_OFFSET[self.level]
+			table.insert(self.beatClicks, b)
+		end
+	end
+end
+
+function Bot:duckBeatUpdate(dt)
+	for i=#self.beatClicks, 1, -1 do
+		local c = self.beatClicks[i]
+		c.time = c.time - dt*210
+		if c.time <= 0 then
+			self.clicked = true
+			table.remove(self.beatClicks, i)
+		end
+	end
+end
+
 return Bot

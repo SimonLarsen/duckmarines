@@ -21,6 +21,7 @@ function DuckBeatState.create(parent, scores)
 	local self = setmetatable(State.create(), DuckBeatState)
 
 	self.inputs = parent.inputs
+	self.bots = parent.bots
 	self.scores = scores
 
 	self.beats = {}
@@ -48,6 +49,11 @@ end
 
 function DuckBeatState:enter()
 	MusicMgr.playMinigame()
+	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:duckBeatEnter(self.beats)
+		end
+	end
 end
 
 function DuckBeatState:leave() stopMusic() end
@@ -96,6 +102,13 @@ function DuckBeatState:update(dt)
 	-- Handle player input
 	local found = false
 	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:duckBeatUpdate(dt)
+			if self.bots[i]:wasClicked() then
+				self.inputs[i].clicked = true
+			end
+			self.bots[i]:clear()
+		end
 		if self.inputs[i]:wasClicked() then
 			found = false
 			for j,v in ipairs(self.beats) do
