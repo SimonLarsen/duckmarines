@@ -29,6 +29,8 @@ function Rules:setDefaults()
 	self.arrowtime = 10
 	-- Predators eat ducks
 	self.predatorseat = true
+	-- Mini games enabled
+	self.minigames = true
 
 	-- Duck rush multiplier
 	self.rushfrequency = 1000

@@ -36,7 +36,8 @@ IngameState.EVENT_DUCKDASH  = 9
 IngameState.EVENT_ESCAPE    = 10
 IngameState.EVENT_DUCKBEAT  = 11
 
-IngameState.EVENT_COUNT 	= 11
+IngameState.EVENT_COUNT = 8
+IngameState.EVENT_COUNT_WITH_GAMES = 11
 
 IngameState.NSTATS = 10
 
@@ -447,8 +448,11 @@ function IngameState:canPlaceArrow(x, y)
 end
 
 function IngameState:triggerEvent(player)
-	self.event = math.random(1, IngameState.EVENT_COUNT)
-	self.event = IngameState.EVENT_DUCKBEAT
+	if rules.minigames == true then
+		self.event = math.random(1, IngameState.EVENT_COUNT_WITH_GAMES)
+	else
+		self.event = math.random(1, IngameState.EVENT_COUNT)
+	end
 	self.eventTime = rules.eventTime[self.event] or 0
 
 	if self.event == IngameState.EVENT_SWITCH then

@@ -2,6 +2,7 @@ local State = require("state")
 local Label = require("label")
 local Menu = require("menu")
 local Slider = require("slider")
+local ToggleButton = require("toggleButton")
 
 local AdvancedSettingsState = {}
 AdvancedSettingsState.__index = AdvancedSettingsState
@@ -37,11 +38,11 @@ function AdvancedSettingsState.create(parent)
 	self:addComponent(Label.create("ARROWS PER PLAYER", 80, 272, 250, "right"))
 	self.maxarrowsSlider = self:addComponent(Slider.create(370, 266, 250, math.seq(1,10,1), 4))
 
-	self:addComponent(Label.create("ARROW LIFE TIME", 80, 312, 250, "right"))
-	self.arrowtimeSlider = self:addComponent(Slider.create(370, 306, 250, math.seq(2,60,1), 10, self, Slider.timeFormatter))
+	self:addComponent(Label.create("PREDATORS EAT DUCKS", 40, 312, 290, "right"))
+	self.predatorseatToggle = self:addComponent(ToggleButton.create(370, 306, true))
 
-	self:addComponent(Label.create("PREDATORS EAT DUCKS", 40, 352, 290, "right"))
-	self.predatorseatSlider = self:addComponent(Slider.create(370, 346, 250, {false,true}, 2, self, Slider.onOffFormatter))
+	self:addComponent(Label.create("MINI GAMES ENABLED", 80, 352, 250, "right"))
+	self.minigamesToggle = self:addComponent(ToggleButton.create(370, 346, true))
 
 	self:updateSliders()
 
@@ -73,8 +74,8 @@ function AdvancedSettingsState:confirmSettings()
 	rules.goldperc = self.goldpercSlider:getValue()
 	rules.pinkperc = self.pinkpercSlider:getValue()
 	rules.maxarrows = self.maxarrowsSlider:getValue()
-	rules.arrowtime = self.arrowtimeSlider:getValue()
-	rules.predatorseat = self.predatorseatSlider:getValue()
+	rules.predatorseat = self.predatorseatToggle:getValue()
+	rules.minigames = self.minigamesToggle:getValue()
 end
 
 function AdvancedSettingsState:updateSliders()
@@ -84,8 +85,8 @@ function AdvancedSettingsState:updateSliders()
 	self.goldpercSlider:setValue(rules.goldperc)
 	self.pinkpercSlider:setValue(rules.pinkperc)
 	self.maxarrowsSlider:setValue(rules.maxarrows)
-	self.arrowtimeSlider:setValue(rules.arrowtime)
-	self.predatorseatSlider:setValue(rules.predatorseat)
+	self.predatorseatToggle:setValue(rules.predatorseat)
+	self.minigamesToggle:setValue(rules.minigames)
 end
 
 function AdvancedSettingsState:valueChanged(id, source)
