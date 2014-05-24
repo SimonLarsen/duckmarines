@@ -11,6 +11,7 @@ local Rules = require("rules")
 local Stack = require("stack")
 local MainMenuState = require("mainMenuState")
 
+VERSION = "1.0 RC1"
 WIDTH = 700
 HEIGHT = 442
 

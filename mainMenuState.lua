@@ -41,6 +41,9 @@ end
 
 function MainMenuState:draw()
 	love.graphics.draw(self.bg, 0, 0)
+	love.graphics.setFont(ResMgr.getFont("bold"))
+	love.graphics.printf(VERSION, 14, HEIGHT-18, 300, "left")
+	love.graphics.printf("MUSIC BY LINDE", WIDTH-314, HEIGHT-18, 300, "right")
 end
 
 function MainMenuState:buttonPressed(id, source)
