@@ -37,6 +37,7 @@ end
 
 function MessageBoxState:buttonPressed(id, source)
 	if id == "okay" then
+		playSound("click")
 		love.timer.sleep(0.15)
 		popState()
 	end

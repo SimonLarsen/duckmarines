@@ -42,9 +42,11 @@ end
 function ConfirmBoxState:buttonPressed(id, source)
 	if id == "ok" then
 		self.func()
+		playSound("click")
 		love.timer.sleep(0.15)
 		popState()
 	elseif id == "cancel" then
+		playSound("click")
 		love.timer.sleep(0.15)
 		popState()
 	end

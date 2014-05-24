@@ -57,6 +57,7 @@ end
 
 function LoadLevelState:buttonPressed(id, source)
 	if id == "Load" then
+		playSound("quack")
 		if love.filesystem.exists(self:getFilename()) then
 			self.parent.map = Map.create(self:getFilename())
 			self.parent.map:updateSpriteBatch(true)
@@ -67,6 +68,7 @@ function LoadLevelState:buttonPressed(id, source)
 			"MAP " .. self.input:getText():upper() .. " DOES NOT EXIST"))
 		end
 	elseif id == "delete" then
+		playSound("quack")
 		if love.filesystem.exists(self:getFilename()) then
 			pushState(
 				ConfirmBoxState.create(self,
@@ -78,6 +80,7 @@ function LoadLevelState:buttonPressed(id, source)
 			))
 		end
 	elseif id == "cancel" then
+		playSound("quack")
 		love.timer.sleep(0.25)
 		popState()
 	end

@@ -194,8 +194,10 @@ function LevelEditorState:buttonPressed(id, source)
 		end
 		self.selection = id
 		self.state = LevelEditorState.STATE_TILE
+		playSound("click")
 	else
 		if id == "new" then
+			playSound("quack");
 			pushState(ConfirmBoxState.create(self, "CLEAR MAP?",
 				function()
 					self.map:clear()
@@ -205,6 +207,7 @@ function LevelEditorState:buttonPressed(id, source)
 			self.loadDialog = LoadLevelState.create(self)
 			self.saveDialog = SaveLevelState.create(self)
 		elseif id == "save" then
+			playSound("quack");
 			local valid, msg = self.map:verify()
 			if valid == true then
 				self.saveDialog:updateFileList()
@@ -213,9 +216,11 @@ function LevelEditorState:buttonPressed(id, source)
 				pushState(MessageBoxState.create(self, msg))
 			end
 		elseif id == "load" then
+			playSound("quack");
 			self.loadDialog:updateFileList()
 			pushState(self.loadDialog)
 		elseif id == "exit" then
+			playSound("quack");
 			pushState(ConfirmBoxState.create(self, "ARE YOU SURE YOU WANT TO QUIT?",
 				function()
 					popState()
@@ -223,7 +228,9 @@ function LevelEditorState:buttonPressed(id, source)
 			)
 		elseif id == "fence_add" then
 			self.state = LevelEditorState.STATE_ADD_FENCE
+			playSound("click")
 		elseif id == "fence_delete" then
+			playSound("click")
 			self.state = LevelEditorState.STATE_REM_FENCE
 		end
 	end
