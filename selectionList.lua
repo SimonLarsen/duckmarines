@@ -18,6 +18,7 @@ function SelectionList.create(x, y, width, length, spacing, listener)
 	self.id = ""
 
 	self.items = {}
+	self.labels = {}
 	self.backgroundColor = {0, 0, 0, 255}
 	self.selectionColor = {20, 20, 20, 255}
 
@@ -56,14 +57,14 @@ function SelectionList:draw()
 	love.graphics.setFont(ResMgr.getFont("bold"))
 	for i=1, self.length do
 		local index = i+self.scroll-1
-		if index > #self.items then break end
-		if i > #self.items then break end
+		if index > #self.labels then break end
+		if i > #self.labels then break end
 		if index == self.selection then
 			love.graphics.setColor(self.selectionColor)
 			love.graphics.rectangle("fill", self.x+1, self.y+(i-1)*self.spacing+14, self.width-2, self.spacing)
 			love.graphics.setColor(255, 255, 255, 255)
 		end
-		love.graphics.print(self.items[index], self.x+5, self.y+(i-1)*self.spacing+(self.spacing-8)/2+14)
+		love.graphics.print(self.labels[index], self.x+5, self.y+(i-1)*self.spacing+(self.spacing-8)/2+14)
 	end
 end
 
@@ -86,8 +87,9 @@ function SelectionList:click(x, y)
 	return false
 end
 
-function SelectionList:setItems(items)
+function SelectionList:setItems(items, labels)
 	self.items = items
+	self.labels = labels
 	self.height = self.length*self.spacing + 28
 	self.selection = 0
 end
@@ -98,7 +100,7 @@ end
 
 function SelectionList:getText()
 	if self.selection > 0 then
-		return self.items[self.selection]
+		return self.labels[self.selection]
 	else
 		return ""
 	end
@@ -115,7 +117,7 @@ end
 function SelectionList:setSelection(index)
 	self.selection = index
 	if self.listener then
-		self.listener:selectionChanged(self:getText(), self)
+		self.listener:selectionChanged(self)
 	end
 end
 

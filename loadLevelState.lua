@@ -4,6 +4,7 @@ local TextInput = require("textInput")
 local Menu = require("menu")
 local Map = require("map")
 local ConfirmBoxState = require("confirmBoxState")
+local MessageBoxState = require("messageBoxState")
 
 local LoadLevelState = {}
 LoadLevelState.__index = LoadLevelState
@@ -41,15 +42,17 @@ end
 
 function LoadLevelState:updateFileList()
 	local items = {}
+	local labels = {}
 	local files = love.filesystem.getDirectoryItems("usermaps")
 	for i,v in ipairs(files) do
-		table.insert(items, v:upper())
+		table.insert(items, v)
+		table.insert(labels, v:upper())
 	end
-	self.list:setItems(items)
+	self.list:setItems(items, labels)
 end
 
-function LoadLevelState:selectionChanged(text, source)
-	self.input:setText(text)
+function LoadLevelState:selectionChanged(source)
+	self.input:setText(self.list:getSelection():upper())
 end
 
 function LoadLevelState:buttonPressed(id, source)

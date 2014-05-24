@@ -74,28 +74,26 @@ function LevelSelectionState:buttonPressed(id, source)
 end
 
 function LevelSelectionState:getFilename()
-	local text = self.list:getText():lower()
-	if text:sub(1,8) == "custom: " then
-		return "usermaps/" .. text:sub(9)
-	else
-		return "res/maps/" .. text
-	end
+	return self.list:getSelection()
 end
 
 function LevelSelectionState:updateMapList()
 	local items = {}
+	local labels = {}
 	local files = love.filesystem.getDirectoryItems("res/maps")
 	for i,v in ipairs(files) do
-		table.insert(items, v:upper())
+		table.insert(items, "res/maps/" .. v)
+		table.insert(labels, v:upper())
 	end
 	files = love.filesystem.getDirectoryItems("usermaps")
 	for i,v in ipairs(files) do
-		table.insert(items, "CUSTOM: " .. v:upper())
+		table.insert(items, "usermaps/" .. v)
+		table.insert(labels, "CUSTOM: " .. v:upper())
 	end
-	self.list:setItems(items)
+	self.list:setItems(items, labels)
 end
 
-function LevelSelectionState:selectionChanged(text, source)
+function LevelSelectionState:selectionChanged(source)
 	playSound("click")
 	self.batch:clear()
 	local quadSub = love.graphics.newQuad(0, 23, 23, 22, 78, 63)
