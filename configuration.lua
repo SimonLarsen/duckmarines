@@ -9,6 +9,7 @@ function Config.create()
 	self.scale = 1
 	self.music_volume = 4
 	self.sound_volume = 4
+	self.level = 1
 	self.ai1level = 2
 	self.ai2level = 2
 	self.ai3level = 2
@@ -31,6 +32,11 @@ function Config:load()
 			self[i] = v
 		end
 	end
+end
+
+function Config:update(key, value)
+	self[key] = value
+	self:save()
 end
 
 return Config

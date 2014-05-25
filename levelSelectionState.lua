@@ -27,7 +27,7 @@ function LevelSelectionState.create(parent)
 
 	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 15, 21, self))
 	self:updateMapList()
-	self.list:setSelection(1)
+	self.list:setSelection(config.level)
 
 	self.menu = self:addComponent(Menu.create(WIDTH/2, 300, 298, 32, 10, self))
 	self.menu:addButton("START GAME", "start")
@@ -95,6 +95,7 @@ end
 
 function LevelSelectionState:selectionChanged(source)
 	playSound("click")
+
 	self.batch:clear()
 	local quadSub = love.graphics.newQuad(0, 23, 23, 22, 78, 63)
 	local quadPit = love.graphics.newQuad(0, 0, 23, 23, 78, 63)
@@ -137,6 +138,10 @@ function LevelSelectionState:selectionChanged(source)
 			end
 		end
 	end
+end
+
+function LevelSelectionState:leave()
+	config:update("level", self.list.selection)
 end
 
 return LevelSelectionState

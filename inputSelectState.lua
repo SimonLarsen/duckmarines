@@ -160,19 +160,22 @@ function InputSelectState:buttonPressed(id, source)
 			if self.inputs[i] == nil then
 				self.inputs[i] = NullInput.create()
 			end
-			config["ai"..i.."level"] = self.aiLevelSelections[i]:getSelection()
 		end
-		config:save()
 		popState()
 		pushState(LevelSelectionState.create(self))
 		return true
 	elseif id == "back" then
 		playSound("quack")
-		config:save()
 		popState()
 		return true
 	end
 	return false
+end
+
+function InputSelectState:leave()
+	for i=1,4 do
+		config:update("ai"..i.."level", self.aiLevelSelections[i]:getSelection())
+	end
 end
 
 return InputSelectState

@@ -115,7 +115,11 @@ function SelectionList:setSelectionColor(r, g, b, a)
 end
 
 function SelectionList:setSelection(index)
-	self.selection = index
+	if index >= 1 and index <= #self.items then
+		self.selection = index
+	else
+		self.selection = 1
+	end
 	if self.listener then
 		self.listener:selectionChanged(self)
 	end
