@@ -2,9 +2,11 @@ local State = require("state")
 local Label = require("label")
 local Map = require("map")
 local Menu = require("menu")
+local Bot = require("bot")
 local SelectionList = require("selectionList")
 local CountdownState = require("countdownState")
 local AdvancedSettingsState = require("advancedSettingsState")
+local MinigameSelectionState = require("minigameSelectionState")
 
 local LevelSelectionState = {}
 LevelSelectionState.__index = LevelSelectionState
@@ -25,14 +27,24 @@ function LevelSelectionState.create(parent)
 
 	self:addComponent(Label.create("SELECT A LEVEL", 0, 25, WIDTH, "center"))
 
-	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 15, 21, self))
+	self.list = self:addComponent(SelectionList.create(WIDTH/2-295, 62, 260, 13, 21, self))
 	self:updateMapList()
 	self.list:setSelection(config.level)
 
 	self.menu = self:addComponent(Menu.create(WIDTH/2, 300, 298, 32, 10, self))
+	self.menu:addButton("MINIGAMES", "minigame", WIDTH/2-295, 384, 260, 32)
 	self.menu:addButton("START GAME", "start")
 	self.menu:addButton("ADVANCED SETTINGS", "advanced")
 	self.menu:addButton("BACK", "back")
+
+	-- Create bots
+	self.bots = {}
+	for i=1,4 do
+		if self.inputs[i]:getType() == Input.TYPE_NONE then
+			local level = config["ai"..i.."level"]
+			self.bots[i] = Bot.create(i, self.cursors[i], level)
+		end
+	end
 
 	return self
 end
@@ -62,6 +74,9 @@ function LevelSelectionState:buttonPressed(id, source)
 	if id == "advanced" then
 		playSound("quack")
 		pushState(AdvancedSettingsState.create(self))
+	elseif id == "minigame" then
+		playSound("quack")
+		pushState(MinigameSelectionState.create(self))
 	elseif id == "start" then
 		playSound("quack")
 		popState()

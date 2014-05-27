@@ -57,6 +57,14 @@ function IngameState.create(parent, mapname)
 	self.entities = {}
 	self.particles = {}
 
+	-- Initialize bots with the current map
+	self.bots = parent.bots
+	for i=1,4 do
+		if self.bots[i] then
+			self.bots[i]:buildGraph(self.map)
+		end
+	end
+
 	-- Initialize cursors
 	self.cursors = {}
 	for i,v in ipairs(self.map:getSubmarines()) do
@@ -69,15 +77,6 @@ function IngameState.create(parent, mapname)
 	for i=1,4 do
 		self.inputs[i].lock = true
 		self.cursors[i]:addInput(self.inputs[i])
-	end
-
-	-- Create bots
-	self.bots = {}
-	for i=1,4 do
-		if self.inputs[i]:getType() == Input.TYPE_NONE then
-			local level = config["ai"..i.."level"]
-			self.bots[i] = Bot.create(self.map, i, self.cursors[i], level)
-		end
 	end
 
 	-- Set variables and counters
