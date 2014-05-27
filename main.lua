@@ -74,9 +74,6 @@ function love.draw()
 end
 
 function love.keypressed(k)
-	if k == "q" then
-		playSound("fail")
-	end
 	stateStack:peek():keypressed(k)
 end
 
