@@ -25,7 +25,12 @@ function LevelEditorState.create(parent)
 	self.lastx, self.lasty = 0,0
 	self.tile = 0
 
-	self.inputs = parent.inputs
+	table.insert(self.inputs, KeyboardInput.create())
+	table.insert(self.inputs, MouseInput.create())
+	for i,v in ipairs(love.joystick.getJoysticks()) do
+		table.insert(self.inputs, JoystickInput.create(v))
+	end
+
 	self.cursors[1] = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	self.cursor = self.cursors[1]
 	for i,v in ipairs(self.inputs) do

@@ -13,7 +13,6 @@ function MainMenuState.create()
 	local self = setmetatable(State.create(), MainMenuState)
 
 	table.insert(self.inputs, KeyboardInput.create())
-	table.insert(self.inputs, MouseInput.create())
 	for i,v in ipairs(love.joystick.getJoysticks()) do
 		table.insert(self.inputs, JoystickInput.create(v))
 	end

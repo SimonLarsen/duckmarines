@@ -17,6 +17,7 @@ HEIGHT = 442
 
 local SCALEX = 1
 local SCALEY = 1
+local focus = true
 
 local stateStack
 config = nil
@@ -55,9 +56,11 @@ function love.load()
 end
 
 function love.update(dt)
+	if not focus then return end
 	if dt > 1/30 then
 		dt = 1/30
 	end
+
 	stateStack:peek():baseUpdate(dt)
 end
 
@@ -71,10 +74,19 @@ function love.draw()
 	for i=bottom, 1, -1 do
 		stateStack:peek(i):baseDraw()
 	end
+	if not focus then
+		love.graphics.setColor(0,0,0,128)
+		love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+		love.graphics.setColor(255,255,255,255)
+	end
 end
 
 function love.keypressed(k)
 	stateStack:peek():keypressed(k)
+end
+
+function love.focus(f)
+	focus = f
 end
 
 function love.textinput(text)
