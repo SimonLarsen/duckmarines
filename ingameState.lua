@@ -110,17 +110,16 @@ end
 
 function IngameState:enter()
 	MusicMgr.playIngame()
+
+	-- Stupid mouse bug hack fix
+	for i=1,4 do
+		if self.inputs[i] then
+			self.inputs[i].down = false
+		end
+	end
 end
 
 function IngameState:update(dt)
-	-- Only for debugging. TODO: Remove
-	if love.keyboard.isDown("s") then
-		dt = dt/4
-	end
-	if love.keyboard.isDown("f") then
-		dt = dt*4
-	end
-	
 	-- Check if player paused the game
 	for i=1,4 do
 		if self.inputs[i]:wasMenuPressed() then
@@ -515,6 +514,8 @@ function IngameState:keypressed(k)
 		local spawns = self.map:getSpawnPoints()
 		local e = spawns[1]
 		table.insert(self.entities, Enemy.create(e.x*48+24, e.y*48+24, e.dir))
+	elseif k == "escape" then
+		pushState(PauseGameState.create(self))
 	else
 		State.keypressed(self, k)
 	end

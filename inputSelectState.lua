@@ -110,6 +110,25 @@ function InputSelectState:joystickpressed(joy, button)
 	end
 end
 
+function InputSelectState:mousepressed(x, y, button)
+	for i=1,4 do
+		if self.inputs[i] then
+			self.inputs[i]:mousepressed(x, y, button)
+		end
+	end
+
+	local found = false
+	for i=1,4 do
+		if self.inputs[i] and self.inputs[i]:getType() == Input.TYPE_MOUSE then
+			found = true
+			break
+		end
+	end
+	if found == false then
+		self:addInput(MouseInput.create())
+	end
+end
+
 function InputSelectState:addInput(input)
 	for i=1,4 do
 		if self.inputs[i] == nil then

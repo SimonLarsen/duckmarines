@@ -58,8 +58,10 @@ function State:baseUpdate(dt)
 	self:update(dt)
 
 	-- Consume input actions and clicks
-	for i,v in ipairs(self.inputs) do
-		v:clear()
+	for i=1,4 do
+		if self.inputs[i] then
+			self.inputs[i]:clear()
+		end
 	end
 end
 

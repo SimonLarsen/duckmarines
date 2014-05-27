@@ -26,11 +26,11 @@ function LevelEditorState.create(parent)
 	self.tile = 0
 
 	table.insert(self.inputs, KeyboardInput.create())
-	table.insert(self.inputs, MouseInput.create())
+	table.insert(self.inputs, MouseInput.create(false))
 	for i,v in ipairs(love.joystick.getJoysticks()) do
 		table.insert(self.inputs, JoystickInput.create(v))
 	end
-
+	
 	self.cursors[1] = Cursor.create(WIDTH/2, HEIGHT/2, 1)
 	self.cursor = self.cursors[1]
 	for i,v in ipairs(self.inputs) do

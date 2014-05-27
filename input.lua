@@ -97,8 +97,6 @@ end
 function KeyboardInput:keypressed(k)
 	if k == " " or k == "return" then
 		self.clicked = true
-	elseif k == "escape" then
-		self.menuPressed = true
 	elseif love.keyboard.isDown(" ") then
 		if k == "up" then
 			self.action = 0
@@ -123,8 +121,16 @@ MouseInput = {}
 MouseInput.__index = MouseInput
 setmetatable(MouseInput, Input)
 
-function MouseInput.create()
+function MouseInput.create(lock)
 	local self = setmetatable(Input.create(), MouseInput)
+
+	self.down = false
+	self.wait = 0 -- Workaround for stupid bug
+	if lock ~= nil then
+		self.lock = lock
+	else
+		self.lock = true
+	end
 
 	love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 
@@ -132,19 +138,19 @@ function MouseInput.create()
 end
 
 function MouseInput:getMovement(dt)
-	if self.clicked == false then
-		local mx = love.mouse.getX()
-		local my = love.mouse.getY()
-
+	if self.lock == false or (self.down == false and self.wait == 0) then
+		local mx, my = love.mouse.getPosition()
 		love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 		return mx-WIDTH/2, my-HEIGHT/2, false
 	else
+		self.wait = 0
 		return 0, 0, false
 	end
 end
 
 function MouseInput:mousepressed(x, y, button)
 	if button == "l" then
+		self.down = true
 		self.clicked = true
 		self.clickx = x
 		self.clicky = y
@@ -152,14 +158,17 @@ function MouseInput:mousepressed(x, y, button)
 end
 
 function MouseInput:mousereleased(x, y, button)
-	if self.clicked == true and (button == "l") then
-		local dx = x - self.clickx
-		local dy = y - self.clicky
-		if dx ~= 0 or dy ~= 0 then
-			self.action = vecToDir(dx, dy)
+	if button == "l" then
+		if self.down == true then
+			local dx = x - self.clickx
+			local dy = y - self.clicky
+			if dx^2 + dy^2 > 16 then
+				self.action = vecToDir(dx, dy)
+			end
+			self.down = false
+			self.wait = 1
+			love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 		end
-		self.clicked = false
-		love.mouse.setPosition(WIDTH/2, HEIGHT/2)
 	end
 end
 
