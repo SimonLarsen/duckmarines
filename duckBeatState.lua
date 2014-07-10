@@ -62,7 +62,7 @@ function DuckBeatState:createBeats()
 	for i=1,4 do
 		local seq = math.seq(1,48,1)
 		for j=1,20 do
-			local k = math.random(1, #seq)
+			local k = love.math.random(1, #seq)
 			local y = 280 - 42*(seq[k]+8)
 			local e
 			if j <= 5 then

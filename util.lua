@@ -28,12 +28,16 @@ end
 
 --- Returns a random element from a table
 function table.random(t)
-	return t[math.random(1,#t)]
+	if #t > 1 then
+		return t[love.math.random(1,#t)]
+	else
+		return t[1]
+	end
 end
 
 --- Returns random number from a Gauss. dist. around 0
 function math.randnorm()
-	return math.random() - math.random()
+	return love.math.random() - love.math.random()
 end
 
 --- Caps x in the interval [a,b]
@@ -64,10 +68,6 @@ function math.seq(first, last, increment)
 	return t
 end
 
-function math.norm()
-	return math.random()-math.random()
-end
-
 --- Creates time string from number of seconds.
 --  s = 123.4 produces "2:03"
 function secsToString(s)
@@ -80,7 +80,7 @@ end
 --  @param Table to shuffle
 function shuffle(a)
 	for i=#a, 2, -1 do
-		local j = math.random(1, i)
+		local j = love.math.random(1, i)
 		a[i], a[j] = a[j], a[i]
 	end
 end
@@ -117,7 +117,7 @@ function offset_iter(t)
 	local n = #t
 	local offset
 	if n > 1 then
-		offset = math.random(1, n)
+		offset = love.math.random(1, n)
 	else
 		offset = 0
 	end

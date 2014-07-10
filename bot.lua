@@ -271,7 +271,7 @@ function Bot:duckDashUpdate(dt)
 	if self.nextDash <= 0 then
 		self.clicked = true
 		local base = Bot.DUCKDASH_DELAY[self.level]
-		self.nextDash = base + base*math.norm()
+		self.nextDash = base + base*math.randnorm()
 	end
 end
 
@@ -282,7 +282,7 @@ function Bot:escapeEnter()
 	-- How many cycles to wait
 	local cycles = love.math.random(0, Bot.ESCAPE_MAX_CYCLES[self.level])
 	-- How imprecise the press is
-	local offset = math.norm() * Bot.ESCAPE_MAX_OFFSET[self.level]
+	local offset = math.randnorm() * Bot.ESCAPE_MAX_OFFSET[self.level]
 
 	self.escapeTime = math.pi/3*(0.5+cycles) + offset
 end
@@ -304,12 +304,12 @@ function Bot:duckBeatEnter(beats)
 		if v.id == self.player
 		and love.math.random() < Bot.DUCKBEAT_HIT_PROB[self.level] then
 			local b = {}
-			b.time = math.abs(280 - v.y) + math.norm()*Bot.DUCKBEAT_OFFSET[self.level]
+			b.time = math.abs(280 - v.y) + math.randnorm()*Bot.DUCKBEAT_OFFSET[self.level]
 			table.insert(self.beatClicks, b)
 		elseif v.id == 5 -- Predator
 		and love.math.random() < Bot.DUCKBEAT_PREDATOR_PROB[self.level] then
 			local b = {}
-			b.time = math.abs(280 - v.y) + math.norm()*Bot.DUCKBEAT_OFFSET[self.level]
+			b.time = math.abs(280 - v.y) + math.randnorm()*Bot.DUCKBEAT_OFFSET[self.level]
 			table.insert(self.beatClicks, b)
 		end
 	end
