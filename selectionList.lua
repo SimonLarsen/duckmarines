@@ -44,8 +44,12 @@ function SelectionList:draw()
 	love.graphics.draw(self.imgButton, self.quadButtonRight, self.x+self.width-2, self.y+self.height-14)
 	love.graphics.draw(self.imgButton, self.quadButtonMiddle, self.x+2, self.y, 0, self.width-4, 1)
 	love.graphics.draw(self.imgButton, self.quadButtonMiddle, self.x+2, self.y+self.height-14, 0, self.width-4, 1)
-	love.graphics.draw(self.imgButton, self.quadButtonUp, self.x+self.width/2-11, self.y)
-	love.graphics.draw(self.imgButton, self.quadButtonDown, self.x+self.width/2-11, self.y+self.height-14)
+	if self.scroll > 1 then
+		love.graphics.draw(self.imgButton, self.quadButtonUp, self.x+self.width/2-11, self.y)
+	end
+	if self.scroll < #self.items-self.length+1 then
+		love.graphics.draw(self.imgButton, self.quadButtonDown, self.x+self.width/2-11, self.y+self.height-14)
+	end
 
 	-- Draw sides
 	love.graphics.setColor(255, 194, 49)
