@@ -22,16 +22,18 @@ function MusicMgr.loadSongs()
 	end
 end
 
+function MusicMgr.playIngame()
+	if #ingameSongs == 0 then stopMusic() return end
+
+	if musicState == MusicMgr.STATE_INGAME then return end
+	playMusic(table.random(ingameSongs))
+	musicState = MusicMgr.STATE_INGAME
+end
+
 function MusicMgr.playMenu()
 	if musicState == MusicMgr.STATE_MENU then return end
 	playMusic(menuSong)
 	musicState = MusicMgr.STATE_MENU
-end
-
-function MusicMgr.playIngame()
-	if musicState == MusicMgr.STATE_INGAME then return end
-	playMusic(table.random(ingameSongs))
-	musicState = MusicMgr.STATE_INGAME
 end
 
 function MusicMgr.playMinigame()

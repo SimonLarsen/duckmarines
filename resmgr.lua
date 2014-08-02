@@ -47,6 +47,10 @@ end
 
 function playMusic(name)
 	stopMusic()
+
+	local path = "res/music/" .. name
+	if love.filesystem.exists(path) == false then return end
+
 	local source = love.audio.newSource("res/music/" .. name, "stream")
 	source:setLooping(true)
 	source:setVolume(config.music_volume/5)
