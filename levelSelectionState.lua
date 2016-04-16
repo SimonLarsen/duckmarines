@@ -53,7 +53,7 @@ function LevelSelectionState:draw()
 	love.graphics.draw(self.imgBlueprint, WIDTH/2+8, 70)
 	love.graphics.draw(self.batch, WIDTH/2+11, 73)
 	love.graphics.draw(self.imgDogear, WIDTH/2+265, 70)
-	love.graphics.setBlendMode("multiplicative")
+	love.graphics.setBlendMode("multiply")
 	love.graphics.draw(self.imgTexture, WIDTH/2+11, 73)
 	love.graphics.setBlendMode("alpha")
 end
