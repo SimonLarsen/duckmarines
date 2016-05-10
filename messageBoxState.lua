@@ -15,7 +15,7 @@ function MessageBoxState.create(parent, message)
 	local font = ResMgr.getFont("menu")
 	self.limit = 500
 	self.width, self.lines = font:getWrap(message, self.limit)
-	self.height = self.lines * font:getHeight()+48
+	self.height = table.getn(self.lines) * font:getHeight()+48
 	self.x = (WIDTH-self.width)/2
 	self.y = (HEIGHT-self.height)/2
 

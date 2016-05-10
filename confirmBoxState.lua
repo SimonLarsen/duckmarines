@@ -18,7 +18,7 @@ function ConfirmBoxState.create(parent, message, func)
 	self.limit = 500
 	self.width, self.lines = font:getWrap(message, self.limit)
 	self.width = math.max(340, self.width)
-	self.height = self.lines * font:getHeight()+48
+	self.height = table.getn(self.lines) * font:getHeight()+48
 	self.x = (WIDTH-self.width)/2
 	self.y = (HEIGHT-self.height)/2
 

@@ -80,7 +80,7 @@ function KeyboardInput:getMovement(dt)
 	local dx = 0
 	local dy = 0
 
-	if not love.keyboard.isDown(" ") or self.lock == false then
+	if not love.keyboard.isDown("space") or self.lock == false then
 		if love.keyboard.isDown("left") then
 			dx = dx - self.SPEED * dt end
 		if love.keyboard.isDown("right") then
@@ -95,9 +95,9 @@ function KeyboardInput:getMovement(dt)
 end
 
 function KeyboardInput:keypressed(k)
-	if k == " " or k == "return" then
+	if k == "space" or k == "return" then
 		self.clicked = true
-	elseif love.keyboard.isDown(" ") then
+	elseif love.keyboard.isDown("space") then
 		if k == "up" then
 			self.action = 0
 		elseif k == "right" then
@@ -111,7 +111,7 @@ function KeyboardInput:keypressed(k)
 end
 
 function KeyboardInput:isDown()
-	return love.keyboard.isDown(" ")
+	return love.keyboard.isDown("space")
 end
 
 function KeyboardInput:getType() return Input.TYPE_KEYBOARD end
@@ -149,7 +149,7 @@ function MouseInput:getMovement(dt)
 end
 
 function MouseInput:mousepressed(x, y, button)
-	if button == "l" then
+	if button == 1 then
 		self.down = true
 		self.clicked = true
 		self.clickx = x
@@ -158,7 +158,7 @@ function MouseInput:mousepressed(x, y, button)
 end
 
 function MouseInput:mousereleased(x, y, button)
-	if button == "l" then
+	if button == 1 then
 		if self.down == true then
 			local dx = x - self.clickx
 			local dy = y - self.clicky
@@ -173,7 +173,7 @@ function MouseInput:mousereleased(x, y, button)
 end
 
 function MouseInput:isDown()
-	return love.mouse.isDown("l")
+	return love.mouse.isDown(1)
 end
 
 function MouseInput:getType() return Input.TYPE_MOUSE end

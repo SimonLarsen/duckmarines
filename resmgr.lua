@@ -20,7 +20,7 @@ function ResMgr.getImage(name)
 end
 
 function ResMgr.loadFonts()
-	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString)
+	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString, 2)
 	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
 	fonts["joystix30"] = love.graphics.newFont("res/images/fonts/joystix.ttf", 30)
 	fonts["joystix40"] = love.graphics.newFont("res/images/fonts/joystix.ttf", 40)
