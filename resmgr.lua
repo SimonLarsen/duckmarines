@@ -20,8 +20,8 @@ function ResMgr.getImage(name)
 end
 
 function ResMgr.loadFonts()
-	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString, 2)
-	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
+	fonts["bold"] = love.graphics.newImageFont("res/images/fonts/bold.png", fontString, 2)
+	fonts["menu"] = love.graphics.newImageFont("res/images/fonts/menu.png", fontString)
 	fonts["joystix30"] = love.graphics.newFont("res/images/fonts/joystix.ttf", 30)
 	fonts["joystix40"] = love.graphics.newFont("res/images/fonts/joystix.ttf", 40)
 end
@@ -49,7 +49,7 @@ function playMusic(name)
 	stopMusic()
 
 	local path = "res/music/" .. name
-	if love.filesystem.exists(path) == false then return end
+	if love.filesystem.getInfo(path) == nil then return end
 
 	local source = love.audio.newSource("res/music/" .. name, "stream")
 	source:setLooping(true)

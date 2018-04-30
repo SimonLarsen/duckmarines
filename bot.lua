@@ -3,7 +3,7 @@ local Map = require("map")
 local Entity = require("entity")
 
 local Bot = {}
-Bot.__index = Bot 
+Bot.__index = Bot
 
 Bot.INFINITY = 99999999
 Bot.SPEED = 300
@@ -158,7 +158,7 @@ function Bot:findPath(x1, y1, x2, y2, dir, map, arrows)
 			table.insert(Q, self.graph[ix][iy])
 		end
 	end
-	
+
 	-- Initialize root
 	self.graph[x1][y1].dist = 0
 	self.graph[x1][y1].dir = dir
@@ -178,7 +178,7 @@ function Bot:findPath(x1, y1, x2, y2, dir, map, arrows)
 		if u.dist == Bot.INFINITY then
 			break
 		end
-		
+
 		if u.isSink == false then
 			for i,v in ipairs(u.neighbors) do
 				if u.hasArrow == false then
@@ -249,7 +249,7 @@ end
 
 function Bot:drawPath()
 	local colors = {
-		{191,49,63}, {56,54,136}, {255,130,46}, {119,56,130}
+		{.75,.19,.25}, {.22,.21,.53}, {1,.51,.18}, {.47,.22,.51}
 	}
 	love.graphics.setColor(unpack(colors[self.player]))
 	for i=1, #self.allpath-1 do
@@ -257,7 +257,7 @@ function Bot:drawPath()
 		local p2 = self.allpath[i+1]
 		love.graphics.line(p1.x*48+24, p1.y*48+24, p2.x*48+24, p2.y*48+24)
 	end
-	love.graphics.setColor(255,255,255,255)
+	love.graphics.setColor(1, 1, 1, 1)
 end
 
 -- Duck Dash
