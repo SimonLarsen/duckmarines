@@ -84,9 +84,9 @@ function GameOverState:update(dt)
 end
 
 function GameOverState:draw()
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(0, 0, 0, .5)
 	love.graphics.rectangle("fill", 116, 0, WIDTH-116, HEIGHT)
-	love.graphics.setColor(255, 255, 255)
+	love.graphics.setColor(1, 1, 1)
 
 	if self.state == GameOverState.STATE_BARS then
 		-- Draw bars
@@ -102,7 +102,7 @@ function GameOverState:draw()
 	elseif self.state == GameOverState.STATE_GRAPH then
 		love.graphics.setLineWidth(2)
 		local colors = {
-			{234,73,89}, {76,74,145}, {255,130,46}, {150,75,164}
+			{.95,.29,.35}, {.3,.29,.57}, {1,.51,.18}, {.59,.29,.64}
 		}
 		for i=1,4 do
 			for j=0,9 do
@@ -126,7 +126,7 @@ function GameOverState:draw()
 			love.graphics.rectangle("fill", 600, 390-self.scores[i]/self.maxstat*292, 6,6)
 		end
 	end
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1, 1, 1)
 end
 
 function GameOverState:buttonPressed(id, source)

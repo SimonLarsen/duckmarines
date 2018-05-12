@@ -31,11 +31,11 @@ end
 
 function ConfirmBoxState:draw()
 	love.graphics.setFont(ResMgr.getFont("menu"))
-	love.graphics.setColor(23, 23, 23, 255)
+	love.graphics.setColor(.09, .09, .09, 1)
 	love.graphics.rectangle("fill", self.x-25, self.y-25, self.width+50, self.height+50)
-	love.graphics.setColor(241, 148, 0, 255)
+	love.graphics.setColor(.945, .58, 0, 1)
 	love.graphics.rectangle("line", self.x-24.5, self.y-24.5, self.width+50, self.height+50)
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
 end
 

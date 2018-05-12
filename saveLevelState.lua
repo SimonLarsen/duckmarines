@@ -32,11 +32,11 @@ function SaveLevelState.create(parent)
 end
 
 function SaveLevelState:draw()
-	love.graphics.setColor(23, 23, 23, 255)
+	love.graphics.setColor(.09, .09, .09, 1)
 	love.graphics.rectangle("fill", 142, 96, 415, 271)
-	love.graphics.setColor(241, 148, 0, 255)
+	love.graphics.setColor(.945, .58, 0, 1)
 	love.graphics.rectangle("line", 142.5, 96.5, 415, 271)
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1, 1, 1, 1)
 end
 
 function SaveLevelState:updateFileList()
@@ -57,7 +57,7 @@ end
 function SaveLevelState:buttonPressed(id, source)
 	if id == "save" then
 		playSound("quack")
-		if love.filesystem.exists(self:getFilename()) then
+		if love.filesystem.getInfo(self:getFilename()) ~= nil then
 			pushState(ConfirmBoxState.create(self,
 				"OVERWRITE " .. self.input:getText():upper() .. "?",
 				function()
@@ -75,7 +75,7 @@ function SaveLevelState:buttonPressed(id, source)
 		end
 	elseif id == "delete" then
 		playSound("quack")
-		if love.filesystem.exists(self:getFilename()) then
+		if love.filesystem.getInfo(self:getFilename()) ~= nil then
 			pushState(
 				ConfirmBoxState.create(self,
 				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",

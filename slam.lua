@@ -97,7 +97,7 @@ end
 function Source:resume()
 	if not self._paused then return end
 	for s in pairs(self.instances) do
-		s:resume()
+		s:play()
 	end
 	self._paused = false
 end

@@ -20,9 +20,9 @@ end
 function TextInput:draw()
 	love.graphics.setColor(self.backgroundColor)
 	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-	love.graphics.setColor(255, 194, 49)
+	love.graphics.setColor(1, .76, .19)
 	love.graphics.rectangle("line", self.x+0.5, self.y+0.5, self.width-1, self.height-1)
-	love.graphics.setColor(255, 255, 255)
+	love.graphics.setColor(1, 1, 1)
 
 	if self.active == true then
 		love.graphics.print(self.text.."|", self.x+4, self.y+((self.height-8)/2))

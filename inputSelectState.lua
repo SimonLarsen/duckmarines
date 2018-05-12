@@ -44,12 +44,12 @@ function InputSelectState:draw()
 	local player = 1
 	local ai = 1
 	for i=1,4 do
-		love.graphics.setColor(23, 23, 23, 255)
+		love.graphics.setColor(.09, .09, .09, 1)
 		love.graphics.rectangle("fill", -88+i*150, 66, 126, 32)
-		love.graphics.setColor(241, 148, 0, 255)
+		love.graphics.setColor(.945, .58, 0, 1)
 		love.graphics.rectangle("line", -87.5+i*150, 66.5, 126, 32)
 
-		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.setColor(1, 1, 1, 1)
 
 		if self.inputs[i] then
 			love.graphics.printf("PLAYER "..player, -100+i*150, 73, 150, "center")

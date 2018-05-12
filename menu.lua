@@ -84,16 +84,16 @@ function Menu:draw()
 				love.graphics.draw(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
 				love.graphics.draw(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
 
-				love.graphics.setColor(255, 194, 49, 255)
+				love.graphics.setColor(1, .76, .19, 1)
 				love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
-				love.graphics.setColor(255, 255, 255, 255)
+				love.graphics.setColor(1, 1, 1, 1)
 				if v.enabled then
-					love.graphics.setColor(80, 49, 0, 255)
+					love.graphics.setColor(.31, .19, 0, 1)
 				else
-					love.graphics.setColor(80, 49, 0, 128)
+					love.graphics.setColor(.31, .19, 0, .5)
 				end
 				love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
-				love.graphics.setColor(255,255,255,255)
+				love.graphics.setColor(1, 1, 1, 1)
 			elseif v.type == Menu.IMAGE_BUTTON then
 				love.graphics.draw(v.img, v.quad, v.x, v.y)
 			end
@@ -103,7 +103,7 @@ end
 
 function Menu:click(x, y)
 	for i,v in ipairs(self.buttons) do
-		if v.enabled == true and v.visible == true 
+		if v.enabled == true and v.visible == true
 		and x >= v.x and x <= v.x + v.width
 		and y >= v.y and y <= v.y + v.height then
 			self.listener:buttonPressed(v.id, self)

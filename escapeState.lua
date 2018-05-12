@@ -163,7 +163,7 @@ function EscapeState:draw()
 		end
 		self.buttonAnim:draw(501, 202)
 		love.graphics.draw(self.mouth_top, 64+self.offsetx, 66)
-	
+
 	elseif self.state == EscapeState.STATE_SHAKE then
 		for i=1,4 do
 			love.graphics.draw(self.ducks, self.duck_quads[i], 180+(i-1)*53, 298)
@@ -172,7 +172,7 @@ function EscapeState:draw()
 			end
 		end
 		love.graphics.draw(self.mouth_top, 64+self.offsetx, 66)
-	
+
 	elseif self.state == EscapeState.STATE_OVER then
 		if self.time < 0.2 then
 			love.graphics.draw(self.mouth_closed_lines, 63, 54)
@@ -185,10 +185,10 @@ function EscapeState:draw()
 				love.graphics.draw(self.ducks, self.duck_quads[i], 206+(i-1)*53-self.time*250, 340-self.time*250, -6*self.time, 1+self.time, 1+self.time, 26, 42)
 			else
 				if self.time > 1 then
-					love.graphics.setColor(255, 255, 255, (2-self.time)*255)
+					love.graphics.setColor(1, 1, 1, (2-self.time))
 				end
 				love.graphics.draw(self.ghosts, self.ghost_quads[i], 181+(i-1)*53, 305-self.time*140)
-				love.graphics.setColor(255,255,255,255)
+				love.graphics.setColor(1, 1, 1, 1)
 			end
 		end
 	end

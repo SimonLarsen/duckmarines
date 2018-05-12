@@ -86,9 +86,9 @@ function EventScoreState:draw()
 				love.graphics.draw(self.duck_dolls, self.duck_quads[i], 274, 97+83*i, val*2, 1+val*8, 1+val*8, 28, 25)
 			end
 			if self.time > i*0.2+0.25 then
-				love.graphics.setColor(0, 0, 0, 128)
+				love.graphics.setColor(0, 0, 0, .5)
 				love.graphics.print(math.abs(self.deltas[i+1]), 364, 79+83*i)
-				love.graphics.setColor(255, 255,255,255)
+				love.graphics.setColor(1, 1, 1, 1)
 				love.graphics.print(math.abs(self.deltas[i+1]), 364, 75+83*i)
 				if self.deltas[i+1] >= 0 then
 					love.graphics.draw(self.plusminus, self.quad_plus, 320, 80+83*i)
