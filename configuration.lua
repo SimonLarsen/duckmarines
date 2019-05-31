@@ -24,7 +24,7 @@ function Config:save()
 end
 
 function Config:load()
-	if love.filesystem.exists("config") then
+	if love.filesystem.getInfo("config") then
 		local strdata = love.filesystem.read("config")
 		local data = TSerial.unpack(strdata)
 

@@ -57,7 +57,7 @@ function BonusTextParticle.create(x,y,text,color)
 	self.text = text
 	self.yspeed = 100
 	self.alive = true
-	self.color = color or {255, 255, 255, 255}
+	self.color = color or {1, 1, 1, 100/255}
 
 	local number = tonumber(self.text)
 	if number and number <= 0 then
@@ -81,11 +81,11 @@ function BonusTextParticle:draw()
 	love.graphics.draw(self.bar, self.x-40, self.y+26)
 
 	love.graphics.setFont(ResMgr.getFont("joystix30"))
-	love.graphics.setColor(0, 0, 0, 255)
+	love.graphics.setColor(0, 0, 0, 100/255)
 	love.graphics.printf(self.text, self.x-75, self.y+3, 150, "center")
 	love.graphics.setColor(self.color)
 	love.graphics.printf(self.text, self.x-75, self.y, 150, "center")
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1, 1, 1, 100/255)
 end
 
 function BonusTextParticle:getLayer()
