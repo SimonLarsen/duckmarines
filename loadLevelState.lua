@@ -32,12 +32,12 @@ function LoadLevelState.create(parent, map)
 end
 
 function LoadLevelState:draw()
-	love.graphics.setColor(23, 23, 23, 255)
+	love.graphics.setColor(23/255, 23/255, 23/255, 1)
 	love.graphics.rectangle("fill", 142, 96, 415, 271)
-	love.graphics.setColor(241, 148, 0, 255)
+	love.graphics.setColor(241/255, 148/255, 0, 1)
 	love.graphics.rectangle("line", 142.5, 96.5, 415, 271)
 
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1,1,1,1)
 end
 
 function LoadLevelState:updateFileList()

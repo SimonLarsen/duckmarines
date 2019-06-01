@@ -111,11 +111,11 @@ function SelectionList:getText()
 end
 
 function SelectionList:setBackgroundColor(r,g,b,a)
-	self.backgroundColor = {r,g,b,a}
+	self.backgroundColor = {r/255,g/255,b/255,a/255}
 end
 
 function SelectionList:setSelectionColor(r, g, b, a)
-	self.selectionColor = {r,g,b,a}
+	self.selectionColor = {r/255,g/255,b/255,a/255}
 end
 
 function SelectionList:setSelection(index)

@@ -75,9 +75,9 @@ function love.draw()
 		stateStack:peek(i):baseDraw()
 	end
 	if not focus then
-		love.graphics.setColor(0,0,0,128)
+		love.graphics.setColor(0,0,0,128/255)
 		love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
-		love.graphics.setColor(255,255,255,255)
+		love.graphics.setColor(1,1,1,1)
 	end
 end
 

@@ -72,16 +72,16 @@ function EventTextState:update(dt)
 end
 
 function EventTextState:draw()
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(0, 0, 0, 128/255)
 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1,1,1,1)
 
 	love.graphics.draw(self.imgBox, 0, self.y)
 
 	love.graphics.setFont(self.font)
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(0, 0, 0, 128/255)
 	love.graphics.print(self.text, self.offset, self.y+30+4)
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1,1,1,1)
 	love.graphics.print(self.text, self.offset, self.y+30)
 end
 

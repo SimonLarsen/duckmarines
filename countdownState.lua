@@ -32,14 +32,14 @@ function CountdownState:draw()
 
 	if self.time < 3 then
 		local quad = math.floor(self.time)
-		love.graphics.setColor(0, 0, 0, 128)
+		love.graphics.setColor(0, 0, 0, 128/255)
 		love.graphics.draw(self.img, self.quads[quad], (WIDTH-100)/2, 176)
-		love.graphics.setColor(255,255,255,255)
+		love.graphics.setColor(1,1,1,1)
 		love.graphics.draw(self.img, self.quads[quad], (WIDTH-100)/2, 168)
 	else
-		love.graphics.setColor(0, 0, 0, 128)
+		love.graphics.setColor(0, 0, 0, 128/255)
 		love.graphics.draw(self.img, self.quads[3], (WIDTH-300)/2, 176)
-		love.graphics.setColor(255,255,255,255)
+		love.graphics.setColor(1,1,1,1)
 		love.graphics.draw(self.img, self.quads[3], (WIDTH-300)/2, 168)
 	end
 end

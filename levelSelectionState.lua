@@ -46,9 +46,9 @@ function LevelSelectionState:draw()
 
 	love.graphics.setColor(0, 0, 0)
 	love.graphics.rectangle("fill", WIDTH/2, 62, 297, 228)
-	love.graphics.setColor(255, 194, 49)
+	love.graphics.setColor(1, 194/255, 49/255)
 	love.graphics.rectangle("line", WIDTH/2+0.5, 62.5, 297, 228)
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 
 	love.graphics.draw(self.imgBlueprint, WIDTH/2+8, 70)
 	love.graphics.draw(self.batch, WIDTH/2+11, 73)
