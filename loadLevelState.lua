@@ -58,7 +58,7 @@ end
 function LoadLevelState:buttonPressed(id, source)
 	if id == "Load" then
 		playSound("quack")
-		if love.filesystem.exists(self:getFilename()) then
+		if love.filesystem.getInfo(self:getFilename()) ~= nil then
 			self.parent.map = Map.create(self:getFilename())
 			self.parent.map:updateSpriteBatch(true)
 			love.timer.sleep(0.25)
@@ -69,7 +69,7 @@ function LoadLevelState:buttonPressed(id, source)
 		end
 	elseif id == "delete" then
 		playSound("quack")
-		if love.filesystem.exists(self:getFilename()) then
+		if love.filesystem.getInfo(self:getFilename()) ~= nil then
 			pushState(
 				ConfirmBoxState.create(self,
 				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",

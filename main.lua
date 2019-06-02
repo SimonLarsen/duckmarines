@@ -25,7 +25,7 @@ rules = nil
 
 function love.load()
 	-- Setup user data
-	if love.filesystem.getInfo("usermaps") == false then
+	if love.filesystem.getInfo("usermaps") == nil then
 		love.filesystem.createDirectory("usermaps")
 	end
 

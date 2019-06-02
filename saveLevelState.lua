@@ -57,7 +57,7 @@ end
 function SaveLevelState:buttonPressed(id, source)
 	if id == "save" then
 		playSound("quack")
-		if love.filesystem.exists(self:getFilename()) then
+		if love.filesystem.getInfo(self:getFilename()) ~= nil then
 			pushState(ConfirmBoxState.create(self,
 				"OVERWRITE " .. self.input:getText():upper() .. "?",
 				function()
@@ -75,7 +75,7 @@ function SaveLevelState:buttonPressed(id, source)
 		end
 	elseif id == "delete" then
 		playSound("quack")
-		if love.filesystem.exists(self:getFilename()) then
+		if love.filesystem.getInfo(self:getFilename()) ~= nil then
 			pushState(
 				ConfirmBoxState.create(self,
 				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",
