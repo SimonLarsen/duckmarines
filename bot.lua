@@ -249,7 +249,7 @@ end
 
 function Bot:drawPath()
 	local colors = {
-		{191,49,63}, {56,54,136}, {255,130,46}, {119,56,130}
+		{191/255,49/255,63/255}, {56/255,54/255,136/255}, {1,130/255,46/255}, {119/255,56/255,130/255}
 	}
 	love.graphics.setColor(unpack(colors[self.player]))
 	for i=1, #self.allpath-1 do
@@ -257,7 +257,7 @@ function Bot:drawPath()
 		local p2 = self.allpath[i+1]
 		love.graphics.line(p1.x*48+24, p1.y*48+24, p2.x*48+24, p2.y*48+24)
 	end
-	love.graphics.setColor(255,255,255,255)
+	love.graphics.setColor(1,1,1,1)
 end
 
 -- Duck Dash

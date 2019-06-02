@@ -185,10 +185,10 @@ function EscapeState:draw()
 				love.graphics.draw(self.ducks, self.duck_quads[i], 206+(i-1)*53-self.time*250, 340-self.time*250, -6*self.time, 1+self.time, 1+self.time, 26, 42)
 			else
 				if self.time > 1 then
-					love.graphics.setColor(255, 255, 255, (2-self.time)*255)
+					love.graphics.setColor(1, 1, 1, (2-self.time))
 				end
 				love.graphics.draw(self.ghosts, self.ghost_quads[i], 181+(i-1)*53, 305-self.time*140)
-				love.graphics.setColor(255,255,255,255)
+				love.graphics.setColor(1,1,1,1)
 			end
 		end
 	end

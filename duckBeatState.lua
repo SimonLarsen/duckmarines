@@ -148,10 +148,10 @@ function DuckBeatState:draw()
 
 	-- Pulse background to beat
 	local alpha = 255 - 637.5*self.pulse
-	love.graphics.setColor(255,255,255,alpha)
+	love.graphics.setColor(1,1,1,alpha/255)
 	love.graphics.rectangle("fill", 173, 0, 2, 333)
 	love.graphics.rectangle("fill", 400, 0, 2, 333)
-	love.graphics.setColor(255,255,255,255)
+	love.graphics.setColor(1,1,1,1)
 
 	-- Draw beats
 	for i,v in ipairs(self.beats) do
@@ -163,12 +163,12 @@ function DuckBeatState:draw()
 		if self.flash[i].time > 0 then
 			local alpha = self.flash[i].time * 128
 			if self.flash[i].color == DuckBeatState.FLASH_RED then
-				love.graphics.setColor(186, 18, 18, alpha)
+				love.graphics.setColor(186/255, 18/255, 18/255, alpha/255)
 			else
-				love.graphics.setColor(84, 177, 33, alpha)
+				love.graphics.setColor(84/255, 177/255, 33/255, alpha/255)
 			end
 			love.graphics.rectangle("fill", 181+(i-1)*54, 0, 51, 333)
-			love.graphics.setColor(255,255,255,255)
+			love.graphics.setColor(1,1,1,1)
 		end
 	end
 
@@ -177,12 +177,12 @@ function DuckBeatState:draw()
 
 	love.graphics.scale(4, 4)
 	love.graphics.setFont(ResMgr.getFont("bold"))
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(0, 0, 0, 128/255)
 	love.graphics.print(self.points[1], 12, 19)
 	love.graphics.print(self.points[2], 12, 58)
 	love.graphics.print(self.points[3], 113, 19)
 	love.graphics.print(self.points[4], 113, 58)
-	love.graphics.setColor(255,255,255,255)
+	love.graphics.setColor(1,1,1,1)
 	love.graphics.print(self.points[1], 12, 18)
 	love.graphics.print(self.points[2], 12, 57)
 	love.graphics.print(self.points[3], 113, 18)

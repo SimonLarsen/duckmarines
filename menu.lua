@@ -84,16 +84,16 @@ function Menu:draw()
 				love.graphics.draw(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
 				love.graphics.draw(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
 
-				love.graphics.setColor(255, 194, 49, 255)
+				love.graphics.setColor(1, 194/255, 49/255, 1)
 				love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
-				love.graphics.setColor(255, 255, 255, 255)
+				love.graphics.setColor(1, 1, 1, 1)
 				if v.enabled then
-					love.graphics.setColor(80, 49, 0, 255)
+					love.graphics.setColor(80/255, 49/255, 0, 1)
 				else
-					love.graphics.setColor(80, 49, 0, 128)
+					love.graphics.setColor(80/255, 49/255, 0, 128/255)
 				end
 				love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
-				love.graphics.setColor(255,255,255,255)
+				love.graphics.setColor(1, 1, 1, 1)
 			elseif v.type == Menu.IMAGE_BUTTON then
 				love.graphics.draw(v.img, v.quad, v.x, v.y)
 			end

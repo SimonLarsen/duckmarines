@@ -1,4 +1,4 @@
--- Simple LÖVE Audio Manager
+-- Simple Lï¿½VE Audio Manager
 --
 -- Copyright (c) 2011 Matthias Richter
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -97,7 +97,7 @@ end
 function Source:resume()
 	if not self._paused then return end
 	for s in pairs(self.instances) do
-		s:resume()
+		s:play()
 	end
 	self._paused = false
 end

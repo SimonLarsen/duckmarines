@@ -388,23 +388,23 @@ function IngameState:drawHUD()
 	love.graphics.scale(3, 3)
 
 	local timeString = secsToString(self.timeLeft)
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(0, 0, 0, 128/255)
 	love.graphics.printf(timeString, 0, 21, 40, "center")
-	love.graphics.setColor(0, 0, 0, 255)
+	love.graphics.setColor(0, 0, 0, 1)
 	love.graphics.printf(timeString, 0, 20, 40, "center")
 
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(0, 0, 0, 128/255)
 	for i=1,4 do
 		love.graphics.print(string.format("%03d", self.score[i]), 8, 18+i*29)
 	end
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(1,1,1,1)
 	for i=1,4 do
 		love.graphics.print(string.format("%03d", self.score[i]), 8, 17+i*29)
 	end
 
 	love.graphics.pop()
 
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 end
 
 function IngameState:getInputs()

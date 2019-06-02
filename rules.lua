@@ -60,7 +60,7 @@ function Rules:save()
 end
 
 function Rules:load()
-	if love.filesystem.exists("rules") then
+	if love.filesystem.getInfo("rules") ~= nil then
 		local strdata = love.filesystem.read("rules")
 		local data = TSerial.unpack(strdata)
 
