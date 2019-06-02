@@ -5,14 +5,26 @@ local images = {}
 local fonts = {}
 local sounds = {}
 
+local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:+-?!()|x%"
+
 local currentSongSource = nil
 
- function ResMgr.loadFonts()
--- 	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString, 2)
--- 	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
--- 	fonts["joystix30"] = love.graphics.newFont("res/fonts/joystix.ttf", 30)
--- 	fonts["joystix40"] = love.graphics.newFont("res/fonts/joystix.ttf", 40)
- end
+function ResMgr.getImage(name)
+	local path = "res/images/" .. name
+	if images[path] == nil then
+		images[path] = love.graphics.newImage(path)
+		images[path]:setWrap("repeat", "repeat")
+		print("Loaded image: " .. name)
+	end
+	return images[path]
+end
+
+function ResMgr.loadFonts()
+	fonts["bold"] = love.graphics.newImageFont("res/images/fonts/bold.png", fontString, 2)
+	fonts["menu"] = love.graphics.newImageFont("res/images/fonts/menu.png", fontString)
+	fonts["joystix30"] = love.graphics.newFont("res/fonts/joystix.ttf", 30)
+	fonts["joystix40"] = love.graphics.newFont("res/fonts/joystix.ttf", 40)
+end
 
 function ResMgr.getFont(name)
 	return fonts[name]
@@ -37,7 +49,7 @@ function playMusic(name)
 	stopMusic()
 
 	local path = "res/music/" .. name
-	if love.filesystem.exists(path) == false then return end
+	if love.filesystem.getInfo(path) == nil then return end
 
 	local source = love.audio.newSource("res/music/" .. name, "stream")
 	source:setLooping(true)

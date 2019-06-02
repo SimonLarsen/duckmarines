@@ -1,6 +1,6 @@
 function love.conf(t)
     t.identity = "duckmarines"
-   -- t.version = "0.10.0"
+    t.version = "11.2"
     t.console = false
 
     t.window.title = "Duck Marines"
